@@ -1,0 +1,65 @@
+.group-list {
+    padding: 2% 0 5px 160px;
+    border-bottom: 2px solid #5F5F5F;
+}
+
+.group-list_item {
+    margin-right: 80px;
+    color: #5F5F5F;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.group-list_item:focus {
+    color: #FF0000;
+}
+
+.items-list {
+    padding: 0 6%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.item__card {
+    position: relative;
+}
+
+.product-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.card__img img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.item__card {
+    width: 100%;
+    margin-top: 23%;
+}
+
+.item__card:last-child {
+    margin-bottom: 23%;
+}
+
+/* レスポンシブ (768px以上)*/
+@media screen and (min-width: 768px) {
+    .items-list {
+        display: grid;
+        grid-template-columns: repeat(3, 31%);
+    }
+}
+
+/* レスポンシブ (1000px以上)*/
+@media screen and (min-width: 1400px) {
+    .items-list {
+        display: grid;
+        grid-template-columns: repeat(4, 20%);
+    }
+}

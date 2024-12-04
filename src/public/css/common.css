@@ -1,0 +1,141 @@
+* {
+    box-sizing: border-box
+}
+
+body,
+input {
+    font-size: 18px;
+    font-family: "Inter", sans-serif;
+    margin: 0;
+}
+
+.header {
+    background-color: #000000;
+}
+
+.header__inner {
+    margin: 0 auto;
+    padding: 10px 30px;
+    max-width: 1540px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    gap: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.header__logo {
+    grid-column: 1/2;
+    display: flex;
+    align-items: center;
+
+}
+
+.header__logo img {
+    width: 100%;
+    height: auto;
+}
+
+.header-utilities__search {
+    grid-column: 2/3;
+}
+
+.header-utilities__search-form {
+    height: 40px;
+}
+
+input {
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input:focus-visible {
+    outline: 2px solid #5F5F5F;
+}
+
+input::placeholder {
+    color: #000000;
+}
+
+.header-utilities__keyword-input {
+    padding: 5px 10px;
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+}
+
+.header-utilities__actions {
+    grid-column: 3/4;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-utilities__login-btn,
+.header-utilities__mypage-btn,
+.header-utilities__sell-btn {
+    text-align: center;
+}
+
+.header-utilities__login-btn,
+.header-utilities__mypage-btn {
+    width: 90px;
+    padding: 10px 0;
+}
+
+.header-utilities__login-btn:link,
+.header-utilities__mypage-btn:link,
+.header-utilities__login-btn:visited,
+.header-utilities__mypage-btn:visited,
+.header-utilities__login-btn:active,
+.header-utilities__mypage-btn:active {
+    color: #FFFFFF;
+}
+
+.header-utilities__sell-btn {
+    border-radius: 4px;
+    font-size: 18px;
+    width: 75px;
+    padding: 5px 10px;
+    text-align: center;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+}
+
+h2,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+button {
+    background: none;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.btn {
+    background-color: #FF5555;
+    color: #FFFFFF;
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
