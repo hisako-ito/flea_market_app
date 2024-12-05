@@ -11,7 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    @yield('css')
+    <link rel="stylesheet" href="{{ asset('css/list.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/search_results.css')}}">
 </head>
 
 <body>
@@ -34,7 +35,24 @@
         </div>
     </header>
     <div class="content">
-        @yield('content')
+        <div class="group-list">
+            <span class="group-list_item group-list__item--recommend" tabindex="-1">おすすめ</span>
+            <span class="group-list_item group-list__item--favorite" tabindex="-1">マイリスト</span>
+        </div>
+
+        <div class="items-list">
+            @foreach ($items as $item)
+                <div class="item__card">
+                    <div class="card__img">
+                        <a href="/item/{{$item->id}}" class="product-link"></a>
+                        <img src="{{ asset($item->image) }}"  alt="商品画像">
+                    </div>
+                    <div class="card__detail">
+                        <p>{{$item->name}}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 </body>
 
