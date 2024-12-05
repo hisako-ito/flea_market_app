@@ -8,10 +8,18 @@ use App\Models\Category;
 
 class ItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $items = Item::all();
-        return view('list',compact('items'));
+
+        $keyword = $request->input('keyword', '');
+
+        if(!empty($keyword)) {
+            $items = Item::KeywordSearch($request->keyword)->get();
+
+            return view('search_results', compact('items', 'keyword'));
+        }
+        return view('list', compact('items', 'keyword'));
     }
 
     public function getDetail($item_id)

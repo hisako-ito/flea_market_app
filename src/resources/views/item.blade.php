@@ -37,17 +37,21 @@
                     </div>
                     <div class="item-information">
                         <h3 class="information__heading">商品の情報</h3>
-                        <div class="information__content">
-                            <h5 class="information__category">カテゴリー</h5>
-                            <span class="category__list">
-                                @foreach($categories as $category)
-                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ $item->categories->contains('id', $category->id) ? 'checked' : '' }}>
-                                    <label>{{ $category->name }}</label>
-                                @endforeach
-                            </span>
-                            <h5 class="information__condition">商品の状態</h5>
-                            <span class="condition__content"></span>
-                        </div>
+                            <table class="item-information__table">
+                                <tr class="table__group">
+                                    <th class="information__category">カテゴリー</th>
+                                    <td class="category__list">
+                                        @foreach($categories as $category)
+                                            <input type="checkbox" {{ $item->categories->contains('id', $category->id) ? 'checked' : '' }}>
+                                            <label>{{ $category->name }}</label>
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr class="table__group">
+                                    <th class="information__condition">商品の状態</th>
+                                    <td class="condition__content">{{$item->checkCondition()}}</td>
+                                </tr>
+                        </table>
                     </div>
 
                     <h3 class="comment__heading">コメント(カウント)</h3>
