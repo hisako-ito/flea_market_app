@@ -37,28 +37,44 @@
     width: 90%;
 }
 
-.item-brand-name {
-    font-size: 10px;
+.item-price,
+.description__description,
+.description__heading,
+.information__heading,
+.comment__heading,
+.item-comment {
+    margin: 2% 0;
+    line-height: 1.7;
+}
+
+.item-brand-name,
+.description__description {
+    font-size: 0.9rem;
 }
 
 .item-price {
-    font-size: 28px;
+    font-size: 1.8rem;
 }
 
 .item-price::before {
     content: "¥";
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .item-price::after {
     content: "(税込)";
-    font-size: 16px;
+    font-size: 1rem;
+}
+
+.item-price::before,
+.item-price::after {
+    font-size: 1rem;
 }
 
 .count-content {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 3%;
     margin-top: 1%;
 }
 
@@ -84,24 +100,18 @@
 
 .like_count__number,
 .comment_count__number {
-    font-size: 10px;
+    font-size: 0.6rem;
     margin-top: 1%;
 }
 
 .description__heading,
 .information__heading,
 .comment__heading {
-    font-size: 20px;
-    margin: 3% 0;
+    font-size: 1.2rem;
 }
 
 .comment__heading {
     color: #5F5F5F;
-}
-
-.description__description {
-    font-size: 14px;
-    line-height: 1.7;
 }
 
 .item-information__table {
@@ -110,14 +120,9 @@
 
 .information__category,
 .information__condition {
-    font-size: 14px;
+    font-size: 0.9rem;
     width: 30%;
     text-align: left;
-}
-
-.category__list,
-.condition__content {
-    font-size: 12px;
 }
 
 .category__list {
@@ -126,13 +131,17 @@
     gap: 1%;
     }
 
+.table__group {
+    line-height: 1.7;
+}
+
 .category__list label {
     padding: 0 5%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 1% 0;
-    font-size: 12px;
+    font-size: 0.8rem;
     color: #000000;
     border-radius: 200px;
 }
@@ -147,20 +156,22 @@
 }
 
 .condition__content {
+    font-size: 0.8rem;
     padding-left: 10%;
 }
 
 .item-comment {
-    font-size: 15px;
-    margin-top: 3%;
+    font-size: 0.9rem;
 }
 
 .comment__form_textarea {
     width: 100%;
-    padding: 8px 16px;
+    padding: 1% 2%;
 }
 
 .button-purchase,
 .button-comment {
     margin-top: 2%;
+    width: 100%;
+    font-size: 1.2rem;
 }

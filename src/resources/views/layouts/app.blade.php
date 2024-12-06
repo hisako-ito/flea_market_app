@@ -23,7 +23,7 @@
             <div class="header-utilities__search">
                 <form class="header-utilities__search-form" action="/" method="get">
                 @csrf
-                    <input class="header-utilities__keyword-input" type="text" name="keyword" placeholder="なにをお探しですか？" value="{{ old('keyword') }}">
+                    <input class="header-utilities__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword }}">
                 </form>
             </div>
             <div class="header-utilities__actions">

@@ -22,11 +22,18 @@ class ItemController extends Controller
         return view('list', compact('items', 'keyword'));
     }
 
-    public function getDetail($item_id)
+    public function getDetail($item_id,Request $request)
     {
         $item = Item::find($item_id);
         $categories = Category::all();
+        $keyword = $request->input('keyword', '');
 
-        return view('item', compact('item','categories'));
+        if(!empty($keyword)) {
+            $items = Item::KeywordSearch($request->keyword)->get();
+
+            return view('search_results', compact('items', 'keyword'));
+        }
+
+        return view('item', compact('item','categories','keyword'));
     }
 }
