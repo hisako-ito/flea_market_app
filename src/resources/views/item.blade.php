@@ -17,7 +17,7 @@
                     <form class="form__purchase" action="/purchase/{item_id}" method ="post">
                     @csrf
                         <h2 class="item-name">{{$item->name}}</h2>
-                        <p class="item-brand-name">ブランド名</p>
+                        <p class="item-brand-name">{{$item->brand}}</p>
                         <p class="item-price">{{ number_format($item->price) }}</p>
                         <div class="count-content">
                             <div class="like_count">

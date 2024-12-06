@@ -1,10 +1,10 @@
 .group-list {
-    padding: 2% 0 5px 160px;
+    padding: 3% 0 0.1% 11%;
     border-bottom: 2px solid #5F5F5F;
 }
 
 .group-list_item {
-    margin-right: 80px;
+    margin-right: 10%;
     color: #5F5F5F;
     font-weight: bold;
     cursor: pointer;
@@ -15,7 +15,6 @@
 }
 
 .items-list {
-    padding: 0 6%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -41,11 +40,10 @@
 
 .item__card {
     width: 100%;
-    margin-top: 23%;
 }
 
-.item__card:last-child {
-    margin-bottom: 23%;
+.card__detail p {
+    font-size: 1.1rem;
 }
 
 /* レスポンシブ (768px以上)*/
@@ -53,6 +51,15 @@
     .items-list {
         display: grid;
         grid-template-columns: repeat(3, 31%);
+        padding: 0 3%;
+    }
+
+    .item__card {
+        margin-top: 10%;
+    }
+
+    .item__card:last-child {
+        margin-bottom: 10%;
     }
 }
 
@@ -61,5 +68,14 @@
     .items-list {
         display: grid;
         grid-template-columns: repeat(4, 20%);
+        padding: 0 6%;
+    }
+
+    .item__card {
+        margin-top: 21%;
+    }
+
+    .item__card:last-child {
+        margin-bottom: 21%;
     }
 }
