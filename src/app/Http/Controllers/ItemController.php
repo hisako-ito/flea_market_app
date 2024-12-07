@@ -10,15 +10,14 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        $items = Item::all();
 
         $keyword = $request->input('keyword', '');
+        $items = Item::query();
 
         if(!empty($keyword)) {
-            $items = Item::KeywordSearch($request->keyword)->get();
-
-            return view('search_results', compact('items', 'keyword'));
+            $items = $items->KeywordSearch($keyword);
         }
+        $items = $items->get();
         return view('list', compact('items', 'keyword'));
     }
 
@@ -29,8 +28,7 @@ class ItemController extends Controller
         $keyword = $request->input('keyword', '');
 
         if(!empty($keyword)) {
-            $items = Item::KeywordSearch($request->keyword)->get();
-
+            $items = Item::KeywordSearch($keyword)->get();
             return view('search_results', compact('items', 'keyword'));
         }
 

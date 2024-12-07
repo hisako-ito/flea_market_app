@@ -20,16 +20,11 @@
             <div class="header__logo">
                 <a href="/"><img src="{{ asset('/images/logo.svg') }}"  alt="coachtech" class="img-logo-icon"/></a>
             </div>
-            <div class="header-utilities__search">
-                <form class="header-utilities__search-form" action="/" method="get">
-                @csrf
-                    <input class="header-utilities__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword }}">
-                </form>
+            <div class="header-nav__search">
+                @yield('nav_search')
             </div>
-            <div class="header-utilities__actions">
-                <a href="/login" class="header-utilities__login-btn">ログイン</a>
-                <a href="/mypage" class="header-utilities__mypage-btn">マイページ</a>
-                <a href="/sell" class="header-utilities__sell-btn">出品</a>
+            <div class="header-nav__actions">
+                @yield('nav_actions')
             </div>
         </div>
     </header>

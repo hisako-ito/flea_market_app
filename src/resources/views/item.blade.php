@@ -4,6 +4,26 @@
 <link rel="stylesheet" href="{{ asset('css/item.css')}}">
 @endsection
 
+@section('nav_search')
+    <form class="header-nav__search-form" action="/" method="get">
+    @csrf
+        <input class="header-nav__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword ?? '' }}">
+    </form>
+@endsection
+
+@section('nav_actions')
+        @if (Auth::check())
+            <form class="logout-form" action="/logout" method="post">
+            @csrf
+                <button class="header-nav__logout-btn" value="ログアウト">
+            </form>
+        @else
+            <a href="/login" class="header-nav__login-btn">ログイン</a>
+        @endif
+            <a href="/mypage" class="header-nav__mypage-btn">マイページ</a>
+            <a href="/sell" class="header-nav__sell-btn">出品</a>
+@endsection
+
 @section('content')
     <div class="detail-content">
         <div class="detail-content__inner">
