@@ -8,7 +8,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: 85%;
-    gap: 50px;
+    gap: 5%;
 }
 
 .content__img {
@@ -58,12 +58,10 @@
 
 .item-price::before {
     content: "¥";
-    font-size: 1rem;
 }
 
 .item-price::after {
     content: "(税込)";
-    font-size: 1rem;
 }
 
 .item-price::before,
@@ -142,13 +140,11 @@
     justify-content: center;
     margin: 1% 0;
     font-size: 0.8rem;
-    color: #000000;
     border-radius: 200px;
 }
 
 .category__list input[type="checkbox"]:checked  + label{
     background-color: #D9D9D9;
-    color: #000000;
 }
 
 .category__list label:not(:checked + label) {
