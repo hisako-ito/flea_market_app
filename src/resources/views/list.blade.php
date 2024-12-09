@@ -15,7 +15,7 @@
         @if (Auth::check())
             <form class="logout-form" action="/logout" method="post">
             @csrf
-                <button class="header-nav__logout-btn" value="ログアウト">
+                <button class="header-nav__logout-btn" type="submit">ログアウト</button>
             </form>
         @else
             <a class="header-nav__login-btn" href="/login">ログイン</a>

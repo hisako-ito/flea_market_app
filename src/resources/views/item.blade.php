@@ -15,13 +15,13 @@
         @if (Auth::check())
             <form class="logout-form" action="/logout" method="post">
             @csrf
-                <button class="header-nav__logout-btn" value="ログアウト">
+                <button class="header-nav__logout-btn" type="submit">ログアウト</button>
             </form>
         @else
-            <a href="/login" class="header-nav__login-btn">ログイン</a>
+            <a class="header-nav__login-btn" href="/login">ログイン</a>
         @endif
-            <a href="/mypage" class="header-nav__mypage-btn">マイページ</a>
-            <a href="/sell" class="header-nav__sell-btn">出品</a>
+            <a class="header-nav__mypage-btn" href="/mypage" >マイページ</a>
+            <a class="header-nav__sell-btn" href="/sell">出品</a>
 @endsection
 
 @section('content')

@@ -133,6 +133,10 @@
     line-height: 1.7;
 }
 
+.category__list input {
+    -webkit-appearance: none;
+}
+
 .category__list label {
     padding: 0 5%;
     display: flex;
