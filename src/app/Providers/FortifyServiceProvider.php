@@ -3,17 +3,21 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
-use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
+// use App\Actions\Fortify\ResetUserPassword;
+// use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+// use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Contracts\LogoutResponse;
+use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
+use App\Http\Requests\LoginRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -22,12 +26,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
-            public function toResponse($request)
-            {
-                return redirect('/');
-            }
-        });
+
     }
 
     /**
@@ -48,14 +47,18 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;
                 return Limit::perMinute(10)->by($email . $request->ip());
-
-        // ログイン後のリダイレクト先
-        Fortify::redirects('login', '/');
-
-        // ログアウト後のリダイレクト先
-        Fortify::redirects('logout', '/');
-
         });
 
+        $this->app->bind(FortifyLoginRequest::class, LoginRequest::class);
+
+        Fortify::authenticateUsing(function ($request) {
+            $user = User::where('email', $request->login)
+                    ->orWhere('name', $request->login)
+                    ->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+        });
     }
 }
