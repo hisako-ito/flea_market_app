@@ -1,0 +1,84 @@
+.purchase-form__inner {
+    display: flex;
+    justify-content: center;
+    margin: 5% 0;
+}
+
+.purchase-form__form {
+    width: 90%;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4%;
+}
+
+.purchase-form__form form {
+    width: 100%;
+}
+
+.purchase-form__action {
+    grid-column: 1/2;
+}
+
+.item__information {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    gap: 7%;
+    padding-bottom: 5%;
+}
+
+.img__card {
+    grid-column: 1/2;
+    width: 100%;
+    height: auto;
+}
+
+.img__card img {
+    width: 100%;
+    height: auto;
+}
+
+.item-price {
+    font-size: 1.5rem;
+}
+
+.item-price::before {
+    content: "¥";
+}
+
+.item-price::after {
+    content: "(税込)";
+}
+
+.item__content {
+    grid-column: 2/3;
+}
+
+.item__information,
+.item__pay-method,
+.item__deliver-address {
+    border-bottom: 1px solid #000000;
+}
+
+.item__pay-method,
+.item__deliver-address {
+    padding: 3% 5%;
+    height: 49%;
+}
+
+.purchase-form__confirm {
+    grid-column: 2/3;
+}
+
+.confirm-table {
+    width: 100%;
+    height: 54%;
+    text-align: center;
+}
+
+.purchase-form__btn {
+    font-size: 1rem;
+    margin-top: 15%;
+    height: 12%;
+    border-radius: 5px;
+}
+

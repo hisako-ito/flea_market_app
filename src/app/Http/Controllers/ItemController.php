@@ -34,4 +34,16 @@ class ItemController extends Controller
 
         return view('item', compact('item','categories','keyword'));
     }
+
+    public function delete($item_id,Request $request)
+    {
+        $item = Item::find($item_id);
+        $keyword = $request->input('keyword', '');
+
+        if(!empty($keyword)) {
+            $items = Item::KeywordSearch($keyword)->get();
+            return view('search_results', compact('items', 'keyword'));
+        }
+        return view('purchase', compact('item','keyword'));
+    }
 }

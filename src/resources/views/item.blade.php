@@ -34,7 +34,7 @@
             </div>
             <div class="content__form">
                 <div class="form__inner">
-                    <form class="form__purchase" action="/purchase/{item_id}" method ="post">
+                    <form action="{{ url('/purchase/' . $item->id) }}" method ="get">
                     @csrf
                         <h2 class="item-name">{{$item->name}}</h2>
                         <p class="item-brand-name">{{$item->brand}}</p>
