@@ -127,6 +127,8 @@ p {
 }
 
 .btn {
+    font-size: 1.2rem;
+    border-radius: 5px;
     background-color: #FF5555;
     color: #FFFFFF;
     width: 100%;

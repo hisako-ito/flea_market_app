@@ -18,6 +18,7 @@ class ItemController extends Controller
             $items = $items->KeywordSearch($keyword);
         }
         $items = $items->get();
+
         return view('list', compact('items', 'keyword'));
     }
 
@@ -35,7 +36,7 @@ class ItemController extends Controller
         return view('item', compact('item','categories','keyword'));
     }
 
-    public function delete($item_id,Request $request)
+    public function getPurchase($item_id,Request $request)
     {
         $item = Item::find($item_id);
         $keyword = $request->input('keyword', '');
@@ -45,5 +46,23 @@ class ItemController extends Controller
             return view('search_results', compact('items', 'keyword'));
         }
         return view('purchase', compact('item','keyword'));
+    }
+
+    public function purchase($item_id,Request $request)
+    {
+        $item = Item::find($item_id);
+        if (!$item) {
+        return redirect('/')->with('error', '指定された商品が見つかりません。');
+        }
+        $keyword = $request->input('keyword', '');
+        $item->delete();
+
+        if(!empty($keyword)) {
+            $items = Item::KeywordSearch($keyword)->get();
+            return view('search_results', compact('items', 'keyword'));
+        }
+        $message = "商品を購入しました。";
+
+        return redirect('/')->with(compact('item','keyword','message'));
     }
 }
