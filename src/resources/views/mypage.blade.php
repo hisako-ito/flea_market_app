@@ -26,19 +26,19 @@
 @endsection
 
 @section('content')
-    <div class="user-information">
-        <div class="user-card">
-            <div class="user-card__inner">
-                <div class="user-card__image">
+    <div class="user-info">
+        <div class="user-info__inner">
+            <div class="user-info__image">
+                <div class="user-info__image__inner">
                     <img src=""  alt="ユーザー画像">
                 </div>
-                <div class="user-card__content">
-                    <h2 class="user-name">ユーザー名</h2>
-                </div>
             </div>
-        </div>
-        <div class="user-information__edit-btn">
-            <a href="/mypage/profile">プロフィールを編集</a>
+            <div class="user-info__content">
+                <h2 class="user-name">ユーザー名</h2>
+            </div>
+            <div class="user-info__edit-form">
+                <a class="user-info__edit-btn" href="/mypage/profile">プロフィールを編集</a>
+            </div>
         </div>
     </div>
     <div class="group-list">
