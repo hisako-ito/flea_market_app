@@ -19,7 +19,7 @@ class ItemController extends Controller
         }
         $items = $items->get();
 
-        return view('list', compact('items', 'keyword'));
+        return view('list', compact('keyword', 'items'));
     }
 
     public function getDetail($item_id,Request $request)

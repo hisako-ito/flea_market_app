@@ -1,16 +1,16 @@
-.register__content {
+.profile-edit__content {
     height: 100vh;
     display: flex;
     justify-content: center;
     padding: 5rem 0;
 }
 
-.register__form {
+.profile-edit__form {
     width: 45%;
     height: 60%;
 }
 
-.register-form__heading {
+.profile-edit-form__heading {
     text-align: center;
 }
 
@@ -36,16 +36,6 @@
 
 .form__button-submit {
     height: 42px;
-}
-
-.login__link {
-    text-align: center;
-    margin-top: 1.5rem;
-}
-
-.login__button-submit {
-    color: #0073CC;
-    font-size: 0.9rem;
 }
 
 .form__error {
