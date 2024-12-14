@@ -10,62 +10,40 @@ use App\Http\Requests\ProfileRequest;
 
 class UserController extends Controller
 {
-    public function store(Request $request)
+    public function showAddProfileForm()
     {
-        $addressRequest = app(AddressRequest::class);
-        $addressRequest->validate($request->all());
+        return view('profile_add');
+    }
 
-        $profileRequest = app(ProfileRequest::class);
-        $profileRequest->validate($request->all());
-
+    public function addProfile(AddressRequest $request)
+    {
         $user = Auth::user();
-        $dir = 'user_images';
-
-        $file_name = $request->file('user_image')->getClientOriginalName();
-        $request->file('user_image')->storeAs('public/' . $dir, $file_name);
-
-        $user_data = User::create([
-            'image' => 'storage/' . $dir . '/' . $file_name,
-            'name' => $request->input('user_name'),
-            'postal_code' => $request->input('postal_code'),
-            'address' => $request->input('address'),
-            'building' => $request->input('building'),
+        $user->update([
+            'postal_code' => $request->postal_code,
+            'address' => $request->address,
+            'building' => $request->building,
         ]);
 
+        // ログアウトしてログイン画面へ遷移
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/login');
+        return redirect('/login')->with('status', 'プロフィールが更新されました。再度ログインしてください。');
     }
 
     public function show(Request $request)
     {
         $keyword = $request->input('keyword', '');
         $items = Item::query();
+        $user = Auth::user();
 
         if(!empty($keyword)) {
             $items = $items->KeywordSearch($keyword);
         }
         $items = $items->get();
 
-        return view('mypage', compact('keyword', 'items'));
+        return view('mypage', compact('keyword', 'items', 'user'));
     }
 
     public function edit(Request $request)
-    {
-        $keyword = $request->input('keyword', '');
-        $user = Auth::user();
-
-        if(!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
-        }
-
-        return view('profile_edit', compact('keyword', 'user'));
-    }
-
-    public function update(Request $request)
     {
         $keyword = $request->input('keyword', '');
         $user = Auth::user();

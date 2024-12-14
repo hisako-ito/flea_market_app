@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
-// use App\Actions\Fortify\ResetUserPassword;
-// use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -40,6 +38,10 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
 
+        Route::get('/profile/add', function () {
+        return redirect('/profile/add');
+        })->middleware(['auth']);
+
         Fortify::loginView(function () {
             return view('auth.login');
         });
@@ -49,16 +51,18 @@ class FortifyServiceProvider extends ServiceProvider
                 return Limit::perMinute(10)->by($email . $request->ip());
         });
 
-        $this->app->bind(FortifyLoginRequest::class, LoginRequest::class);
+        // $this->app->bind(FortifyLoginRequest::class, LoginRequest::class);
 
         Fortify::authenticateUsing(function ($request) {
             $user = User::where('email', $request->login)
-                    ->orWhere('name', $request->login)
+                    ->orWhere('user_name', $request->login)
                     ->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
                 return $user;
             }
         });
+
+        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
     }
 }

@@ -14,14 +14,14 @@
         @csrf
             <div class="form__group">
                 <div class="form__group-title">
-                    <label class="form__label--item" for="name">ユーザー名</label>
+                    <label class="form__label--item" for="user_name">ユーザー名</label>
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="name" id="name" value="{{ old('name') }}">
+                        <input type="text" name="user_name" id="user_name" value="{{ old('user_name') }}">
                     </div>
                     <div class="form__error">
-                        @error('name')
+                        @error('user_name')
                         {{ $message }}
                         @enderror
                     </div>
