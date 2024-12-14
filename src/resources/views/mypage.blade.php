@@ -30,11 +30,11 @@
         <div class="user-info__inner">
             <div class="user-info__image">
                 <div class="user-info__image__inner">
-                    <img src=""  alt="ユーザー画像">
+                    <img src="{{ $user->user_image }}"  alt="ユーザー画像">
                 </div>
             </div>
             <div class="user-info__content">
-                <h2 class="user-name">ユーザー名</h2>
+                <h2 class="user-name">{{ $user->user_name }}</h2>
             </div>
             <div class="user-info__edit-form">
                 <a class="user-info__edit-btn" href="/mypage/profile">プロフィールを編集</a>

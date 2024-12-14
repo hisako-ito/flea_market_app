@@ -13,20 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request)
-    {   $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return view('profile_add');
-    }
-
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('login', 'password');

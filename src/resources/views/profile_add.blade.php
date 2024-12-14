@@ -30,14 +30,14 @@
         <div class="profile-edit-form__heading">
             <h2>プロフィール設定</h2>
         </div>
-        <form class="form" action="/register/add" method="post" enctype="multipart/form-data">
+        <form class="form" action="{{ route('profile.add.save') }}" method="post" enctype="multipart/form-data">
         @csrf
             <div class="form__group">
                 <div class="form__input--image">
-                    <input type="file" name="user_image" value="{{ $user['image'] ?? '' }}">
+                    <input type="file" name="user_image">
                 </div>
                 <div class="form__error">
-                    @error('image')
+                    @error('user_image')
                     {{ $message }}
                     @enderror
                 </div>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="user_name" id="user_name" value="{{ $user['name'] ?? '' }}">
+                        <input type="text" name="user_name" id="user_name" value="{{ old('user_name', auth()->check() ? (auth()->user()->user_name ?? '') : '') }}">
                     </div>
                     <div class="form__error">
                         @error('name')
@@ -59,14 +59,14 @@
             </div>
             <div class="form__group">
                 <div class="form__group-title">
-                    <label class="form__label--item" for="postal-code">郵便番号</label>
+                    <label class="form__label--item" for="postal_code">郵便番号</label>
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="postal-code" id="postal-code" value="{{ $user['postal-code'] ?? '' }}">
+                        <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', auth()->check() ? (auth()->user()->postal_code ?? '') : '') }}">
                     </div>
                     <div class="form__error">
-                        @error('postal-code')
+                        @error('postal_code')
                         {{ $message }}
                         @enderror
                     </div>
@@ -78,7 +78,7 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="address" id="address" value="{{ $user['address'] ?? '' }}">
+                        <input type="text" name="address" id="address" value="{{ old('address', auth()->check() ? (auth()->user()->address ?? '') : '') }}">
                     </div>
                     <div class="form__error">
                         @error('address')
@@ -93,7 +93,7 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="building" id="building" value="{{ $user['building'] ?? '' }}">
+                        <input type="text" name="building" id="building" value="{{ old('building', auth()->check() ? (auth()->user()->building ?? '') : '') }}">
                     </div>
                 </div>
             </div>

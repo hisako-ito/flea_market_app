@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -40,16 +41,18 @@ class ItemController extends Controller
     {
         $item = Item::find($item_id);
         $keyword = $request->input('keyword', '');
+        $user = Auth::user();
 
         if(!empty($keyword)) {
             $items = Item::KeywordSearch($keyword)->get();
             return view('search_results', compact('items', 'keyword'));
         }
-        return view('purchase', compact('item','keyword'));
+        return view('purchase', compact('item','keyword', 'user'));
     }
 
-    public function purchase($item_id,Request $request)
+    public function postPurchase($item_id,Request $request)
     {
+        $user = Auth::user();
         $item = Item::find($item_id);
         if (!$item) {
         return redirect('/')->with('error', '指定された商品が見つかりません。');
@@ -63,6 +66,6 @@ class ItemController extends Controller
         }
         $message = "商品を購入しました。";
 
-        return redirect('/')->with(compact('item','keyword','message'));
+        return redirect('/')->with(compact('item','keyword','message', 'user'));
     }
 }

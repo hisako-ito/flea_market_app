@@ -31,8 +31,8 @@ class ProfileRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_image.required' => '商品画像を登録してください',
-            'user_image.mimes:png,jpeg' => '「.png」または「.jpeg」形式でアップロードしてください',
+            'user_image.required' => 'ユーザー画像を登録してください',
+            'user_image.mimes' => '「.png」または「.jpeg」形式でアップロードしてください',
         ];
     }
 }

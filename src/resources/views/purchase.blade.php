@@ -55,8 +55,9 @@
                     </div>
                     <div class="item__deliver-address">
                         <h3 class="deliver-address__heading">配送先</h3>
-                        <p class="postal-code"></p>
-                        <p class="address"></p>
+                        <p class="postal_code">{{ $user->postal_code }}</p>
+                        <p class="address">{{ $user->address }}</p>
+                        <p class="building">{{ $user->building }}</p>
                     </div>
                 </div>
                 <div class="purchase-form__confirm">
