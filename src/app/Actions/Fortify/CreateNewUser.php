@@ -19,7 +19,7 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-    public function create(array $input): RegisterResponse
+    public function create(array $input)
     {
         $request = new RegisterRequest();
 
@@ -28,15 +28,15 @@ class CreateNewUser implements CreatesNewUsers
 
         Validator::make($input, $rules, $messages)->validate();
 
-        $user = User::create([
+        return User::create([
             'user_name' => $input['user_name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
 
-        Auth::login($user);
+        // Auth::login($user);
 
-        return app(RegisterResponse::class);
+        // return app(RegisterResponse::class);
     }
 }
 

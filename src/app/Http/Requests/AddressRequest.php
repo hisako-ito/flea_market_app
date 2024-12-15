@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AddressRequest extends FormRequest
 {
@@ -10,9 +11,12 @@ class AddressRequest extends FormRequest
      * Determine if the user is authorized to make this request.
      *
      * @return bool
+     *
      */
+
     public function authorize()
     {
+        \Log::info('フォームリクエスト内のユーザー情報 (authorize): ', ['user' => $this->user()]);
         return true;
     }
 
@@ -21,10 +25,30 @@ class AddressRequest extends FormRequest
      *
      * @return array
      */
+    public function prepareForValidation()
+    {
+        \Log::info('prepareForValidation() でキャッシュされたユーザーID: ', ['userId' => $this->user()->id ?? null]);
+    }
+
     public function rules()
     {
+        $userId = $this->user() ? $this->user()->id : null;
+
+        if ($userId === null) {
+            \Log::error('ルール内でユーザーIDが取得できません');
+        }
+
+        \Log::info('バリデーションルール適用中: ', ['userId' => $userId]);
+
+
         return [
             'user_name' => 'required',
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($userId),
+            ],
             'postal_code' => 'required|string|regex:/^\d{3}-\d{4}$/|max:8',
             'address' => 'required',
             'building' => 'required'

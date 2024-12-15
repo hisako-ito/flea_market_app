@@ -6,6 +6,11 @@
 
 @section('content')
 <div class="login__content">
+@if(session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
     <div class="login__form">
         <div class="login-form__heading">
             <h2>ログイン</h2>
