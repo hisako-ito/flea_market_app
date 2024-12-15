@@ -5,23 +5,23 @@
 @endsection
 
 @section('nav_search')
-    <form class="header-nav__search-form" action="/" method="get">
+<form class="header-nav__search-form" action="/" method="get">
     @csrf
-        <input class="header-nav__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword ?? '' }}">
-    </form>
+    <input class="header-nav__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword ?? '' }}">
+</form>
 @endsection
 
 @section('nav_actions')
-    @if (Auth::check())
-        <form class="logout-form" action="/logout" method="post">
-        @csrf
-            <button class="header-nav__logout-btn" type="submit">ログアウト</button>
-        </form>
-    @else
-        <a class="header-nav__login-btn" href="/login">ログイン</a>
-    @endif
-        <a class="header-nav__mypage-btn" href="/mypage" >マイページ</a>
-        <a class="header-nav__sell-btn" href="/sell">出品</a>
+@if (Auth::check())
+<form class="logout-form" action="/logout" method="post">
+    @csrf
+    <button class="header-nav__logout-btn" type="submit">ログアウト</button>
+</form>
+@else
+<a class="header-nav__login-btn" href="/login">ログイン</a>
+@endif
+<a class="header-nav__mypage-btn" href="/mypage">マイページ</a>
+<a class="header-nav__sell-btn" href="/sell">出品</a>
 @endsection
 
 @section('content')
@@ -30,8 +30,9 @@
         <div class="profile-edit-form__heading">
             <h2>プロフィール設定</h2>
         </div>
-        <form class="form" action="{{ route('profile.add.save') }}" method="post" enctype="multipart/form-data">
-        @csrf
+        <form class="form" action="{{ route('user-profile-information.register') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @method('PATCH')
             <div class="form__group">
                 <div class="form__input--image">
                     <input type="file" name="user_image">
@@ -51,7 +52,7 @@
                         <input type="text" name="user_name" id="user_name" value="{{ old('user_name', auth()->check() ? (auth()->user()->user_name ?? '') : '') }}">
                     </div>
                     <div class="form__error">
-                        @error('name')
+                        @error('user_name')
                         {{ $message }}
                         @enderror
                     </div>
@@ -95,7 +96,13 @@
                     <div class="form__input--text">
                         <input type="text" name="building" id="building" value="{{ old('building', auth()->check() ? (auth()->user()->building ?? '') : '') }}">
                     </div>
+                    <div class="form__error">
+                        @error('building')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </div>
+                <input type="hidden" id="email" name="email" value="{{ old('email', auth()->user()->email) }}">
             </div>
             <div class="form__button">
                 <button class="form__button-submit btn" type="submit">更新する</button>

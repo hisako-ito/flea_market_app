@@ -10,23 +10,9 @@ use App\Http\Requests\ProfileRequest;
 
 class UserController extends Controller
 {
-    public function showAddProfileForm()
+    public function add()
     {
         return view('profile_add');
-    }
-
-    public function addProfile(AddressRequest $request)
-    {
-        $user = Auth::user();
-        $user->update([
-            'postal_code' => $request->postal_code,
-            'address' => $request->address,
-            'building' => $request->building,
-        ]);
-
-        // ログアウトしてログイン画面へ遷移
-        Auth::logout();
-        return redirect('/login')->with('status', 'プロフィールが更新されました。再度ログインしてください。');
     }
 
     public function show(Request $request)

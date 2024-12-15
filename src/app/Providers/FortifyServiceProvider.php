@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Actions\Fortify\RegisterResponse;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -33,14 +34,11 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::createUsersUsing(CreateNewUser::class);
+        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
 
         Fortify::registerView(function () {
             return view('auth.register');
         });
-
-        Route::get('/profile/add', function () {
-        return redirect('/profile/add');
-        })->middleware(['auth']);
 
         Fortify::loginView(function () {
             return view('auth.login');
@@ -63,6 +61,9 @@ class FortifyServiceProvider extends ServiceProvider
             }
         });
 
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        $this->app->singleton(
+        \Laravel\Fortify\Contracts\RegisterResponse::class,
+        RegisterResponse::class
+        );
     }
 }
