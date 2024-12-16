@@ -5,18 +5,29 @@
 @endsection
 
 @section('content')
-<div class="login__content">
-@if(session('status'))
-    <div class="alert alert-success">
-        {{ session('status') }}
+<div class="content__alert">
+    @if (session('message'))
+    <div class="alert--success">
+        {{ session('message') }}
     </div>
-@endif
+    @endif
+    @if ($errors->any())
+    <div class="alert--danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+</div>
+<div class="login__content">
     <div class="login__form">
         <div class="login-form__heading">
             <h2>ログイン</h2>
         </div>
         <form class="form" action="/login" method="post">
-        @csrf
+            @csrf
             <div class="form__group">
                 <div class="form__group-title">
                     <label class="form__label--item" for="login">ユーザー名 / メールアドレス</label>

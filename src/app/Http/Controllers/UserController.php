@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\AddressRequest;
-use App\Http\Requests\ProfileRequest;
 
 class UserController extends Controller
 {
@@ -21,7 +19,7 @@ class UserController extends Controller
         $items = Item::query();
         $user = Auth::user();
 
-        if(!empty($keyword)) {
+        if (!empty($keyword)) {
             $items = $items->KeywordSearch($keyword);
         }
         $items = $items->get();
@@ -34,7 +32,7 @@ class UserController extends Controller
         $keyword = $request->input('keyword', '');
         $user = Auth::user();
 
-        if(!empty($keyword)) {
+        if (!empty($keyword)) {
             $items = Item::KeywordSearch($keyword)->get();
             return view('search_results', compact('items', 'keyword'));
         }

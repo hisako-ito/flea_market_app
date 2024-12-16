@@ -1,13 +1,5 @@
-.profile-edit__content {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 5rem 0;
-}
-
 .profile-edit__form {
-    width: 45%;
-    height: 60%;
+    margin: 3% 30%;
 }
 
 .profile-edit-form__heading {
@@ -16,6 +8,43 @@
 
 .form__group {
     margin-top: 2rem;
+}
+
+.image-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.user-info__image {
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: inline-block;
+}
+
+.user-info__image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FF5555;
+    border: 2px solid #FF5555;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
 .form__label--item {
@@ -31,7 +60,7 @@
 }
 
 .form__button {
-    margin-top: 4rem;
+    margin-top: 3rem;
 }
 
 .form__button-submit {

@@ -16,8 +16,9 @@ class AddressRequest extends FormRequest
 
     public function authorize()
     {
-        \Log::info('フォームリクエスト内のユーザー情報 (authorize): ', ['user' => $this->user()]);
-        return true;
+        $user = $this->user(); // 現在のユーザーを取得
+        \Log::info('フォームリクエスト内のユーザー情報 (authorize): ', ['user' => $user]);
+        return $user !== null; // ユーザーが取得できればtrueを返す
     }
 
     /**
@@ -43,12 +44,12 @@ class AddressRequest extends FormRequest
 
         return [
             'user_name' => 'required',
-            'email' => [
-                'nullable',
-                'email',
-                'max:255',
-                Rule::unique('users', 'email')->ignore($userId),
-            ],
+            // 'email' => [
+            //     'nullable',
+            //     'email',
+            //     'max:255',
+            //     Rule::unique('users', 'email')->ignore($userId),
+            // ],
             'postal_code' => 'required|string|regex:/^\d{3}-\d{4}$/|max:8',
             'address' => 'required',
             'building' => 'required'

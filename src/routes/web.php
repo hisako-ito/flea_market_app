@@ -2,16 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProfileInformationController;
-// use Laravel\Fortify\Http\Controllers\ProfileInformationController;
+use App\Http\Controllers\Auth\ProfileInformationController;
 
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/item/{item_id}', [ItemController::class, 'getDetail']);
 
-Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/login', [LoginController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/mypage/profile', [UserController::class, 'edit']);
