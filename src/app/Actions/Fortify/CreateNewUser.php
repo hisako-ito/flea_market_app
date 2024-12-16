@@ -34,9 +34,8 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        // Auth::login($user);
+        Auth::login($user);
 
-        // return app(RegisterResponse::class);
+        return app(RegisterResponse::class);
     }
 }
-

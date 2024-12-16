@@ -17,16 +17,14 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Auth\RegisterController;
 
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -46,15 +44,15 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;
-                return Limit::perMinute(10)->by($email . $request->ip());
+            return Limit::perMinute(10)->by($email . $request->ip());
         });
 
         // $this->app->bind(FortifyLoginRequest::class, LoginRequest::class);
 
         Fortify::authenticateUsing(function ($request) {
             $user = User::where('email', $request->login)
-                    ->orWhere('user_name', $request->login)
-                    ->first();
+                ->orWhere('user_name', $request->login)
+                ->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
                 return $user;
@@ -62,8 +60,8 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(
-        \Laravel\Fortify\Contracts\RegisterResponse::class,
-        RegisterResponse::class
+            \Laravel\Fortify\Contracts\RegisterResponse::class,
+            RegisterResponse::class
         );
     }
 }

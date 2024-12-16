@@ -34,8 +34,14 @@
             @csrf
             @method('PATCH')
             <div class="form__group">
-                <div class="form__input--image">
-                    <input type="file" name="user_image">
+                <div class="image-upload-container">
+                    <div class="user-info__image" id="imagePreview">
+                        <img src="{{ $user ?? '' }}" alt="ユーザー画像" id="previewImage">
+                    </div>
+                    <div class="form__input--image">
+                        <input type="file" name="user_image" id="fileInput" accept="image/*" hidden>
+                        <label for="fileInput" class="file-input-label">画像を選択する</label>
+                    </div>
                 </div>
                 <div class="form__error">
                     @error('user_image')
@@ -110,4 +116,24 @@
         </form>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const previewImage = document.getElementById('previewImage');
+    const imagePreview = document.getElementById('imagePreview');
+
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                imagePreview.style.backgroundColor = 'transparent';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 @endsection

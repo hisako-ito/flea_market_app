@@ -19,7 +19,7 @@
     <header class="header">
         <div class="header__inner">
             <div class="header__logo">
-                <a href="/"><img src="{{ asset('/images/logo.svg') }}"  alt="coachtech" class="img-logo-icon"/></a>
+                <a href="/"><img src="{{ asset('/images/logo.svg') }}" alt="coachtech" class="img-logo-icon" /></a>
             </div>
             <div class="header-nav__search">
                 @yield('nav_search')
@@ -29,10 +29,27 @@
             </div>
         </div>
     </header>
+    <div class="content__alert">
+        @if (session('message'))
+        <div class="alert--success">
+            {{ session('message') }}
+        </div>
+        @endif
+        @if ($errors->any())
+        <div class="alert--danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+    </div>
     <div class="content">
         @yield('content')
     </div>
 
 </body>
 @yield('script')
+
 </html>
