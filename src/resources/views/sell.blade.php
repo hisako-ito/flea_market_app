@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/profile_edit.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sell.css') }}">
 @endsection
 
 @section('nav_search')
@@ -27,11 +27,10 @@
 @section('content')
 <div class="profile-edit__form">
     <div class="profile-edit-form__heading">
-        <h2>プロフィール設定</h2>
+        <h2>商品の出品</h2>
     </div>
-    <form class="form" action="{{ route('user-profile-information.profile') }}" method="post" enctype="multipart/form-data">
+    <form class="form" action="/sell" method="post" enctype="multipart/form-data">
         @csrf
-        @method('PATCH')
         <div class="form__group">
             <div class="image-upload-container">
                 <div class="user-info__image" id="imagePreview">
@@ -109,7 +108,7 @@
             </div>
         </div>
         <div class="form__button">
-            <button class="form__button-submit btn" type="submit">更新する</button>
+            <button class="form__button-submit btn" type="submit">出品する</button>
         </div>
     </form>
 </div>

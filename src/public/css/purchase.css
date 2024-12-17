@@ -68,8 +68,7 @@
 }
 
 .select-wrapper,
-.postal-code,
-.address {
+.deliver-address__content {
     margin-left: 8%;
     margin-top: 4%;
 }
@@ -86,6 +85,7 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    outline: none;
 }
 
 .select-wrapper {
@@ -103,12 +103,21 @@
     color: #5F5F5F;
 }
 
-.bl_selectCont {
-    display: none;
+.deliver-address__wrapper {
+    display: flex;
+    justify-content: space-between;
 }
 
-.bl_selectCont.is_active {
-    display: revert;
+.address-update__button-submit {
+    color: #0073CC;
+}
+
+.postal_code::before {
+    content: "〒";
+}
+
+.address {
+    margin-left: 1rem;
 }
 
 .purchase-form__confirm {
@@ -117,7 +126,7 @@
 
 .confirm-table {
     width: 100%;
-    height: 45%;
+    height: 40%;
 }
 
 .confirm-table__row {
@@ -131,11 +140,46 @@
 
 .confirm-table__data {
     width: 60%;
-    font-size: 1.3rem;
 }
 
 .purchase-form__btn {
     margin-top: 15%;
-    height: 10%;
 }
 
+/* レスポンシブ (768px以上)*/
+@media screen and (min-width: 768px) {
+    .pay-method__heading,
+    .deliver-address__heading,
+    .confirm-table__data,
+    .address-update__button-submit {
+        font-size: 1rem;
+    }
+
+    .confirm-table__label {
+        font-size: 0.8rem;
+    }
+
+    .purchase-form__btn {
+        font-size: 1rem;
+        height: 10%;
+    }
+}
+
+/* レスポンシブ (1000px以上)*/
+@media screen and (min-width: 1400px) {
+    .pay-method__heading,
+    .deliver-address__heading,
+    .confirm-table__data {
+        font-size: 1.2rem;
+    }
+
+    .confirm-table__label {
+            font-size: 1rem;
+    }
+
+    .purchase-form__btn {
+        font-size: 1.2rem;
+        height: 8%;
+    }
+
+}
