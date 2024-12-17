@@ -29,11 +29,8 @@ class ProfileInformationController extends Controller
 
         $mergedData = array_merge($profileData, $addressData);
 
-        // try {
         $user = $addressRequest->user();
         $this->updateUserProfile->update($user, $mergedData);
-
-        // \Log::info('更新処理完了');
 
         if ($addressRequest->route()->getName() === 'user-profile-information.register') {
             auth()->logout();
@@ -41,8 +38,15 @@ class ProfileInformationController extends Controller
         }
 
         return redirect()->back()->with('message', 'プロフィールを更新しました！');
-        // } catch (\Exception $e) {
-        //     \Log::error('更新処理中にエラーが発生しました: ' . $e->getMessage());
-        //     return redirect()->back()->withErrors(['error' => 'プロフィールの更新中に問題が発生しました。もう一度お試しください。']);
+    }
+
+    public function postAddress(AddressRequest $request)
+    {
+        $data = $request->validated();
+
+        $user = $request->user();
+        $this->updateUserProfile->update($user, $data);
+
+        return redirect()->back()->with('message', '住所を更新しました！');
     }
 }

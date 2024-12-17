@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function add()
-    {
-        return view('profile_add');
-    }
-
     public function show(Request $request)
     {
         $keyword = $request->input('keyword', '');
@@ -25,6 +20,11 @@ class UserController extends Controller
         $items = $items->get();
 
         return view('mypage', compact('keyword', 'items', 'user'));
+    }
+
+    public function add()
+    {
+        return view('profile_add');
     }
 
     public function edit(Request $request)

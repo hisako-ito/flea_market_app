@@ -27,42 +27,11 @@
 @section('content')
 <div class="profile-edit__form">
     <div class="profile-edit-form__heading">
-        <h2>プロフィール設定</h2>
+        <h2>住所の変更</h2>
     </div>
-    <form class="form" action="{{ route('user-profile-information.profile') }}" method="post" enctype="multipart/form-data">
+    <form class="form" action="/purchase/address/{{$item->id}}" method="post">
         @csrf
         @method('PATCH')
-        <div class="form__group">
-            <div class="image-upload-container">
-                <div class="user-info__image" id="imagePreview">
-                    <img src="{{ asset($user->user_image) }}" alt="ユーザー画像" id="previewImage">
-                </div>
-                <div class="form__input--image">
-                    <input type="file" name="user_image" id="fileInput" accept="image/*" hidden>
-                    <label for="fileInput" class="file-input-label">画像を選択する</label>
-                </div>
-            </div>
-            <div class="form__error">
-                @error('user_image')
-                {{ $message }}
-                @enderror
-            </div>
-        </div>
-        <div class="form__group">
-            <div class="form__group-title">
-                <label class="form__label--item" for="user_name">ユーザー名</label>
-            </div>
-            <div class="form__group-content">
-                <div class="form__input--text">
-                    <input type="text" name="user_name" id="name" value="{{ old('user_name', auth()->user()->user_name) }}">
-                </div>
-                <div class="form__error">
-                    @error('user_name')
-                    {{ $message }}
-                    @enderror
-                </div>
-            </div>
-        </div>
         <div class="form__group">
             <div class="form__group-title">
                 <label class="form__label--item" for="postal_code">郵便番号</label>
@@ -108,29 +77,10 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="user_name" value="{{ $user->user_name }}">
         <div class="form__button">
             <button class="form__button-submit btn" type="submit">更新する</button>
         </div>
     </form>
 </div>
-@endsection
-
-@section('script')
-<script>
-    const fileInput = document.getElementById('fileInput');
-    const previewImage = document.getElementById('previewImage');
-    const imagePreview = document.getElementById('imagePreview');
-
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImage.src = e.target.result;
-                imagePreview.style.backgroundColor = 'transparent';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-</script>
 @endsection
