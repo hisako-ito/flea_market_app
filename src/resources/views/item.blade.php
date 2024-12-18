@@ -74,7 +74,6 @@
                         </tr>
                     </table>
                 </div>
-
                 <h3 class="comment__heading">コメント(カウント)</h3>
                 <div class="comment-user">comment-user</div>
                 <div class="comment-content">comment-content</div>

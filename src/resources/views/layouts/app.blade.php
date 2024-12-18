@@ -29,26 +29,27 @@
             </div>
         </div>
     </header>
-    <div class="content__alert">
-        @if (session('message'))
-        <div class="alert--success">
-            {{ session('message') }}
+    <main>
+        <div class="content__alert">
+            @if (session('message'))
+            <div class="alert--success">
+                {{ session('message') }}
+            </div>
+            @endif
+            @if ($errors->any())
+            <div class="alert--danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
         </div>
-        @endif
-        @if ($errors->any())
-        <div class="alert--danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="content">
+            @yield('content')
         </div>
-        @endif
-    </div>
-    <div class="content">
-        @yield('content')
-    </div>
-
+    </main>
 </body>
 @yield('script')
 

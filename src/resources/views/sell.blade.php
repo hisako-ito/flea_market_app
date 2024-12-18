@@ -4,6 +4,17 @@
 <link rel="stylesheet" href="{{ asset('css/sell.css') }}">
 @endsection
 
+@section('jquery')
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="{{ asset('js/jquery.minimalect.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.minimalect.css') }}" media="screen" />
+<script type="text/javascript">
+    $(function() {
+        $("#exhibition-form__select").minimalect();
+    });
+</script>
+@endsection
+
 @section('nav_search')
 <form class="header-nav__search-form" action="/" method="get">
     @csrf
@@ -25,38 +36,43 @@
 @endsection
 
 @section('content')
-<div class="profile-edit__form">
-    <div class="profile-edit-form__heading">
+<div class="exhibition-form">
+    <div class="exhibition-form__heading">
         <h2>商品の出品</h2>
     </div>
     <form class="form" action="/sell" method="post" enctype="multipart/form-data">
         @csrf
         <div class="form__group">
-            <div class="image-upload-container">
-                <div class="user-info__image" id="imagePreview">
-                    <img src="{{ asset($user->user_image) }}" alt="ユーザー画像" id="previewImage">
-                </div>
-                <div class="form__input--image">
-                    <input type="file" name="user_image" id="fileInput" accept="image/*" hidden>
-                    <label for="fileInput" class="file-input-label">画像を選択する</label>
-                </div>
+            <div class="form__group-title">
+                <label class="form__label--item">商品画像</label>
+            </div>
+            <div class="item-image" id="imagePreview">
+                <span class="close-btn" id="close-btn">×</span>
+                <img src="#" alt="商品画像" id="previewImage" style="display: none;">
+            </div>
+            <div class="form__input--image">
+                <label for="image-input" class="file-input-label">画像を選択する</label>
+                <input type="file" name="item_image" id="image-input" accept="image/*">
             </div>
             <div class="form__error">
-                @error('user_image')
+                @error('item_image')
                 {{ $message }}
                 @enderror
             </div>
         </div>
+        <div class="exhibition-item-info__heading">
+            <h3>商品の詳細</h3>
+        </div>
         <div class="form__group">
             <div class="form__group-title">
-                <label class="form__label--item" for="user_name">ユーザー名</label>
+                <label class="form__label--item" for="category_id">カテゴリー</label>
             </div>
             <div class="form__group-content">
                 <div class="form__input--text">
-                    <input type="text" name="user_name" id="name" value="{{ old('user_name', auth()->user()->user_name) }}">
+                    <input type="checkbox" name="category_id" id="category_id" value="{{ old('category_id') }}">
                 </div>
                 <div class="form__error">
-                    @error('user_name')
+                    @error('category_id')
                     {{ $message }}
                     @enderror
                 </div>
@@ -64,14 +80,36 @@
         </div>
         <div class="form__group">
             <div class="form__group-title">
-                <label class="form__label--item" for="postal_code">郵便番号</label>
+                <label class="form__label--item" for="condition">商品の状態</label>
+            </div>
+            <div class="form__group-content">
+                <select class="exhibition-form__select" id="exhibition-form__select">
+                    <option value="" disabled selected>選択してください</option>
+                    <option value="1">良好</option>
+                    <option value="2">目立った傷や汚れなし</option>
+                    <option value="3">やや傷や汚れあり</option>
+                    <option value="4">状態が悪い</option>
+                </select>
+                <div class="form__error">
+                    @error('condition')
+                    {{ $message }}
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="exhibition-item-info__heading">
+            <h3>商品名と説明</h3>
+        </div>
+        <div class="form__group">
+            <div class="form__group-title">
+                <label class="form__label--item" for="item_name">商品名</label>
             </div>
             <div class="form__group-content">
                 <div class="form__input--text">
-                    <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', auth()->user()->postal_code) }}">
+                    <input type="text" name="item_name" id="item_name" value="{{ old('item_name') }}">
                 </div>
                 <div class="form__error">
-                    @error('postal_code')
+                    @error('item_name')
                     {{ $message }}
                     @enderror
                 </div>
@@ -79,29 +117,39 @@
         </div>
         <div class="form__group">
             <div class="form__group-title">
-                <label class="form__label--item" for="address">住所</label>
+                <label class="form__label--item" for="brand">ブランド名</label>
             </div>
             <div class="form__group-content">
                 <div class="form__input--text">
-                    <input type="text" name="address" id="address" value="{{ old('address', auth()->user()->address) }}">
-                </div>
-                <div class="form__error">
-                    @error('address')
-                    {{ $message }}
-                    @enderror
+                    <input type="text" name="brand" id="brand" value="{{ old('brand') }}">
                 </div>
             </div>
         </div>
         <div class="form__group">
             <div class="form__group-title">
-                <label class="form__label--item" for="building">建物名</label>
+                <label class="form__label--item" for="description">商品の説明</label>
             </div>
             <div class="form__group-content">
                 <div class="form__input--text">
-                    <input type="text" name="building" id="building" value="{{ old('building', auth()->user()->building) }}">
+                    <input type="text" name="description" id="description" value="{{ old('description') }}">
                 </div>
                 <div class="form__error">
                     @error('building')
+                    {{ $message }}
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="form__group">
+            <div class="form__group-title">
+                <label class="form__label--item" for="price">販売価格</label>
+            </div>
+            <div class="form__group-content">
+                <div class="form__input--text">
+                    <input type="text" name="price" id="price" value="￥{{ old('price') }}">
+                </div>
+                <div class="form__error">
+                    @error('price')
                     {{ $message }}
                     @enderror
                 </div>
@@ -116,20 +164,37 @@
 
 @section('script')
 <script>
-    const fileInput = document.getElementById('fileInput');
-    const previewImage = document.getElementById('previewImage');
-    const imagePreview = document.getElementById('imagePreview');
+    // 要素を取得
+    const imageInput = document.getElementById("image-input");
+    const previewImage = document.getElementById("previewImage");
+    const imagePreview = document.getElementById("imagePreview");
+    const closeBtn = document.getElementById("close-btn");
 
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
+    // 画像選択時の処理
+    imageInput.addEventListener("change", function() {
+        const file = this.files[0]; // 選択されたファイル
         if (file) {
             const reader = new FileReader();
+
+            // ファイル読み込みが完了した時の処理
             reader.onload = function(e) {
-                previewImage.src = e.target.result;
-                imagePreview.style.backgroundColor = 'transparent';
+                imagePreview.style.display = "block";
+                previewImage.src = e.target.result; // 画像のプレビュー
+                previewImage.style.display = "block"; // 画像を表示
+                closeBtn.style.display = "block"; // バツ印を表示
             };
-            reader.readAsDataURL(file);
+
+            reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
         }
+    });
+
+    // 削除ボタン（バツ印）クリック時の処理
+    closeBtn.addEventListener("click", function() {
+        previewImage.src = "#"; // 画像をリセット
+        previewImage.style.display = "none"; // 画像を非表示
+        closeBtn.style.display = "none"; // バツ印を非表示
+        imagePreview.style.display = "none";
+        imageInput.value = ""; // ファイル入力をクリア
     });
 </script>
 @endsection
