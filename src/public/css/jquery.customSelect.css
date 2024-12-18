@@ -1,0 +1,29 @@
+.ctSelect {
+    background: url(../images/customSelect-arrow.gif) right center no-repeat;
+    background-color: #ffffff;
+    padding: 1% 3%;
+    color: #000000;
+    border: 1px solid #5F5F5F;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    font-size: 1em;
+    width: 100%;
+    cursor: pointer;
+}
+
+
+/*【マウスオーバー時のselectタグ】*/
+.ctSelect.customSelectHover {}
+
+/*【選択肢(option)オープン時のselectタグ】*/
+.ctSelect.customSelectOpen {}
+
+/*【フォーカスが当たっているときのselectタグ】*/
+.ctSelect.customSelectFocus {}
+
+/*【selectタグが無効なとき】*/
+.ctSelect.customSelectDisabled {}
+
+/*【無効なoptionタグ】*/
+.ctSelect.customSelectDisabledOption {}
