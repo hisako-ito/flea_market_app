@@ -1,5 +1,5 @@
-.exhibition-form {
-    margin: 3% 30%;
+.exhibition-form__inner {
+    margin: 3% 28%;
 }
 
 .exhibition-form__heading {
@@ -68,6 +68,8 @@
 .exhibition-item-info__heading {
     color: #5F5F5F;
     border-bottom: 1px solid #5F5F5F;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
 }
 
 .form__label--item {
@@ -82,18 +84,46 @@
     border-radius: 4px;
 }
 
+.category-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    padding: 1rem;
+}
+
+.category-item {
+    border: 2px solid #FF5655;
+    color: #FF5655;
+    border-radius: 200px;
+    padding: 0.2rem 1rem;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.category-container input[type="checkbox"] {
+    display: none;
+}
+
+.category-container input[type="checkbox"]:checked + .category-item {
+    background-color: #FF5655;
+    color: #FFFFFF;
+    border-radius: 200px;
+    padding: 0.2rem 1rem;
+}
+
 .exhibition-form__select {
     width: 100%;
 }
 
+.form__input--textarea textarea {
+    padding: 2%;
+    width: 100%;
+    border-radius: 4px;
+    resize: none;
+}
+
 .form__button {
-    margin-top: 3rem;
+    margin-top: 5rem;
 }
 
-.form__button-submit {
-    height: 42px;
-}
-
-.form__error {
-    color: #ff0000;
-}

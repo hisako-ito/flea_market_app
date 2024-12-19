@@ -34,10 +34,6 @@
     margin-top: 4rem;
 }
 
-.form__button-submit {
-    height: 42px;
-}
-
 .register__link {
     text-align: center;
     margin-top: 1.5rem;
@@ -46,10 +42,5 @@
 .register__button-submit {
     color: #0073CC;
     font-size: 0.9rem;
-}
-
-.form__error {
-    color: #ff0000;
-    ;
 }
 

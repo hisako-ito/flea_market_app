@@ -2,10 +2,24 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/purchase.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.minimalect.css') }}" media="screen" />
 @endsection
 
 @section('jquery')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="{{ asset('js/jquery.minimalect.js') }}"></script>
+<script type="text/javascript">
+    $(function() {
+        // Minimalectを有効化
+        $("#payment-method").minimalect();
+
+        // Minimalectのイベントをリッスンして値を更新
+        $("#payment-method").on("change", function() {
+            const selectedValue = $(this).val();
+            $("#selected-payment").text(selectedValue);
+        });
+    });
+</script>
 @endsection
 
 @section('nav_search')
@@ -46,8 +60,7 @@
                 <div class="item__pay-method">
                     <h3 class="pay-method__heading">支払い方法</h3>
                     <div class="select-wrapper">
-                        <select class="pay-method__select" id="options" name="options">
-                            <option disabled selected>選択してください</option>
+                        <select class="pay-method__select" id="payment-method">
                             <option value="コンビニ払い">コンビニ払い</option>
                             <option value="カード支払い">カード支払い</option>
                         </select>
@@ -72,7 +85,7 @@
                     </tr>
                     <tr class="confirm-table__row">
                         <td class="confirm-table__label">支払い方法</td>
-                        <td class="confirm-table__data" id="selected-value"></td>
+                        <td class="confirm-table__data" id="selected-payment">コンビニ払い</td>
                     </tr>
                 </table>
                 <button class="purchase-form__btn btn" type="submit">購入する</button>
@@ -80,15 +93,4 @@
         </form>
     </div>
 </div>
-@endsection
-
-@section('script')
-<script>
-    $(document).ready(function() {
-        $('#options').on('change', function() {
-            var selectedValue = $(this).val();
-            $('#selected-value').text(selectedValue);
-        });
-    });
-</script>
 @endsection

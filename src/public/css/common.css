@@ -3,8 +3,8 @@
 }
 
 html,
-body {
-    height: 100%;
+body
+{    min-height: 100vh;
 }
 
 body,
@@ -132,6 +132,7 @@ p {
     background-color: #FF5555;
     color: #FFFFFF;
     width: 100%;
+    height: 50px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
