@@ -62,11 +62,3 @@
 .form__button {
     margin-top: 3rem;
 }
-
-.form__button-submit {
-    height: 42px;
-}
-
-.form__error {
-    color: #ff0000;
-}

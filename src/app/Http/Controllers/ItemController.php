@@ -84,11 +84,12 @@ class ItemController extends Controller
     {
         $keyword = $request->input('keyword', '');
         $user = Auth::user();
+        $categories = Category::all();
 
         if (!empty($keyword)) {
             $items = Item::KeywordSearch($keyword)->get();
             return view('search_results', compact('items', 'keyword'));
         }
-        return view('sell', compact('keyword', 'user'));
+        return view('sell', compact('keyword', 'user', 'categories'));
     }
 }

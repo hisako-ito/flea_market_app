@@ -73,33 +73,8 @@
     margin-top: 4%;
 }
 
-.pay-method__select {
-    width: 15rem;
-    padding: 2%;
-    font-size: 1rem;
-    border: 1px solid #5F5F5F;
-    border-radius: 4px;
-    background-color: #ffffff;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    outline: none;
-}
-
 .select-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.select-wrapper::after {
-    content: "▼";
-    position: absolute;
-    right: 4%;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #5F5F5F;
+    width: 40%;
 }
 
 .deliver-address__wrapper {

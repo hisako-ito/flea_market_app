@@ -13,7 +13,7 @@
 ************************************/
 .minict_wrapper {
   font-family: "Inter", sans-serif;
-  color: #5F5F5F;
+  color: #000000;
   background: #fff;
   position: relative;
   width: 100%;
@@ -48,7 +48,7 @@
     line-height: 32px;
     line-height: 1.9rem;
     text-align: center;
-    color: #555; }
+    color: #555;}
   .minict_wrapper.active:after {
     content: "\25B2"; }
   .minict_wrapper.disabled:after {
@@ -58,8 +58,8 @@
     border: 0;
     outline: none;
     background: none;
-    font-family: "Segoe UI", Segoe, "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
-    color: #333;
+    font-family: "Inter", sans-serif;
+    color: #000000;
     font-size: 16px;
     font-size: 1rem;
     height: 32px;
@@ -75,12 +75,12 @@
     text-overflow: ellipsis; }
     .minict_wrapper span:empty:before {
       content: attr(data-placeholder);
-      color: #ccc;
+      color: #000000;
+      padding-left: 0.5rem;
       line-height: 23px;
       line-height: 1.5rem; }
   .minict_wrapper ul {
     display: none;
-    list-style: none;
     padding: 0;
     margin: 0 -1px;
     position: absolute;
@@ -99,20 +99,36 @@
     max-height: 22rem;
     overflow-y: auto;
     z-index: 999999; }
+
     .minict_wrapper ul li {
+      position: relative;
       list-style: none;
       font-size: 1rem;
       padding: 0 10px;
-      padding: 0 0.7rem;
+      padding-left: 2rem;
       cursor: pointer;
-      background: #fff;
-      height: 35px;
-      height: 2.2rem;
+      background: #636769;
+      color: #EAEAEA;
+      height: 42px;
       line-height: 32px;
       line-height: 2rem; }
+
+    .minict_wrapper ul li:before {
+      content: "";
+      position: absolute;
+      top: 0.5em;
+      left: 0.8rem;
+      -webkit-transform: rotate(50deg);
+      -ms-transform: rotate(50deg);
+      transform: rotate(50deg);
+      width: 5px;
+      height: 10px;
+      border-right: 3px solid #FFFFFF;
+      border-bottom: 3px solid #FFFFFF;}
+
       .minict_wrapper ul li:hover {
-        background: #fcfcfc;
-        color: #111; }
+        background: #5599EB;
+        color: #EAEAEA;}
       .minict_wrapper ul li.minict_group {
         color: #444;
         background: #f6f6f6;
@@ -137,8 +153,8 @@
         color: #EAEAEA;
         background: #5599EB; }
       .minict_wrapper ul li.highlighted {
-        color: #fff;
-        background: #819a9a; }
+        color: #EAEAEA;
+        background: #5599EB; }
       .minict_wrapper ul li.hidden {
         display: none; }
   .minict_wrapper .minict_reset {

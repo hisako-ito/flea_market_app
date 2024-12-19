@@ -166,11 +166,16 @@
 
 .comment__form_textarea {
     width: 100%;
-    padding: 1% 2%;
+    padding: 2%;
+    resize: none;
 }
 
-.button-purchase,
-.button-comment {
-    margin-top: 2%;
-    width: 100%;
+.button-purchase {
+    margin-top: 1rem;
 }
+
+.button-comment {
+    margin-top: 2rem;
+}
+
+
