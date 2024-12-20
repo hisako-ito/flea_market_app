@@ -123,6 +123,11 @@
     resize: none;
 }
 
+.price-input::placeholder {
+    color: #000000;
+    opacity: 1;
+}
+
 .form__button {
     margin-top: 5rem;
 }

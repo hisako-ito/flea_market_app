@@ -16,9 +16,7 @@ class AddressRequest extends FormRequest
 
     public function authorize()
     {
-        $user = $this->user(); // 現在のユーザーを取得
-        \Log::info('フォームリクエスト内のユーザー情報 (authorize): ', ['user' => $user]);
-        return $user !== null; // ユーザーが取得できればtrueを返す
+        return true;
     }
 
     /**
@@ -26,30 +24,11 @@ class AddressRequest extends FormRequest
      *
      * @return array
      */
-    public function prepareForValidation()
-    {
-        \Log::info('prepareForValidation() でキャッシュされたユーザーID: ', ['userId' => $this->user()->id ?? null]);
-    }
 
     public function rules()
     {
-        $userId = $this->user() ? $this->user()->id : null;
-
-        if ($userId === null) {
-            \Log::error('ルール内でユーザーIDが取得できません');
-        }
-
-        \Log::info('バリデーションルール適用中: ', ['userId' => $userId]);
-
-
         return [
             'user_name' => 'required',
-            // 'email' => [
-            //     'nullable',
-            //     'email',
-            //     'max:255',
-            //     Rule::unique('users', 'email')->ignore($userId),
-            // ],
             'postal_code' => 'required|string|regex:/^\d{3}-\d{4}$/|max:8',
             'address' => 'required',
             'building' => 'required'

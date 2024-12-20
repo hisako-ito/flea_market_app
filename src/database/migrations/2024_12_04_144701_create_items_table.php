@@ -15,14 +15,14 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('item_name');
             $table->string('brand');
             $table->integer('price');
             $table->text('description');
-            $table->string('image');
+            $table->string('item_image');
             $table->tinyInteger('condition')->comment('1:良好 2:目立った傷や汚れなし 3:やや傷や汚れあり 4:状態が悪い');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

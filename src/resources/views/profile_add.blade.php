@@ -36,17 +36,12 @@
             <div class="form__group">
                 <div class="image-upload-container">
                     <div class="user-info__image" id="imagePreview">
-                        <img src="{{ $user ?? '' }}" alt="ユーザー画像" id="previewImage">
+                        <img src="{{ $user ?? '' }}" id="previewImage">
                     </div>
                     <div class="form__input--image">
                         <input type="file" name="user_image" id="fileInput" accept="image/*" hidden>
                         <label for="fileInput" class="file-input-label">画像を選択する</label>
                     </div>
-                </div>
-                <div class="form__error">
-                    @error('user_image')
-                    {{ $message }}
-                    @enderror
                 </div>
             </div>
             <div class="form__group">
@@ -56,11 +51,6 @@
                 <div class="form__group-content">
                     <div class="form__input--text">
                         <input type="text" name="user_name" id="user_name" value="{{ old('user_name', auth()->check() ? (auth()->user()->user_name ?? '') : '') }}">
-                    </div>
-                    <div class="form__error">
-                        @error('user_name')
-                        {{ $message }}
-                        @enderror
                     </div>
                 </div>
             </div>
@@ -72,11 +62,6 @@
                     <div class="form__input--text">
                         <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', auth()->check() ? (auth()->user()->postal_code ?? '') : '') }}">
                     </div>
-                    <div class="form__error">
-                        @error('postal_code')
-                        {{ $message }}
-                        @enderror
-                    </div>
                 </div>
             </div>
             <div class="form__group">
@@ -87,11 +72,6 @@
                     <div class="form__input--text">
                         <input type="text" name="address" id="address" value="{{ old('address', auth()->check() ? (auth()->user()->address ?? '') : '') }}">
                     </div>
-                    <div class="form__error">
-                        @error('address')
-                        {{ $message }}
-                        @enderror
-                    </div>
                 </div>
             </div>
             <div class="form__group">
@@ -101,11 +81,6 @@
                 <div class="form__group-content">
                     <div class="form__input--text">
                         <input type="text" name="building" id="building" value="{{ old('building', auth()->check() ? (auth()->user()->building ?? '') : '') }}">
-                    </div>
-                    <div class="form__error">
-                        @error('building')
-                        {{ $message }}
-                        @enderror
                     </div>
                 </div>
                 <input type="hidden" id="email" name="email" value="{{ old('email', auth()->user()->email) }}">

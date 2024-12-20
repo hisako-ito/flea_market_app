@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ExhibitionRequest;
 
 class ItemController extends Controller
 {
@@ -63,7 +64,7 @@ class ItemController extends Controller
         }
         $message = "商品を購入しました。";
 
-        return redirect('/')->with(compact('item', 'keyword', 'message', 'user'));
+        return redirect('purchase/{item_id}')->with('message', $message);
     }
 
     public function getAddress($item_id, Request $request)
@@ -91,5 +92,36 @@ class ItemController extends Controller
             return view('search_results', compact('items', 'keyword'));
         }
         return view('sell', compact('keyword', 'user', 'categories'));
+    }
+
+    public function postSell(ExhibitionRequest $request)
+    {
+        $keyword = $request->input('keyword', '');
+        $user = Auth::user();
+
+        if (!empty($keyword)) {
+            $items = Item::KeywordSearch($keyword)->get();
+            return view('search_results', compact('items', 'keyword'));
+        }
+
+        $item = Item::create(
+            array_merge(
+                $request->only([
+                    'item_image',
+                    'condition',
+                    'item_name',
+                    'brand',
+                    'description',
+                    'price',
+                ]),
+                ['user_id' => $user->id]
+            )
+        );
+
+        $item->categories()->attach($request->categories);
+
+        $message = "商品を出品しました。";
+
+        return redirect('/sell')->with('message', $message);
     }
 }

@@ -11,7 +11,7 @@
             <h2>会員登録</h2>
         </div>
         <form class="form" action="/register" method="post">
-        @csrf
+            @csrf
             <div class="form__group">
                 <div class="form__group-title">
                     <label class="form__label--item" for="user_name">ユーザー名</label>
@@ -19,11 +19,6 @@
                 <div class="form__group-content">
                     <div class="form__input--text">
                         <input type="text" name="user_name" id="user_name" value="{{ old('user_name') }}">
-                    </div>
-                    <div class="form__error">
-                        @error('user_name')
-                        {{ $message }}
-                        @enderror
                     </div>
                 </div>
             </div>
@@ -35,11 +30,6 @@
                     <div class="form__input--text">
                         <input type="email" name="email" id="email" value="{{ old('email') }}">
                     </div>
-                    <div class="form__error">
-                        @error('email')
-                        {{ $message }}
-                        @enderror
-                    </div>
                 </div>
             </div>
             <div class="form__group">
@@ -49,11 +39,6 @@
                 <div class="form__group-content">
                     <div class="form__input--text">
                         <input type="password" name="password" id="password">
-                    </div>
-                    <div class="form__error">
-                        @error('password')
-                        {{ $message }}
-                        @enderror
                     </div>
                 </div>
             </div>
