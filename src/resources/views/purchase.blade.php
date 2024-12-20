@@ -10,10 +10,8 @@
 <script type="text/javascript" src="{{ asset('js/jquery.minimalect.js') }}"></script>
 <script type="text/javascript">
     $(function() {
-        // Minimalectを有効化
         $("#payment-method").minimalect();
 
-        // Minimalectのイベントをリッスンして値を更新
         $("#payment-method").on("change", function() {
             const selectedValue = $(this).val();
             $("#selected-payment").text(selectedValue);
@@ -50,10 +48,10 @@
             <div class="purchase-form__action">
                 <div class="item__information">
                     <div class="item__card">
-                        <img src="{{ asset($item->image) }}" alt="商品画像">
+                        <img src="{{ asset($item->item_image) }}" alt="商品画像">
                     </div>
                     <div class="item__content">
-                        <h2 class="item-name">{{$item->name}}</h2>
+                        <h2 class="item-name">{{$item->item_name}}</h2>
                         <p class="item-price item-price--action">&nbsp;{{ number_format($item->price) }}</p>
                     </div>
                 </div>

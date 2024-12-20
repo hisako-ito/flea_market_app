@@ -55,11 +55,6 @@
                     <label for="image-input" class="file-input-label">画像を選択する</label>
                     <input type="file" name="item_image" id="image-input" accept="image/*">
                 </div>
-                <div class="form__error">
-                    @error('item_image')
-                    {{ $message }}
-                    @enderror
-                </div>
             </div>
             <div class="exhibition-item-info__heading">
                 <h3>商品の詳細</h3>
@@ -71,14 +66,9 @@
                 <div class="form__group-content">
                     <div class="category-container">
                         @foreach ($categories as $category)
-                        <input type="checkbox" id="category-{{ $category->id }}" value="{{$category->id}}" name="category_item">
+                        <input type="checkbox" id="category-{{ $category->id }}" name="category_item[]" value="{{ $category->id }}" {{ is_array(old('category_item')) && in_array($category->id, old('category_item')) ? 'checked' : '' }}>
                         <label class="category-item" for="category-{{ $category->id }}">{{ $category->name }}</label>
                         @endforeach
-                    </div>
-                    <div class="form__error">
-                        @error('category_item')
-                        {{ $message }}
-                        @enderror
                     </div>
                 </div>
             </div>
@@ -87,17 +77,16 @@
                     <label class="form__label--item" for="condition">商品の状態</label>
                 </div>
                 <div class="form__group-content">
-                    <select class="exhibition-form__select" id="exhibition-form__select">
-                        <option value="1">良好</option>
-                        <option value="2">目立った傷や汚れなし</option>
-                        <option value="3">やや傷や汚れあり</option>
-                        <option value="4">状態が悪い</option>
+                    <select class="exhibition-form__select" id="exhibition-form__select" name="condition">
+                        <option value="1" {{
+                old('condition') == 1 ? 'selected' : '' }}>良好</option>
+                        <option value="2" {{
+                old('condition') == 2 ? 'selected' : '' }}>目立った傷や汚れなし</option>
+                        <option value="3" {{
+                old('condition') == 3 ? 'selected' : '' }}>やや傷や汚れあり</option>
+                        <option value="4" {{
+                old('condition') == 4 ? 'selected' : '' }}>状態が悪い</option>
                     </select>
-                    <div class="form__error">
-                        @error('condition')
-                        {{ $message }}
-                        @enderror
-                    </div>
                 </div>
             </div>
             <div class="exhibition-item-info__heading">
@@ -110,11 +99,6 @@
                 <div class="form__group-content">
                     <div class="form__input--text">
                         <input type="text" name="item_name" id="item_name" value="{{ old('item_name') }}">
-                    </div>
-                    <div class="form__error">
-                        @error('item_name')
-                        {{ $message }}
-                        @enderror
                     </div>
                 </div>
             </div>
@@ -136,11 +120,6 @@
                     <div class="form__input--textarea">
                         <textarea type="text" name="description" id="description" cols="30" rows="10">{{ old('description') }}</textarea>
                     </div>
-                    <div class="form__error">
-                        @error('description')
-                        {{ $message }}
-                        @enderror
-                    </div>
                 </div>
             </div>
             <div class="form__group">
@@ -149,15 +128,11 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="price" id="price" value="￥{{ old('price') }}">
-                    </div>
-                    <div class="form__error">
-                        @error('price')
-                        {{ $message }}
-                        @enderror
+                        <input type="text" class="price-input" name="price" id="price" value="{{ old('price') }}" placeholder="￥">
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="user_id" value="{{ $user->id }}">
             <div class="form__button">
                 <button class="form__button-submit btn" type="submit">出品する</button>
             </div>
@@ -168,37 +143,33 @@
 
 @section('script')
 <script>
-    // 要素を取得
     const imageInput = document.getElementById("image-input");
     const previewImage = document.getElementById("previewImage");
     const imagePreview = document.getElementById("imagePreview");
     const closeBtn = document.getElementById("close-btn");
 
-    // 画像選択時の処理
     imageInput.addEventListener("change", function() {
-        const file = this.files[0]; // 選択されたファイル
+        const file = this.files[0];
         if (file) {
             const reader = new FileReader();
 
-            // ファイル読み込みが完了した時の処理
             reader.onload = function(e) {
                 imagePreview.style.display = "block";
-                previewImage.src = e.target.result; // 画像のプレビュー
-                previewImage.style.display = "block"; // 画像を表示
-                closeBtn.style.display = "block"; // バツ印を表示
+                previewImage.src = e.target.result;
+                previewImage.style.display = "block";
+                closeBtn.style.display = "block";
             };
 
-            reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
+            reader.readAsDataURL(file);
         }
     });
 
-    // 削除ボタン（バツ印）クリック時の処理
     closeBtn.addEventListener("click", function() {
-        previewImage.src = "#"; // 画像をリセット
-        previewImage.style.display = "none"; // 画像を非表示
-        closeBtn.style.display = "none"; // バツ印を非表示
+        previewImage.src = "#";
+        previewImage.style.display = "none";
+        closeBtn.style.display = "none";
         imagePreview.style.display = "none";
-        imageInput.value = ""; // ファイル入力をクリア
+        imageInput.value = "";
     });
 </script>
 @endsection

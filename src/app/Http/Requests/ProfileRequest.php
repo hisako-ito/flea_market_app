@@ -23,7 +23,7 @@ class ProfileRequest extends FormRequest
      */
     public function rules()
     {
-        $isUpdate = $this->route()->getName() === 'user-profile-information.profile'; // ルート名で判断
+        $isUpdate = $this->route()->getName() === 'user-profile-information.profile';
 
         return [
             'user_image' => $isUpdate ? 'nullable|mimes:png,jpeg' : 'required|mimes:png,jpeg',

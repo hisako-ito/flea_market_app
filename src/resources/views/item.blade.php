@@ -29,14 +29,14 @@
     <div class="detail-content__inner">
         <div class="content__img">
             <div class="img__card">
-                <img src="{{ asset($item->image) }}" alt="商品画像">
+                <img src="{{ asset($item->item_image) }}" alt="商品画像">
             </div>
         </div>
         <div class="content__form">
             <div class="form__inner">
                 <form action="/purchase/{{$item->id}}" method="get">
                     @csrf
-                    <h2 class="item-name">{{$item->name}}</h2>
+                    <h2 class="item-name">{{$item->item_name}}</h2>
                     <p class="item-brand-name">{{$item->brand}}</p>
                     <p class="item-price">{{ number_format($item->price) }}</p>
                     <div class="count-content">

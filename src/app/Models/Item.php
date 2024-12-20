@@ -10,11 +10,18 @@ class Item extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','brand','price','description','image','condition'];
+    protected $guarded = [
+        'id',
+    ];
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class,'category_item','item_id','category_id',);
+        return $this->belongsToMany(Category::class, 'category_item', 'item_id', 'category_id',);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function checkCondition()
@@ -22,28 +29,28 @@ class Item extends Model
         $condition_type = $this->condition;
         switch ($condition_type) {
 
-        case "1":
-        echo "良好";
-        break;
+            case "1":
+                echo "良好";
+                break;
 
-        case "2":
-        echo "目立った傷や汚れなし";
-        break;
+            case "2":
+                echo "目立った傷や汚れなし";
+                break;
 
-        case "3":
-        echo "やや傷や汚れあり";
-        break;
+            case "3":
+                echo "やや傷や汚れあり";
+                break;
 
-        case "4":
-        echo "状態が悪い";
-        break;
+            case "4":
+                echo "状態が悪い";
+                break;
         }
     }
 
     public function scopeKeywordSearch($query, $keyword)
     {
         if (!empty($keyword)) {
-            $query->where('name', 'like', '%' . $keyword . '%');
+            $query->where('item_name', 'like', '%' . $keyword . '%');
         }
     }
 }
