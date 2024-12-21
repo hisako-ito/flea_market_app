@@ -58,7 +58,7 @@
                 <div class="item__pay-method">
                     <h3 class="pay-method__heading">支払い方法</h3>
                     <div class="select-wrapper">
-                        <select class="pay-method__select" id="payment-method">
+                        <select class="pay-method__select" id="payment-method" name="payment_method">
                             <option value="コンビニ払い">コンビニ払い</option>
                             <option value="カード支払い">カード支払い</option>
                         </select>
