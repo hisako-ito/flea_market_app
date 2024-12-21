@@ -11,8 +11,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
     public function update(User $user, array $input): void
     {
-        \Log::info('更新処理開始: ', $input);
-
         if (isset($input['user_image'])) {
             $this->handleUserImage($user, $input['user_image']);
         }
@@ -32,26 +30,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'address' => $input['address'] ?? $user->address,
                 'building' => $input['building'] ?? $user->building,
             ])->save();
-
-            \Log::info('保存後のデータ: ', $user->toArray());
-            \Log::info('更新処理完了: ', $user->toArray());
         }
     }
 
     protected function handleUserImage(User $user, $image): void
     {
-        try {
-            if ($user->user_image && Storage::exists(str_replace('storage', 'public/', $user->user_image))) {
-                Storage::delete(str_replace('storage', 'public/', $user->user_image));
-            }
-
-            $path = $image->store('public/user_images');
-            $user->user_image = str_replace('public/', 'storage/', $path);
-            $user->save();
-        } catch (\Exception $e) {
-            \Log::error('画像処理エラー: ' . $e->getMessage());
-            throw new \RuntimeException('画像の保存に失敗しました。');
+        if ($user->user_image) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $user->user_image));
         }
+
+        $user->update([
+            'user_image' => 'storage/' . $image->store('user_images', 'public'),
+        ]);
     }
 
     protected function updateVerifiedUser(User $user, array $input): void

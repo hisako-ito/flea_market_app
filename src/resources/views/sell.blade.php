@@ -66,7 +66,7 @@
                 <div class="form__group-content">
                     <div class="category-container">
                         @foreach ($categories as $category)
-                        <input type="checkbox" id="category-{{ $category->id }}" name="category_item[]" value="{{ $category->id }}" {{ is_array(old('category_item')) && in_array($category->id, old('category_item')) ? 'checked' : '' }}>
+                        <input type="checkbox" id="category-{{ $category->id }}" name="categories[]" value="{{ $category->id }}" {{ is_array(old('category_item')) && in_array($category->id, old('category_item')) ? 'checked' : '' }}>
                         <label class="category-item" for="category-{{ $category->id }}">{{ $category->name }}</label>
                         @endforeach
                     </div>
@@ -78,6 +78,7 @@
                 </div>
                 <div class="form__group-content">
                     <select class="exhibition-form__select" id="exhibition-form__select" name="condition">
+                        <option disabled selected>選択してください</option>
                         <option value="1" {{
                 old('condition') == 1 ? 'selected' : '' }}>良好</option>
                         <option value="2" {{

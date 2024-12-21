@@ -21,7 +21,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'Emporio Armani',
                 'price' => '15000',
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
-                'item_image' => 'storage/images/Armani+Mens+Clock.jpg',
+                'item_image' => 'storage/item_images/Armani+Mens+Clock.jpg',
                 'condition' => 1,
             ],
             [
@@ -30,7 +30,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'BUFFALO',
                 'price' => '5000',
                 'description' => '高速で信頼性の高いハードディスク',
-                'item_image' => 'storage/images/HDD+Hard+Disk.jpg',
+                'item_image' => 'storage/item_images/HDD+Hard+Disk.jpg',
                 'condition' => 2,
             ],
             [
@@ -39,7 +39,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => '北海道産',
                 'price' => '300',
                 'description' => '新鮮な玉ねぎ3束のセット',
-                'item_image' => 'storage/images/iLoveIMG+d.jpg',
+                'item_image' => 'storage/item_images/iLoveIMG+d.jpg',
                 'condition' => 3,
             ],
             [
@@ -48,7 +48,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'COLE HAAN',
                 'price' => '4000',
                 'description' => 'クラシックなデザインの革靴',
-                'item_image' => 'storage/images/Leather+Shoes+Product+Photo.jpg',
+                'item_image' => 'storage/item_images/Leather+Shoes+Product+Photo.jpg',
                 'condition' => 4,
             ],
             [
@@ -57,7 +57,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'Apple',
                 'price' => '45000',
                 'description' => '高性能なノートパソコン',
-                'item_image' => 'storage/images/Living+Room+Laptop.jpg',
+                'item_image' => 'storage/item_images/Living+Room+Laptop.jpg',
                 'condition' => 1,
             ],
             [
@@ -66,7 +66,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'audio-technica',
                 'price' => '8000',
                 'description' => '高音質のレコーディング用マイク',
-                'item_image' => 'storage/images/Music+Mic+4632231.jpg',
+                'item_image' => 'storage/item_images/Music+Mic+4632231.jpg',
                 'condition' => 2,
             ],
             [
@@ -75,7 +75,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'Vivienne Westwood',
                 'price' => '3500',
                 'description' => 'おしゃれなショルダーバッグ',
-                'item_image' => 'storage/images/Purse+fashion+pocket.jpg',
+                'item_image' => 'storage/item_images/Purse+fashion+pocket.jpg',
                 'condition' => 3,
             ],
             [
@@ -84,7 +84,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'THERMOS',
                 'price' => '500',
                 'description' => '使いやすいタンブラー',
-                'item_image' => 'storage/images/Tumbler+souvenir.jpg',
+                'item_image' => 'storage/item_images/Tumbler+souvenir.jpg',
                 'condition' => 4,
             ],
             [
@@ -92,7 +92,7 @@ class ItemsTableSeeder extends Seeder
                 'item_name' => 'コーヒーミル',
                 'brand' => 'Kalita',
                 'price' => '4000',
-                'item_image' => 'storage/images/Waitress+with+Coffee+Grinder.jpg',
+                'item_image' => 'storage/item_images/Waitress+with+Coffee+Grinder.jpg',
                 'description' => '手動のコーヒーミル',
                 'condition' => 1,
             ],
@@ -102,7 +102,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'M・A・C',
                 'price' => '2500',
                 'description' => '便利なメイクアップセット',
-                'item_image' => 'storage/images/外出メイクアップセット.jpg',
+                'item_image' => 'storage/item_images/外出メイクアップセット.jpg',
                 'condition' => 2,
             ],
         ]);

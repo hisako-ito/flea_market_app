@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Actions\Fortify\UpdateUserProfileInformation;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
-use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse;
-use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 
@@ -37,7 +32,7 @@ class ProfileInformationController extends Controller
             return redirect('/login')->with('message', '会員登録が完了しました。登録した情報でログインしてください。');
         }
 
-        return redirect()->back()->with('message', 'プロフィールを更新しました！');
+        return redirect()->back()->with('message', 'プロフィールを更新しました。');
     }
 
     public function postAddress(AddressRequest $request)
@@ -47,6 +42,6 @@ class ProfileInformationController extends Controller
         $user = $request->user();
         $this->updateUserProfile->update($user, $data);
 
-        return redirect()->back()->with('message', '住所を更新しました！');
+        return redirect()->back()->with('message', '住所を更新しました。');
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,12 +10,11 @@ class LoginController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        $credentials = $request->only('login', 'password');
-        $field = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+        $field = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
 
-        if (Auth::attempt([$field => $credentials['login'], 'password' => $credentials['password']])) {
+        if (Auth::attempt([$field => $request->login, 'password' => $request->password])) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended('/')->with('message', 'ログインに成功しました');
         }
 
         return back()->withErrors([
