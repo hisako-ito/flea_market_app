@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PurchaseRequest;
 use App\Http\Requests\ExhibitionRequest;
 
 class ItemController extends Controller
@@ -52,7 +53,7 @@ class ItemController extends Controller
         return view('purchase', compact('item', 'keyword', 'user'));
     }
 
-    public function postPurchase($item_id, Request $request)
+    public function postPurchase($item_id, PurchaseRequest $request)
     {
         $user = Auth::user();
         $item = Item::find($item_id);
@@ -63,15 +64,28 @@ class ItemController extends Controller
             return view('search_results', compact('items', 'keyword'));
         }
 
-        $order = Order::create([
+        $paymentMethod = 0;
+        if ($request->payment_method === 'コンビニ払い') {
+            $paymentMethod = 1;
+        } elseif ($request->payment_method === 'カード払い') {
+            $paymentMethod = 2;
+        }
+
+        $form = [
             'user_id' => Auth::id(),
             'item_id' => $item->id,
-            'address' => $item->address,
-        ]);
+            'price' => $item->price,
+            'payment_method' => $paymentMethod,
+            'shipping_address' => $request->shipping_address,
+        ];
+
+        Order::create($form);
+
+        $item->update(['is_sold' => true]);
 
         $message = "商品を購入しました。";
 
-        return redirect('purchase/{item_id}')->with('message', $message);
+        return redirect()->route('purchase.success', ['item_id' => $item->id])->with('message', $message);
     }
 
     public function getSell(Request $request)

@@ -35,6 +35,11 @@
     @foreach ($items as $item)
     <div class="item__card">
         <div class="card__img">
+            @if ($item->is_sold)
+            <div class="sold-label">
+                <span class="sold-font">SOLD</span>
+            </div>
+            @endif
             <a href="/item/{{$item->id}}" class="product-link"></a>
             <img src="{{ asset($item->item_image) }}" alt="商品画像">
         </div>

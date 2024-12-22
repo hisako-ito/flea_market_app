@@ -43,7 +43,7 @@
 @section('content')
 <div class="purchase-form">
     <div class="purchase-form__inner">
-        <form class="purchase-form__form" action="/purchase/{{$item->id}}" method="post">
+        <form class="purchase-form__form" action="/purchase/{{ $item->id }}" method="post">
             @csrf
             <div class="purchase-form__action">
                 <div class="item__information">
@@ -51,7 +51,7 @@
                         <img src="{{ asset($item->item_image) }}" alt="商品画像">
                     </div>
                     <div class="item__content">
-                        <h2 class="item-name">{{$item->item_name}}</h2>
+                        <h2 class="item-name">{{ $item->item_name }}</h2>
                         <p class="item-price item-price--action">&nbsp;{{ number_format($item->price) }}</p>
                     </div>
                 </div>
@@ -59,8 +59,9 @@
                     <h3 class="pay-method__heading">支払い方法</h3>
                     <div class="select-wrapper">
                         <select class="pay-method__select" id="payment-method" name="payment_method">
+                            <option disabled selected>選択してください</option>
                             <option value="コンビニ払い">コンビニ払い</option>
-                            <option value="カード支払い">カード支払い</option>
+                            <option value="カード払い">カード支払い</option>
                         </select>
                     </div>
                 </div>
@@ -70,8 +71,8 @@
                         <a class="address-update__button-submit" href="/purchase/address/{{$item->id}}" target="_blank">変更する</a>
                     </div>
                     <div class="deliver-address__content">
-                        <p class="postal_code">{{ $user->postal_code }}</p>
-                        <p class="address">{{ $user->address }}{{ $user->building }}</p>
+                        <input class="postal_code" value="〒{{ $user->postal_code }}" readonly>
+                        <input class="postal_code" value="{{ $user->address }}{{ $user->building }}" readonly>
                     </div>
                 </div>
             </div>
@@ -86,6 +87,10 @@
                         <td class="confirm-table__data" id="selected-payment">コンビニ払い</td>
                     </tr>
                 </table>
+                <input type=hidden name="user_id" value="{{ $user->id }}">
+                <input type=hidden name="item_id" value="{{ $item->id }}">
+                <input type=hidden name="item_id" value="{{ $item->price }}">
+                <input type=hidden name="shipping_address" value="{{ $user->postal_code }}{{ $user->address }}{{ $user->building }}">
                 <button class="purchase-form__btn btn" type="submit">購入する</button>
             </div>
         </form>

@@ -22,12 +22,4 @@ class Order extends Model
     {
         return $this->belongsTo(Item::class);
     }
-
-    public function getPaymentMethodLabelAttribute()
-    {
-        return match ($this->payment_method) {
-            1 => 'コンビニ払い',
-            2 => 'カード払い',
-        };
-    }
 }
