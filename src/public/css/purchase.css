@@ -86,8 +86,18 @@
     color: #0073CC;
 }
 
-.postal_code::before {
-    content: "〒";
+.deliver-address__content input {
+    background: none;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.postal_code {
+    display: block;
 }
 
 .address {

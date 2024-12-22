@@ -29,6 +29,11 @@
     <div class="detail-content__inner">
         <div class="content__img">
             <div class="img__card">
+                @if ($item->is_sold)
+                <div class="sold-label">
+                    <span class="sold-font">SOLD</span>
+                </div>
+                @endif
                 <img src="{{ asset($item->item_image) }}" alt="商品画像">
             </div>
         </div>

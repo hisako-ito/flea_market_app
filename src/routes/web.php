@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/mypage/profile', [ProfileInformationController::class, 'update'])
         ->name('user-profile-information.profile');
     Route::get('/purchase/{item_id}', [ItemController::class, 'getPurchase']);
-    Route::post('/purchase/{item_id}', [ItemController::class, 'postPurchase']);
+    Route::post('/purchase/{item_id}', [ItemController::class, 'postPurchase'])->name('purchase.success');
     Route::get('/purchase/address/{item_id}', [UserController::class, 'getAddress']);
     Route::patch('/purchase/address/{item_id}', [ProfileInformationController::class, 'postAddress'])->name('user-profile-information.address');
     Route::get('/sell', [ItemController::class, 'getSell']);

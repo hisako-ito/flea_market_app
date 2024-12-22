@@ -24,6 +24,27 @@
     position: relative;
 }
 
+.sold-label {
+    position:absolute;
+    top: 0;
+    left: 0;
+    border-top: 50px solid #FF5555;
+    border-right: 50px solid transparent;
+    border-left: 50px solid #FF5555;
+    border-bottom: 50px solid transparent;
+    border-radius: 4px;
+}
+
+.sold-font {
+    position: absolute;
+    top: -30px;
+    left: -45px;
+    color: #ffffff;
+    font-size: 1.2rem;
+    transform: rotate(-45deg);
+    z-index: 10;
+}
+
 .product-link {
     position: absolute;
     top: 0;
