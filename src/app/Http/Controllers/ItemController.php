@@ -53,41 +53,6 @@ class ItemController extends Controller
         return view('purchase', compact('item', 'keyword', 'user'));
     }
 
-    public function postPurchase($item_id, PurchaseRequest $request)
-    {
-        $user = Auth::user();
-        $item = Item::find($item_id);
-        $keyword = $request->input('keyword', '');
-
-        if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
-        }
-
-        $paymentMethod = 0;
-        if ($request->payment_method === 'コンビニ払い') {
-            $paymentMethod = 1;
-        } elseif ($request->payment_method === 'カード払い') {
-            $paymentMethod = 2;
-        }
-
-        $form = [
-            'user_id' => Auth::id(),
-            'item_id' => $item->id,
-            'price' => $item->price,
-            'payment_method' => $paymentMethod,
-            'shipping_address' => $request->shipping_address,
-        ];
-
-        Order::create($form);
-
-        $item->update(['is_sold' => true]);
-
-        $message = "商品を購入しました。";
-
-        return redirect()->route('purchase.success', ['item_id' => $item->id])->with('message', $message);
-    }
-
     public function getSell(Request $request)
     {
         $keyword = $request->input('keyword', '');
