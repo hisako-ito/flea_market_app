@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Category;
-use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\PurchaseRequest;
 use App\Http\Requests\ExhibitionRequest;
 
 class ItemController extends Controller
@@ -37,7 +35,9 @@ class ItemController extends Controller
             return view('search_results', compact('items', 'keyword'));
         }
 
-        return view('item', compact('item', 'categories', 'keyword'));
+        $purchase_completed = $request->query('purchase_completed', false);
+
+        return view('item', compact('item', 'categories', 'keyword', 'purchase_completed'));
     }
 
     public function getPurchase($item_id, Request $request)

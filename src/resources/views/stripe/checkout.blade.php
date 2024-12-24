@@ -16,7 +16,7 @@
     <div class="container">
         <div class="card w-50 mt-5 m-auto">
             <div class="card-body">
-                <form action="{{ route('stripe.payment', ['item_id' => $item->id]) }}" method="POST" id="stripe-form">
+                <form action="{{ route('stripe.checkout', ['item_id' => $item->id]) }}" method="POST" id="stripe-form">
                     @csrf
                     <div class="mb-3 row">
                         <label for="card-holder-name" class="col-sm-2 col-form-label">名前</label>

@@ -3,7 +3,7 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/purchase.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.minimalect.css') }}" media="screen" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
 @endsection
 
 @section('jquery')
@@ -44,7 +44,7 @@
 @section('content')
 <div class="purchase-form">
     <div class="purchase-form__inner">
-        <form class="purchase-form__form" action="{{ route('stripe.checkout', ['item_id' => $item->id]) }}" method="post" id="stripe-form">
+        <form class="purchase-form__form" action="{{ route('purchase.post', ['item_id' => $item->id]) }}" method="post" id="stripe-form">
             @csrf
             <div class="purchase-form__action">
                 <div class="item__information">
@@ -97,70 +97,4 @@
         </form>
     </div>
 </div>
-@endsection
-
-@section('script')
-<script>
-    const stripe = Stripe(price_1QZ3i0JTtMtwFa3DEuLENdX2);
-
-    var style = {
-        base: {
-            fontSize: "16px",
-            color: "#424770",
-            letterSpacing: "0.025em",
-            fontFamily: "Roboto, Source Code Pro, monospace, SFUIDisplay",
-            "::placeholder": {
-                color: "#aab7c4"
-            }
-        },
-        invalid: {
-            color: "#9e2146"
-        },
-    };
-
-
-    const elements = stripe.elements();
-    const cardElement = elements.create('card', {
-        style: style,
-        hidePostalCode: true
-    });
-
-    cardElement.mount('#card-element');
-
-    const cardHolderName = document.getElementById('card-holder-name');
-    const cardButton = document.getElementById('card-button');
-    const clientSecret = cardButton.dataset.secret;
-
-    cardButton.addEventListener('click', async (e) => {
-        const {
-            setupIntent,
-            error
-        } = await stripe.confirmCardSetup(
-            clientSecret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                        name: cardHolderName.value
-                    }
-                }
-            }
-        );
-
-        if (error) {
-            // "error.message"をコンソールに表示する
-            console.log(error.message);
-        } else {
-            // カードが正常に検証された場合
-            // setupIntent.payment_methodをサーバーに送信する
-            console.log('カードが正常です');
-            const form = document.getElementById('stripe-form');
-            const hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'payment_method');
-            hiddenInput.setAttribute('value', setupIntent.payment_method);
-            form.appendChild(hiddenInput);
-            form.submit();
-        }
-    });
-</script>
 @endsection

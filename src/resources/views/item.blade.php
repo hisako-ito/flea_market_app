@@ -55,7 +55,11 @@
                             <p class="comment_count__number">カウント</p>
                         </div>
                     </div>
+                    @if ($item->is_sold)
+                    <button type="button" class="button-sold btn">売り切れました</button>
+                    @else
                     <button class="button-purchase btn" type="submit">購入手続きへ</button>
+                    @endif
                 </form>
                 <div class="item-description">
                     <h3 class="description__heading">商品説明</h3>
@@ -92,4 +96,9 @@
         </div>
     </div>
 </div>
+
+@endsection
+
+@section('script')
+
 @endsection
