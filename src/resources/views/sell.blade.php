@@ -78,7 +78,7 @@
                 </div>
                 <div class="form__group-content">
                     <select class="exhibition-form__select" id="exhibition-form__select" name="condition">
-                        <option disabled selected>選択してください</option>
+                        <option value="" disabled selected>-- 支払い方法を選択 --</option>
                         <option value="1" {{
                 old('condition') == 1 ? 'selected' : '' }}>良好</option>
                         <option value="2" {{
