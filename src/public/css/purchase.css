@@ -74,7 +74,7 @@
 }
 
 .select-wrapper {
-    width: 40%;
+    width: 50%;
 }
 
 .deliver-address__wrapper {
@@ -91,6 +91,7 @@
     border: none;
     border-radius: 0;
     outline: none;
+    font-size: 1rem;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;

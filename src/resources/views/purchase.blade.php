@@ -60,7 +60,7 @@
                     <h3 class="pay-method__heading">支払い方法</h3>
                     <div class="select-wrapper">
                         <select class="pay-method__select" id="payment-method" name="payment_method">
-                            <option disabled selected>選択してください</option>
+                            <option value="" disabled selected>-- 支払い方法を選択 --</option>
                             <option value="コンビニ払い">コンビニ払い</option>
                             <option value="カード払い">カード支払い</option>
                         </select>

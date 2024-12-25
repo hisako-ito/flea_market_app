@@ -33,3 +33,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/sell', [ItemController::class, 'getSell']);
     Route::post('/sell', [ItemController::class, 'postSell']);
 });
+
+Route::post('/webhook/stripe', [PaymentController::class, 'handleWebhook']);
