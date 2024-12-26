@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -17,14 +18,22 @@ class UserController extends Controller
     {
         $keyword = $request->input('keyword', '');
         $items = Item::query();
+        $orders = collect();
         $user = Auth::user();
+        $page = $request->query('page', 'sell');
 
         if (!empty($keyword)) {
             $items = $items->KeywordSearch($keyword);
         }
-        $items = $items->get();
 
-        return view('mypage', compact('keyword', 'items', 'user'));
+        if ($page == 'buy') {
+            $orders = Order::where('user_id', $user->id)->with('item')->get();
+            $items = collect(); // $itemsを空のコレクションで初期化
+        } else {
+            $items = Item::where('user_id', $user->id)->get();
+        }
+
+        return view('mypage', compact('keyword', 'items', 'user', 'page', 'orders'));
     }
 
     public function edit(Request $request)

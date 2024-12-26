@@ -10,10 +10,6 @@
     cursor: pointer;
 }
 
-.group-list_item:focus {
-    color: #FF0000;
-}
-
 .items-list {
     display: flex;
     flex-wrap: wrap;
@@ -42,7 +38,6 @@
     color: #ffffff;
     font-size: 1.2rem;
     transform: rotate(-45deg);
-    z-index: 10;
 }
 
 .product-link {
