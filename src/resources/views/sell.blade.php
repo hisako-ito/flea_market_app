@@ -2,12 +2,12 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/sell.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.minimalect.css') }}" media="screen" />
 @endsection
 
 @section('jquery')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.minimalect.js') }}"></script>
-<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.minimalect.css') }}" media="screen" />
 <script type="text/javascript">
     $(function() {
         $("#exhibition-form__select").minimalect();

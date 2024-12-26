@@ -49,14 +49,11 @@ class PaymentController extends Controller
                     'product_data' => [
                         'name' => $item->item_name,
                     ],
-                    'unit_amount' =>
-                    (int)$item->price,
+                    'unit_amount' => (int)$item->price,
                 ],
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => route('stripe.success', ['item_id' => $item->id]),
-            'cancel_url' => route('stripe.cancel', ['item_id' => $item->id]),
             'payment_intent_data' => [
                 'metadata' => [
                     'item_id' => strval($item->id),
@@ -65,6 +62,18 @@ class PaymentController extends Controller
                     'shipping_address' => $shippingAddress,
                 ],
             ],
+            'success_url' => route('stripe.success', ['item_id' => $item->id]),
+            'cancel_url' => route('stripe.cancel', [
+                'item_id' => $item->id,
+                'session_id' => isset($session) ? $session->id : null, // 一時的に対処
+            ]),
+        ]);
+
+        Log::info('Metadata being sent to Stripe:', [
+            'item_id' => $item->id,
+            'user_id' => $user->id,
+            'payment_method' => $paymentMethod,
+            'shipping_address' => $shippingAddress,
         ]);
 
         Log::info('Checkout Session Created:', (array)$session);
@@ -79,37 +88,37 @@ class PaymentController extends Controller
         $sigHeader = $request->header('Stripe-Signature');
 
         try {
-            $event = Webhook::constructEvent(
-                $payload,
-                $sigHeader,
-                $endpointSecret
-            );
+            $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
+
+            Log::info('Received Webhook event:', [
+                'type' => $event->type,
+                'data' => $event->data->object,
+            ]);
+
             if ($event->type === 'payment_intent.succeeded') {
                 $paymentIntent = $event->data->object;
 
-                Log::info('Received PaymentIntent:', (array) $paymentIntent);
-                Log::info('Received Metadata:', (array) $paymentIntent->metadata);
+                Log::info('PaymentIntent status:', ['status' => $paymentIntent->status]);
+                Log::info('PaymentIntent metadata:', (array) $paymentIntent->metadata);
 
-                if (!isset($paymentIntent->metadata) || !is_object($paymentIntent->metadata)) {
-                    Log::error('Metadata is missing or invalid in PaymentIntent.');
-                    return response('Invalid metadata', 400);
+                if (!isset($paymentIntent->metadata['item_id'])) {
+                    Log::error('Metadata missing item_id');
+                    return response('Missing metadata', 400);
                 }
 
-                $item_id = $paymentIntent->metadata->item_id ?? null;
-
-                if (!$item_id) {
-                    Log::error('Item ID not found in PaymentIntent metadata');
-                    return response('Item ID not found', 400);
-                }
-
-                $item = Item::find($item_id);
+                $item = Item::find($paymentIntent->metadata['item_id']);
                 if (!$item) {
-                    Log::error("Item not found for ID: $item_id");
+                    Log::error('Item not found', ['item_id' => $paymentIntent->metadata['item_id']]);
                     return response('Item not found', 404);
                 }
 
-                $paymentMethod = $paymentIntent->metadata->payment_method ?? null;
-                $shippingAddress = $paymentIntent->metadata->shipping_address ?? null;
+                if (Order::where('item_id', $item->id)->exists()) {
+                    Log::info('Order already exists for item_id: ' . $item->id);
+                    return response('Order already processed', 200);
+                }
+
+                $paymentMethod = $paymentIntent->metadata['payment_method'] ?? null;
+                $shippingAddress = $paymentIntent->metadata['shipping_address'] ?? null;
 
                 if ($paymentMethod === 'コンビニ払い') {
                     $paymentMethod = 1;
@@ -118,7 +127,7 @@ class PaymentController extends Controller
                 }
 
                 $form = [
-                    'user_id' => $paymentIntent->metadata->user_id ?? null,
+                    'user_id' => $paymentIntent->metadata['user_id'] ?? null,
                     'item_id' => $item->id,
                     'price' => $item->price,
                     'payment_method' => $paymentMethod,
@@ -127,6 +136,8 @@ class PaymentController extends Controller
 
                 Order::create($form);
                 $item->update(['is_sold' => true]);
+
+                Log::info('Order created successfully');
             }
 
             return response('Webhook handled', 200);
@@ -142,14 +153,46 @@ class PaymentController extends Controller
         }
     }
 
+
     public function success(Request $request)
     {
         $item_id = $request->query('item_id');
         $item = Item::find($item_id);
 
-        return redirect()->route('item.detail', [
-            'item_id' => $item->id,
-            'purchase_completed' => true
-        ]);
+        return redirect()->route('item.detail', ['item_id' => $item->id])
+            ->with('message', '商品の購入が完了しました！');
+    }
+
+
+    public function cancel(Request $request)
+    {
+        $item_id = $request->query('item_id');
+        $item = Item::find($item_id);
+
+        $session_id = $request->query('session_id'); // StripeのCheckout Session ID
+
+        if ($session_id) {
+            Stripe::setApiKey(config('services.stripe.secret'));
+
+            try {
+                $session = StripeSession::retrieve($session_id);
+                $paymentMethod = $session->payment_method_types[0] ?? null; // 支払い方法を取得
+
+                if ($paymentMethod === 'konbini') {
+                    // コンビニ払いの場合のメッセージ
+                    return redirect()->route('item.detail', ['item_id' => $item->id])
+                        ->with('message', 'コンビニ払いの場合、支払いが確認されるまで注文が確定されません。');
+                }
+            } catch (\Exception $e) {
+                Log::error('Error retrieving Stripe session in cancel action:', [
+                    'error' => $e->getMessage(),
+                    'session_id' => $session_id,
+                ]);
+            }
+        }
+
+        // デフォルトのキャンセルメッセージ
+        return redirect()->route('item.detail', ['item_id' => $item->id])
+            ->with('message', '決済がキャンセルされました。再度お試しください。');
     }
 }

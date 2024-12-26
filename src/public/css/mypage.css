@@ -61,7 +61,75 @@
     font-weight: bold;
 }
 
-/* レスポンシブ (768px以上) */
+.tabs {
+    padding: 0 0 0.1% 11%;
+    border-bottom: 2px solid #5F5F5F;
+}
+
+.tabs a {
+    color: #5F5F5F;
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+.tabs a.active-tab {
+    color: #FF0000;
+    font-weight: bold;
+}
+
+.items-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.item__card {
+    position: relative;
+}
+
+.sold-label {
+    position:absolute;
+    top: 0;
+    left: 0;
+    border-top: 50px solid #FF5555;
+    border-right: 50px solid transparent;
+    border-left: 50px solid #FF5555;
+    border-bottom: 50px solid transparent;
+    border-radius: 4px;
+}
+
+.sold-font {
+    position: absolute;
+    top: -30px;
+    left: -45px;
+    color: #ffffff;
+    font-size: 1.2rem;
+    transform: rotate(-45deg);
+}
+
+.product-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.card__img img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.item__card {
+    width: 100%;
+}
+
+.card__detail p {
+    font-size: 1.1rem;
+}
+
+/* レスポンシブ (768px以上)*/
 @media screen and (min-width: 768px) {
     .user-info__image__inner {
         width: 90px;
@@ -81,14 +149,38 @@
         width: 80%;
         padding: 2% 0;
     }
+
+    .items-list {
+        display: grid;
+        grid-template-columns: repeat(3, 31%);
+        padding: 0 3%;
+    }
+
+    .item__card {
+        margin-top: 10%;
+    }
+
+    .item__card:last-child {
+        margin-bottom: 10%;
+    }
 }
 
-.group-list {
-    padding: 0 0 0.1% 11%;
-}
-
-/* レスポンシブ (1000px以上) */
+/* レスポンシブ (1000px以上)*/
 @media screen and (min-width: 1400px) {
+    .items-list {
+        display: grid;
+        grid-template-columns: repeat(4, 20%);
+        padding: 0 6%;
+    }
+
+    .item__card {
+        margin-top: 21%;
+    }
+
+    .item__card:last-child {
+        margin-bottom: 21%;
+    }
+
     .user-info__image__inner {
         width: 140px;
         height: 140px;

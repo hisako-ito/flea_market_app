@@ -53,15 +53,4 @@ class Item extends Model
             $query->where('item_name', 'like', '%' . $keyword . '%');
         }
     }
-    // 購入済み商品をスコープで取得
-    public function scopeSold($query)
-    {
-        return $query->where('is_sold', true);
-    }
-
-    // 購入済みかどうかのアクセサ
-    public function getIsSoldLabelAttribute()
-    {
-        return $this->is_sold ? 'SOLD' : 'AVAILABLE';
-    }
 }

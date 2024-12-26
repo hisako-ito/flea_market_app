@@ -26,16 +26,6 @@
 
 @section('content')
 <div class="detail-content">
-    <!-- モーダルウィンドウ -->
-    @if($purchase_completed)
-    <div id="purchase-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h4>購入が完了しました</h4>
-            <p>出品者の発送通知をお待ちください</p>
-            <button id="close-modal">閉じる</button>
-        </div>
-    </div>
-    @endif
     <div class="detail-content__inner">
         <div class="content__img">
             <div class="img__card">
@@ -66,7 +56,7 @@
                         </div>
                     </div>
                     @if ($item->is_sold)
-                    <button class="button-sold btn" type="button">売り切れました</button>
+                    <button type="button" class="button-sold btn">売り切れました</button>
                     @else
                     <button class="button-purchase btn" type="submit">購入手続きへ</button>
                     @endif
@@ -107,24 +97,4 @@
     </div>
 </div>
 
-@endsection
-
-@section('script')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // モーダル表示フラグをチェック
-        @if($purchase_completed)
-        const modal = document.getElementById('purchase-modal');
-        const closeModal = document.getElementById('close-modal');
-
-        // モーダルを表示
-        modal.style.display = 'flex';
-
-        // 閉じるボタンを押したらモーダルを非表示
-        closeModal.addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
-        @endif
-    });
-</script>
 @endsection
