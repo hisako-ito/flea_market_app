@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\ProfileInformationController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\FavoriteController;
 
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/item/{item_id}', [ItemController::class, 'getDetail'])->name('item.detail');
@@ -17,6 +18,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/register/add', [UserController::class, 'add']);
     Route::patch('/register/add', [ProfileInformationController::class, 'update'])->name('user-profile-information.register');
 
+    Route::post('/items/{item}/favorite', [FavoriteController::class, 'favorite']);
+
     Route::get('/mypage', [UserController::class, 'show'])->name('mypage');
     Route::get('/mypage/profile', [UserController::class, 'edit']);
     Route::patch('/mypage/profile', [ProfileInformationController::class, 'update'])->name('user-profile-information.profile');
@@ -26,7 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase/address/{item_id}', [UserController::class, 'getAddress']);
     Route::patch('/purchase/address/{item_id}', [ProfileInformationController::class, 'postAddress'])->name('user-profile-information.address');
 
-    Route::post('/stripe/checkout', [PaymentController::class, 'checkout'])->name('stripe.checkout');
     Route::get('/stripe/success', [PaymentController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [PaymentController::class, 'cancel'])->name('stripe.cancel');
 

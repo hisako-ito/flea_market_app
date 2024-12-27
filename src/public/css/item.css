@@ -87,33 +87,31 @@
 
 .count-content {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 3%;
+    gap: 10%;
+    padding-left: 5%;
     margin-top: 1%;
 }
 
-.like_count,
+.favorite_count,
 .comment_count {
-    width: 20%;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
-.like_btn {
-    padding: 0;
+.favorite_btn,
+.comment_wrapper {
+    font-size: 2rem;
+}
+
+.favorite_btn {
     cursor: pointer;
 }
 
-.img-like_icon,
-.img-comment_icon {
-    width: 25%;
-    height: 25%;
-}
-
-.like_count__number,
+.favorite_count__number,
 .comment_count__number {
+    text-align: center;
     font-size: 0.6rem;
     margin-top: 1%;
 }

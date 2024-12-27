@@ -84,7 +84,7 @@
     </div>
     @endforeach
     @else
-    <p>表示する商品がありません。</p>
+    <p class="no-results">該当する商品がありません</p>
     @endif
 </div>
 @endsection

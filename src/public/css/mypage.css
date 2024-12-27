@@ -81,6 +81,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    position: relative;
 }
 
 .item__card {
@@ -127,6 +128,14 @@
 
 .card__detail p {
     font-size: 1.1rem;
+}
+
+.no-results {
+    position: absolute;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 200%);
 }
 
 /* レスポンシブ (768px以上)*/

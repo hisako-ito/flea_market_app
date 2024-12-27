@@ -53,4 +53,9 @@ class Item extends Model
             $query->where('item_name', 'like', '%' . $keyword . '%');
         }
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }
