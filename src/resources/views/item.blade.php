@@ -45,14 +45,17 @@
                     <p class="item-brand-name">{{$item->brand}}</p>
                     <p class="item-price">{{ number_format($item->price) }}</p>
                     <div class="count-content">
-                        <div class="like_count">
-                            <button type="submit" class="like_btn"><img src="{{ asset('/images/星アイコン8.png') }}" class="img-like_icon" />
-                                <p class="like_count__number">カウント</p>
+                        <div class="favorite_count">
+                            <button type="submit" class="favorite_btn">
+                                <i class="fa-regular fa-star"></i>
                             </button>
+                            <p class="favorite_count__number" id="favorite-count-{{ $item->id }}">カウント</p>
                         </div>
                         <div class="comment_count">
-                            <img src="{{ asset('/images/ふきだしのアイコン.png') }}" class="img-comment_icon" />
-                            <p class="comment_count__number">カウント</p>
+                            <div class='comment_wrapper'>
+                                <i class="fa-regular fa-comment"></i>
+                                <p class="comment_count__number">カウント</p>
+                            </div>
                         </div>
                     </div>
                     @if ($item->is_sold)

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PurchaseRequest;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
-use Stripe\PaymentIntent;
 use Illuminate\Support\Facades\Log;
 use Stripe\Webhook;
 use Illuminate\Support\Facades\Config;
@@ -65,7 +64,7 @@ class PaymentController extends Controller
             'success_url' => route('stripe.success', ['item_id' => $item->id]),
             'cancel_url' => route('stripe.cancel', [
                 'item_id' => $item->id,
-                'session_id' => isset($session) ? $session->id : null, // 一時的に対処
+                'session_id' => isset($session) ? $session->id : null,
             ]),
         ]);
 
@@ -89,8 +88,7 @@ class PaymentController extends Controller
 
         try {
             $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
-
-            Log::info('Received Webhook event:', [
+            Log::info('Webhook event received', [
                 'type' => $event->type,
                 'data' => $event->data->object,
             ]);
@@ -98,13 +96,10 @@ class PaymentController extends Controller
             if ($event->type === 'payment_intent.succeeded') {
                 $paymentIntent = $event->data->object;
 
-                Log::info('PaymentIntent status:', ['status' => $paymentIntent->status]);
-                Log::info('PaymentIntent metadata:', (array) $paymentIntent->metadata);
-
-                if (!isset($paymentIntent->metadata['item_id'])) {
-                    Log::error('Metadata missing item_id');
-                    return response('Missing metadata', 400);
-                }
+                Log::info('Processing payment_intent.succeeded event', [
+                    'payment_intent_id' => $paymentIntent->id,
+                    'metadata' => (array)$paymentIntent->metadata,
+                ]);
 
                 $item = Item::find($paymentIntent->metadata['item_id']);
                 if (!$item) {
@@ -120,24 +115,25 @@ class PaymentController extends Controller
                 $paymentMethod = $paymentIntent->metadata['payment_method'] ?? null;
                 $shippingAddress = $paymentIntent->metadata['shipping_address'] ?? null;
 
-                if ($paymentMethod === 'コンビニ払い') {
-                    $paymentMethod = 1;
-                } elseif ($paymentMethod === 'カード払い') {
-                    $paymentMethod = 2;
-                }
+                Log::info('Creating order', [
+                    'item_id' => $item->id,
+                    'user_id' => $paymentIntent->metadata['user_id'] ?? null,
+                    'payment_method' => $paymentMethod,
+                    'shipping_address' => $shippingAddress,
+                ]);
 
                 $form = [
                     'user_id' => $paymentIntent->metadata['user_id'] ?? null,
                     'item_id' => $item->id,
                     'price' => $item->price,
-                    'payment_method' => $paymentMethod,
+                    'payment_method' => $paymentMethod === 'カード払い' ? 2 : 1,
                     'shipping_address' => $shippingAddress,
                 ];
 
-                Order::create($form);
+                $order = Order::create($form);
                 $item->update(['is_sold' => true]);
 
-                Log::info('Order created successfully');
+                Log::info('Order created successfully', ['order_id' => $order->id]);
             }
 
             return response('Webhook handled', 200);
@@ -176,10 +172,10 @@ class PaymentController extends Controller
 
             try {
                 $session = StripeSession::retrieve($session_id);
-                $paymentMethod = $session->payment_method_types[0] ?? null; // 支払い方法を取得
+                $paymentMethod = $session->payment_method_types[0] ?? null;
 
                 if ($paymentMethod === 'konbini') {
-                    // コンビニ払いの場合のメッセージ
+
                     return redirect()->route('item.detail', ['item_id' => $item->id])
                         ->with('message', 'コンビニ払いの場合、支払いが確認されるまで注文が確定されません。');
                 }
@@ -190,8 +186,6 @@ class PaymentController extends Controller
                 ]);
             }
         }
-
-        // デフォルトのキャンセルメッセージ
         return redirect()->route('item.detail', ['item_id' => $item->id])
             ->with('message', '決済がキャンセルされました。再度お試しください。');
     }
