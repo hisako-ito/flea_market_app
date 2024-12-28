@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/register/add', [UserController::class, 'add']);
     Route::patch('/register/add', [ProfileInformationController::class, 'update'])->name('user-profile-information.register');
 
-    Route::post('/items/{item}/favorite', [FavoriteController::class, 'favorite']);
+    Route::post('/items/{item}/favorite', [FavoriteController::class, 'favorite'])->name('favorite');
 
     Route::get('/mypage', [UserController::class, 'show'])->name('mypage');
     Route::get('/mypage/profile', [UserController::class, 'edit']);
