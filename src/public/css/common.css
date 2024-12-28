@@ -89,6 +89,8 @@ button {
     outline: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
 }
 
 .header-nav__logout-btn {

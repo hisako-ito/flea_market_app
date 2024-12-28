@@ -39,30 +39,39 @@
         </div>
         <div class="content__form">
             <div class="form__inner">
-                <form action="/purchase/{{$item->id}}" method="get">
-                    @csrf
-                    <h2 class="item-name">{{$item->item_name}}</h2>
-                    <p class="item-brand-name">{{$item->brand}}</p>
-                    <p class="item-price">{{ number_format($item->price) }}</p>
-                    <div class="count-content">
-                        <div class="favorite_count">
-                            <button type="submit" class="favorite_btn">
-                                <i class="fa-regular fa-star"></i>
+                <h2 class="item-name">{{$item->item_name}}</h2>
+                <p class="item-brand-name">{{$item->brand}}</p>
+                <p class="item-price">{{ number_format($item->price) }}</p>
+                <div class="count-content">
+                    <div class="favorite_count">
+                        <form id="favorite-form-{{ $item->id }}" action="{{ route('favorite', $item->id) }}" data-item-id="{{ $item->id }}" method="post">
+                            @csrf
+                            <button type="submit" class="favorite_btn" aria-label="お気に入り切り替え">
+                                @if (Auth::check() && $item->isFavoritedBy(Auth::user()))
+                                <i class="fas fa-star filled"></i>
+                                @else
+                                <i class="far fa-star empty"></i>
+                                @endif
                             </button>
-                            <p class="favorite_count__number" id="favorite-count-{{ $item->id }}">カウント</p>
-                        </div>
-                        <div class="comment_count">
-                            <div class='comment_wrapper'>
-                                <i class="fa-regular fa-comment"></i>
-                                <p class="comment_count__number">カウント</p>
-                            </div>
+                        </form>
+                        <p class="favorite_count__number" id="favorite-count-{{ $item->id }}">{{ $item->favorites->count() }}</p>
+                    </div>
+                    <div class="comment_count">
+                        <div class='comment_wrapper'>
+                            <i class="fa-regular fa-comment"></i>
+                            <p class="comment_count__number">カウント</p>
                         </div>
                     </div>
-                    @if ($item->is_sold)
-                    <button type="button" class="button-sold btn">売り切れました</button>
-                    @else
-                    <button class="button-purchase btn" type="submit">購入手続きへ</button>
-                    @endif
+                </div>
+                <form action="/purchase/{{$item->id}}" method="get">
+                    @csrf
+                    <div class="purchase-procedure-btn">
+                        @if ($item->is_sold)
+                        <a class="button-sold btn">売り切れました</a>
+                        @else
+                        <a class="button-purchase btn" href="/purchase/{{$item->id}}">購入手続きへ</a>
+                        @endif
+                    </div>
                 </form>
                 <div class="item-description">
                     <h3 class="description__heading">商品説明</h3>
@@ -99,5 +108,60 @@
         </div>
     </div>
 </div>
+@endsection
 
+@section('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const favoriteForms = document.querySelectorAll('form[id^="favorite-form-"]');
+
+        favoriteForms.forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const button = form.querySelector('button');
+                const icon = button.querySelector('i');
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                        },
+                    });
+
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+
+
+                    if (response.ok) {
+
+                        const data = await response.json();
+                        console.log(data);
+                        const favoriteCount = document.getElementById(`favorite-count-${form.dataset.itemId}`);
+
+                        if (icon.classList.contains('fas')) {
+                            icon.classList.remove('fas', 'filled');
+                            icon.classList.add('far', 'empty');
+                        } else {
+                            icon.classList.remove('far', 'empty');
+                            icon.classList.add('fas', 'filled');
+                        }
+
+                        if (favoriteCount) {
+                            favoriteCount.textContent = data.favorite_count;
+                        }
+                    } else {
+                        console.error('Failed to toggle favorite status:', response.status);
+                    }
+                } catch (error) {
+                    console.error('An error occurred:', error);
+                }
+            });
+        });
+    });
+</script>
 @endsection
