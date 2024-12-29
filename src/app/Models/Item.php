@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
@@ -44,13 +43,6 @@ class Item extends Model
             case "4":
                 echo "状態が悪い";
                 break;
-        }
-    }
-
-    public function scopeKeywordSearch($query, $keyword)
-    {
-        if (!empty($keyword)) {
-            $query->where('item_name', 'like', '%' . $keyword . '%');
         }
     }
 

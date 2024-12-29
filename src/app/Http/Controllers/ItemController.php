@@ -14,14 +14,40 @@ class ItemController extends Controller
     {
 
         $keyword = $request->input('keyword', '');
-        $items = Item::query();
+        $user = Auth::user();
+        $page = $request->query('page', 'recommend');
+        $sort = "recommend";
+
+        $query = Item::query();
+
+        $items = collect();
+        $favorites = collect();
 
         if (!empty($keyword)) {
-            $items = $items->KeywordSearch($keyword);
-        }
-        $items = $items->get();
+            $query->where('item_name', 'like', '%' . $keyword . '%');
 
-        return view('list', compact('keyword', 'items'));
+            if ($page == 'recommend') {
+                $items = $query->withCount('favorites')
+                    ->orderBy('favorites_count', 'desc')
+                    ->get();
+            } elseif ($page === 'mylist' && $user) {
+                $favorites = $user->favoriteEntries()
+                    ->whereHas('item', function ($query) use ($keyword) {
+                        $query->where('item_name', 'like', '%' . $keyword . '%');
+                    })
+                    ->get();
+            }
+        } else {
+            if ($page === 'recommend') {
+                $items = Item::withCount('favorites')
+                    ->orderBy('favorites_count', 'desc')
+                    ->get();
+            } elseif ($page === 'mylist' && $user) {
+                $favorites = $user->favoriteEntries;
+            }
+        }
+
+        return view('list', compact('keyword', 'items', 'user', 'page', 'sort', 'favorites'));
     }
 
     public function getDetail($item_id, Request $request)
@@ -29,10 +55,11 @@ class ItemController extends Controller
         $item = Item::find($item_id);
         $categories = Category::all();
         $keyword = $request->input('keyword', '');
+        $query = Item::query();
 
         if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
 
         $purchase_completed = $request->query('purchase_completed', false);
@@ -46,9 +73,11 @@ class ItemController extends Controller
         $keyword = $request->input('keyword', '');
         $user = Auth::user();
 
+        $query = Item::query();
+
         if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
         return view('purchase', compact('item', 'keyword', 'user'));
     }
@@ -59,10 +88,13 @@ class ItemController extends Controller
         $user = Auth::user();
         $categories = Category::all();
 
+        $query = Item::query();
+
         if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
+
         return view('sell', compact('keyword', 'user', 'categories'));
     }
 
@@ -70,10 +102,11 @@ class ItemController extends Controller
     {
         $keyword = $request->input('keyword', '');
         $user = Auth::user();
+        $query = Item::query();
 
         if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
 
         $item = Item::create([

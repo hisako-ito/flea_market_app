@@ -1,19 +1,24 @@
-.group-list {
+.tabs {
     padding: 3% 0 0.1% 11%;
     border-bottom: 2px solid #5F5F5F;
 }
 
-.group-list_item {
-    margin-right: 10%;
+.tabs a {
     color: #5F5F5F;
+    margin-right: 10%;
     font-weight: bold;
-    cursor: pointer;
+}
+
+.tabs a.active-tab {
+    color: #FF0000;
+    font-weight: bold;
 }
 
 .items-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    position: relative;
 }
 
 .item__card {
@@ -40,7 +45,7 @@
     transform: rotate(-45deg);
 }
 
-.product-link {
+.item-link {
     position: absolute;
     top: 0;
     left: 0;
@@ -60,6 +65,14 @@
 
 .card__detail p {
     font-size: 1.1rem;
+}
+
+.no-results {
+    position: absolute;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 200%);
 }
 
 /* レスポンシブ (768px以上)*/

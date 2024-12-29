@@ -21,11 +21,13 @@ class PaymentController extends Controller
         $user = Auth::user();
         $item = Item::find($item_id);
         $keyword = $request->input('keyword', '');
+        $query = Item::query();
 
         if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
+
 
         $paymentMethod = $request->input('payment_method');
         $shippingAddress = $request->input('shipping_address');
@@ -155,6 +157,13 @@ class PaymentController extends Controller
         $item_id = $request->query('item_id');
         $item = Item::find($item_id);
 
+        $query = Item::query();
+
+        if (!empty($keyword)) {
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
+        }
+
         return redirect()->route('item.detail', ['item_id' => $item->id])
             ->with('message', '商品の購入が完了しました！');
     }
@@ -164,6 +173,13 @@ class PaymentController extends Controller
     {
         $item_id = $request->query('item_id');
         $item = Item::find($item_id);
+
+        $query = Item::query();
+
+        if (!empty($keyword)) {
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
+        }
 
         $session_id = $request->query('session_id'); // StripeのCheckout Session ID
 
