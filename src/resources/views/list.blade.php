@@ -8,6 +8,7 @@
 <form class="header-nav__search-form" action="/" method="get">
     @csrf
     <input class="header-nav__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword ?? '' }}">
+    <input type="hidden" name="page" value="{{ $page }}">
 </form>
 @endsection
 
@@ -25,13 +26,15 @@
 @endsection
 
 @section('content')
-<div class="group-list">
-    <span class="group-list_item group-list__item--recommend" tabindex="-1">おすすめ</span>
-    <span class="group-list_item group-list__item--favorite" tabindex="-1">マイリスト</span>
+<div class="tabs">
+    <a href="{{ route('item.list', ['page' => 'recommend', 'keyword' => $keyword]) }}"
+        class="{{ $page === 'recommend' ? 'active-tab' : '' }}">おすすめ</a>
+    <a href="{{ route('item.list', ['page' => 'mylist', 'keyword' => $keyword]) }}"
+        class="{{ $page === 'mylist' ? 'active-tab' : '' }}">マイリスト</a>
 </div>
 
 <div class="items-list">
-    @if(isset($items) && $items->isNotEmpty())
+    @if($page === 'recommend' && $items->isNotEmpty())
     @foreach ($items as $item)
     <div class="item__card">
         <div class="card__img">
@@ -40,7 +43,7 @@
                 <span class="sold-font">SOLD</span>
             </div>
             @endif
-            <a href="/item/{{$item->id}}" class="product-link"></a>
+            <a href="/item/{{$item->id}}" class="item-link"></a>
             <img src="{{ asset($item->item_image) }}" alt="商品画像">
         </div>
         <div class="card__detail">
@@ -48,8 +51,27 @@
         </div>
     </div>
     @endforeach
+    @elseif ($page === 'mylist' && $favorites->isNotEmpty())
+    @foreach ($favorites as $favorite)
+    @if ($favorite->item) {{-- itemが存在する場合のみ表示 --}}
+    <div class="item__card">
+        <div class="card__img">
+            @if ($favorite->item->is_sold)
+            <div class="sold-label">
+                <span class="sold-font">SOLD</span>
+            </div>
+            @endif
+            <a href="/item/{{$favorite->item->id}}" class="item-link"></a>
+            <img src="{{ asset($favorite->item->item_image) }}" alt="商品画像">
+        </div>
+        <div class="card__detail">
+            <p>{{$favorite->item->item_name}}</p>
+        </div>
+    </div>
+    @endif
+    @endforeach
     @else
-    <p>表示する商品がありません。</p>
+    <p class="no-results">該当する商品がありません</p>
     @endif
 </div>
 @endsection

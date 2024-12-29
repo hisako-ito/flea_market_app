@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FavoriteController;
 
-Route::get('/', [ItemController::class, 'index']);
+Route::get('/', [ItemController::class, 'index'])->name('item.list');
 Route::get('/item/{item_id}', [ItemController::class, 'getDetail'])->name('item.detail');
 
 // Route::post('/register', [RegisterController::class, 'register']);

@@ -22,13 +22,16 @@ class UserController extends Controller
         $user = Auth::user();
         $page = $request->query('page', 'sell');
 
+        $query = Item::query();
+
         if (!empty($keyword)) {
-            $items = $items->KeywordSearch($keyword);
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
 
         if ($page == 'buy') {
             $orders = Order::where('user_id', $user->id)->with('item')->get();
-            $items = collect(); // $itemsを空のコレクションで初期化
+            $items = collect();
         } else {
             $items = Item::where('user_id', $user->id)->get();
         }
@@ -41,9 +44,11 @@ class UserController extends Controller
         $keyword = $request->input('keyword', '');
         $user = Auth::user();
 
+        $query = Item::query();
+
         if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
 
         return view('profile_edit', compact('keyword', 'user'));
@@ -55,9 +60,11 @@ class UserController extends Controller
         $keyword = $request->input('keyword', '');
         $user = Auth::user();
 
+        $query = Item::query();
+
         if (!empty($keyword)) {
-            $items = Item::KeywordSearch($keyword)->get();
-            return view('search_results', compact('items', 'keyword'));
+            $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
+            return view('search_results', compact('items', 'keyword', 'page'));
         }
 
         return view('profile_address', compact('item', 'keyword', 'user'));
