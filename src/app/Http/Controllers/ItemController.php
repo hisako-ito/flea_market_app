@@ -20,31 +20,30 @@ class ItemController extends Controller
 
         $query = Item::query();
 
-        $items = collect();
-        $favorites = collect();
+        if (Auth::check() && $user) {
+            $query->where('user_id', '!=', $user->id);
+        }
 
         if (!empty($keyword)) {
             $query->where('item_name', 'like', '%' . $keyword . '%');
+        }
 
-            if ($page == 'recommend') {
-                $items = $query->withCount('favorites')
-                    ->orderBy('favorites_count', 'desc')
-                    ->get();
-            } elseif ($page === 'mylist' && $user) {
-                $favorites = $user->favoriteEntries()
-                    ->whereHas('item', function ($query) use ($keyword) {
+        $items = collect();
+        $favorites = collect();
+
+        if ($page == 'recommend') {
+            $items = $query->withCount('favorites')
+                ->orderBy('favorites_count', 'desc')
+                ->get();
+        } elseif ($page === 'mylist' && $user) {
+            $favorites = $user->favoriteEntries()
+                ->whereHas('item', function ($query) use ($user, $keyword) {
+                    if (!empty($keyword)) {
                         $query->where('item_name', 'like', '%' . $keyword . '%');
-                    })
-                    ->get();
-            }
-        } else {
-            if ($page === 'recommend') {
-                $items = Item::withCount('favorites')
-                    ->orderBy('favorites_count', 'desc')
-                    ->get();
-            } elseif ($page === 'mylist' && $user) {
-                $favorites = $user->favoriteEntries;
-            }
+                    }
+                    $query->where('user_id', '!=', $user->id);
+                })
+                ->get();
         }
 
         return view('list', compact('keyword', 'items', 'user', 'page', 'sort', 'favorites'));
@@ -62,9 +61,7 @@ class ItemController extends Controller
             return view('search_results', compact('items', 'keyword', 'page'));
         }
 
-        $purchase_completed = $request->query('purchase_completed', false);
-
-        return view('item', compact('item', 'categories', 'keyword', 'purchase_completed'));
+        return view('item', compact('item', 'categories', 'keyword'));
     }
 
     public function getPurchase($item_id, Request $request)
