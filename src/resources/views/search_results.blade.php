@@ -8,6 +8,7 @@
 <form class="header-nav__search-form" action="/" method="get">
     @csrf
     <input class="header-nav__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword ?? '' }}">
+    <input type="hidden" name="page" value="{{ $page }}">
 </form>
 @endsection
 
@@ -26,13 +27,14 @@
 
 @section('content')
 <div class="tabs">
-    <a href="{{ route('item.list', ['page' => 'recommend']) }}"
+    <a href="{{ route('item.list', ['page' => 'recommend', 'keyword' => $keyword]) }}"
         class="{{ $page === 'recommend' ? 'active-tab' : '' }}">おすすめ</a>
-    <a href="{{ route('item.list', ['page' => 'mylist']) }}"
+    <a href="{{ route('item.list', ['page' => 'mylist', 'keyword' => $keyword]) }}"
         class="{{ $page === 'mylist' ? 'active-tab' : '' }}">マイリスト</a>
 </div>
 
 <div class="items-list">
+    @if($page === 'recommend' && $items->isNotEmpty())
     @foreach ($items as $item)
     <div class="item__card">
         <div class="card__img">
@@ -49,5 +51,27 @@
         </div>
     </div>
     @endforeach
+    @elseif ($page === 'mylist' && $favorites->isNotEmpty())
+    @foreach ($favorites as $favorite)
+    @if ($favorite->item) {{-- itemが存在する場合のみ表示 --}}
+    <div class="item__card">
+        <div class="card__img">
+            @if ($favorite->item->is_sold)
+            <div class="sold-label">
+                <span class="sold-font">SOLD</span>
+            </div>
+            @endif
+            <a href="/item/{{$favorite->item->id}}" class="item-link"></a>
+            <img src="{{ asset($favorite->item->item_image) }}" alt="商品画像">
+        </div>
+        <div class="card__detail">
+            <p>{{$favorite->item->item_name}}</p>
+        </div>
+    </div>
+    @endif
+    @endforeach
+    @else
+    <p class="no-results">該当する商品がありません</p>
+    @endif
 </div>
 @endsection
