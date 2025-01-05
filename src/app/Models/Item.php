@@ -60,4 +60,14 @@ class Item extends Model
 
         return $this->favorites()->where('user_id', $user->id)->exists();
     }
+
+    // public function comments()
+    // {
+    //     return $this->belongsToMany(User::class, 'comments', 'item_id', 'user_id')->withPivot('content');
+    // }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

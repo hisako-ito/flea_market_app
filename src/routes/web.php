@@ -7,6 +7,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', [ItemController::class, 'index'])->name('item.list');
 Route::get('/item/{item_id}', [ItemController::class, 'getDetail'])->name('item.detail');
@@ -19,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/register/add', [ProfileInformationController::class, 'update'])->name('user-profile-information.register');
 
     Route::post('/items/{item}/favorite', [FavoriteController::class, 'favorite'])->name('favorite');
+    Route::post('/items/{id}/comments', [CommentController::class, 'storeComment'])->name('items.comments.store');
 
     Route::get('/mypage', [UserController::class, 'show'])->name('mypage');
     Route::get('/mypage/profile', [UserController::class, 'edit']);
@@ -36,4 +38,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/sell', [ItemController::class, 'postSell']);
 });
 
-Route::post('/webhook/stripe', [PaymentController::class, 'handleWebhook']);
+Route::post('/webhook/stripe', [PaymentController::class, 'handleWebhook'])->withoutMiddleware(['web']);

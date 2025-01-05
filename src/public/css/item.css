@@ -217,6 +217,40 @@
     background-color: #444444;
 }
 
+.comment-user_info {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+}
+
+.comment-user_image {
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comment-user_image img {
+    width: 100%;
+    height: auto;
+}
+
+.comment-user_name {
+    font-weight: bold;
+}
+
+.comment-content {
+    background-color: #E5E5E5;
+    width: 100%;
+    padding: 3%;
+    border-radius: 5px;
+    margin: 3% 0;
+}
+
 .button-comment {
     margin-top: 2rem;
 }
