@@ -51,17 +51,19 @@ class ItemController extends Controller
 
     public function getDetail($item_id, Request $request)
     {
-        $item = Item::find($item_id);
+        $item = Item::with(['comments.user'])->findOrFail($item_id);
         $categories = Category::all();
         $keyword = $request->input('keyword', '');
         $query = Item::query();
+
+        $commentsCount = $item->comments->count();
 
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
             return view('search_results', compact('items', 'keyword', 'page'));
         }
 
-        return view('item', compact('item', 'categories', 'keyword'));
+        return view('item', compact('item', 'categories', 'keyword', 'commentsCount'));
     }
 
     public function getPurchase($item_id, Request $request)

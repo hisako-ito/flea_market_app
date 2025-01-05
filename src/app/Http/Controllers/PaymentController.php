@@ -10,8 +10,10 @@ use App\Http\Requests\PurchaseRequest;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use Illuminate\Support\Facades\Log;
-use Stripe\Webhook;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Stripe\Event;
+use Stripe\Webhook;
 
 
 class PaymentController extends Controller
@@ -78,99 +80,97 @@ class PaymentController extends Controller
 
     public function handleWebhook(Request $request)
     {
+        $endpointSecret = config('services.stripe.webhook_secret');
         $payload = $request->getContent();
-        $signature = $request->header('Stripe-Signature');
-        $secret = env('STRIPE_WEBHOOK_SECRET');
+        $sigHeader = $request->header('Stripe-Signature');
 
         try {
-            $event = \Stripe\Webhook::constructEvent($payload, $signature, $secret);
+            $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
+        } catch (\UnexpectedValueException $e) {
+            Log::error("Invalid payload");
+            return response()->json(['error' => 'Invalid payload'], 400);
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
-            Log::error('Invalid signature', ['message' => $e->getMessage()]);
-            return response('Invalid signature', 400);
-        } catch (\Exception $e) {
-            Log::error('Webhook error', ['message' => $e->getMessage()]);
-            return response('Webhook error', 500);
+            Log::error("Invalid signature");
+            return response()->json(['error' => 'Invalid signature'], 400);
         }
 
-        $eventType = $event->type;
+        $this->handleEvent($event);
 
-        Log::info('Webhook event received', ['type' => $eventType]);
+        return response()->json(['status' => 'success']);
+    }
+
+    protected function handleEvent($event)
+    {
+        $eventType = $event['type'] ?? null;
 
         switch ($eventType) {
+            case 'checkout.session.completed':
+                $this->handleCheckoutSessionCompleted($event['data']['object']);
+                break;
+
             case 'payment_intent.succeeded':
-                $this->handlePaymentIntentSucceeded($event->data->object);
-                break;
-
-            case 'charge.succeeded':
-                $this->handleChargeSucceeded($event->data->object);
-                break;
-
-            case 'payment_intent.created':
-                Log::info('Processing payment_intent.created event');
-                break;
-
-            case 'charge.updated':
-                Log::info('Processing charge.updated event');
+                $this->handlePaymentIntentSucceeded($event['data']['object']);
                 break;
 
             default:
-                Log::warning('Unhandled webhook event type', ['type' => $eventType]);
-                return response('Unhandled event type', 400);
+                Log::info("Unhandled event type", ['type' => $eventType]);
         }
-
-        return response('Webhook handled', 200);
     }
 
     protected function handleCheckoutSessionCompleted($session)
     {
-        Log::info('Processing checkout.session.completed event', ['session_id' => $session->id]);
+        $this->processEventData($session['metadata'], $session['amount_total'] ?? 0);
     }
 
     protected function handlePaymentIntentSucceeded($paymentIntent)
     {
-        Log::info('Received metadata for payment_intent.succeeded', ['metadata' => $paymentIntent->metadata]);
-
-        $metadata = $paymentIntent->metadata ?? [];
-        if (empty($metadata)) {
-            Log::error('Missing metadata in payment_intent.succeeded', ['payment_intent_id' => $paymentIntent->id]);
-            return;
-        }
-
-        $itemId = $metadata['item_id'] ?? null;
-        if (!$itemId) {
-            Log::error('Item ID not found in metadata', ['metadata' => $metadata, 'payment_intent_id' => $paymentIntent->id]);
-            return;
-        }
-
-        $item = Item::find($itemId);
-        if (!$item) {
-            Log::error('Item not found for payment_intent', ['item_id' => $itemId, 'payment_intent_id' => $paymentIntent->id]);
-            return;
-        }
-
-        $paymentMethod = $metadata['payment_method'] ?? null;
-        $shippingAddress = $metadata['shipping_address'] ?? null;
-
-        $form = [
-            'user_id' => $metadata['user_id'] ?? null,
-            'item_id' => $item->id,
-            'price' => $item->price,
-            'payment_method' => $paymentMethod === 'カード払い' ? 2 : 1,
-            'shipping_address' => $shippingAddress,
-        ];
-
-        $order = Order::create($form);
-        $item->update(['is_sold' => true]);
-
-        Log::info('Order created successfully', ['order_id' => $order->id, 'item_id' => $item->id]);
+        $this->processEventData($paymentIntent['metadata'], $paymentIntent['amount_received'] ?? 0);
     }
 
-
-    protected function handleChargeSucceeded($charge)
+    protected function processEventData($metadata, $amount)
     {
-        Log::info('Processing charge.succeeded event', ['charge_id' => $charge->id]);
-    }
+        if (!$metadata) {
+            Log::error("Missing metadata");
+            return;
+        }
 
+        $userId = $metadata['user_id'] ?? null;
+        $itemId = $metadata['item_id'] ?? null;
+        $shippingAddress = $metadata['shipping_address'] ?? null;
+        $paymentMethod = $metadata['payment_method'] ?? null;
+
+        if (!$userId || !$itemId || !$shippingAddress || !$paymentMethod) {
+            Log::error("Incomplete metadata", ['metadata' => $metadata]);
+            return;
+        }
+
+        $paymentMethodType = $paymentMethod === 'カード払い' ? 2 : 1;
+
+        try {
+            DB::transaction(function () use ($userId, $itemId, $shippingAddress, $paymentMethodType, $amount) {
+                $orderData = [
+                    'user_id' => $userId,
+                    'item_id' => $itemId,
+                    'price' => $amount,
+                    'payment_method' => $paymentMethodType,
+                    'shipping_address' => $shippingAddress,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                Log::info("Inserting order data", $orderData);
+                DB::table('orders')->insert($orderData);
+
+                DB::table('items')->where('id', $itemId)->update(['is_sold' => true]);
+                Log::info("Item marked as sold", ['item_id' => $itemId]);
+            });
+        } catch (\Exception $e) {
+            Log::error("Database operation failed", [
+                'error' => $e->getMessage(),
+                'user_id' => $userId,
+                'item_id' => $itemId,
+            ]);
+        }
+    }
 
     public function success(Request $request)
     {
@@ -179,9 +179,10 @@ class PaymentController extends Controller
 
         $query = Item::query();
 
+        $keyword = $request->input('keyword', '');
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
-            return view('search_results', compact('items', 'keyword', 'page'));
+            return view('search_results', compact('items', 'keyword'));
         }
 
         return redirect()->route('item.detail', ['item_id' => $item->id])
@@ -196,9 +197,10 @@ class PaymentController extends Controller
 
         $query = Item::query();
 
+        $keyword = $request->input('keyword', '');
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
-            return view('search_results', compact('items', 'keyword', 'page'));
+            return view('search_results', compact('items', 'keyword'));
         }
 
         $session_id = $request->query('session_id');
