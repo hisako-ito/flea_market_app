@@ -68,7 +68,7 @@
                 <div class="item__deliver-address">
                     <div class="deliver-address__wrapper">
                         <h3 class=" deliver-address__heading">配送先</h3>
-                        <a class="address-update__button-submit" href="/purchase/address/{{$item->id}}" target="_blank">変更する</a>
+                        <a class="address-update__button-submit" href="/purchase/address/{{$item->id}}">変更する</a>
                     </div>
                     <div class="deliver-address__content">
                         <input class="postal_code" value="〒{{ $user->postal_code }}" readonly>

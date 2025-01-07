@@ -6,7 +6,7 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Routing\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
-
+use App\Models\Item;
 
 class ProfileInformationController extends Controller
 {
@@ -35,13 +35,13 @@ class ProfileInformationController extends Controller
         return redirect()->back()->with('message', 'プロフィールを更新しました。');
     }
 
-    public function postAddress(AddressRequest $request)
+    public function postAddress($item_id, AddressRequest $request)
     {
+        $item = Item::find($item_id);
         $data = $request->validated();
-
         $user = $request->user();
         $this->updateUserProfile->update($user, $data);
 
-        return redirect()->back()->with('message', '住所を更新しました。');
+        return redirect()->route('purchase.get', ['item_id' => $item->id])->with('message', '住所を更新しました。');
     }
 }

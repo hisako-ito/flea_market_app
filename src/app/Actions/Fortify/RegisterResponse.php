@@ -14,6 +14,6 @@ class RegisterResponse implements RegisterResponseContract
      */
     public function toResponse($request)
     {
-        return redirect('/register/add');
+        return redirect('/register/add')->with('message', 'プロフィールの設定をお願いします');
     }
 }
