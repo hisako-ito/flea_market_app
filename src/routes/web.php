@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileInformationController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
@@ -12,8 +13,8 @@ use App\Http\Controllers\CommentController;
 Route::get('/', [ItemController::class, 'index'])->name('item.list');
 Route::get('/item/{item_id}', [ItemController::class, 'getDetail'])->name('item.detail');
 
-// Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LogoutController::class, 'logout']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/register/add', [UserController::class, 'add']);
@@ -26,16 +27,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/profile', [UserController::class, 'edit']);
     Route::patch('/mypage/profile', [ProfileInformationController::class, 'update'])->name('user-profile-information.profile');
 
-    Route::get('/purchase/{item_id}', [ItemController::class, 'getPurchase']);
+    Route::get('/purchase/{item_id}', [ItemController::class, 'getPurchase'])->name('purchase.get');
     Route::post('/purchase/{item_id}', [PaymentController::class, 'postPurchase'])->name('purchase.post');
     Route::get('/purchase/address/{item_id}', [UserController::class, 'getAddress']);
     Route::patch('/purchase/address/{item_id}', [ProfileInformationController::class, 'postAddress'])->name('user-profile-information.address');
 
-    Route::get('/stripe/success', [PaymentController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [PaymentController::class, 'cancel'])->name('stripe.cancel');
+    Route::get('/stripe/waiting-for-payment', [PaymentController::class, 'waitingForPayment'])->name('stripe.waiting_for_payment');
+    Route::post('/stripe/check-payment-status', [PaymentController::class, 'checkPaymentStatus'])->name('stripe.check_payment_status');
 
     Route::get('/sell', [ItemController::class, 'getSell']);
     Route::post('/sell', [ItemController::class, 'postSell']);
 });
-
-Route::post('/webhook/stripe', [PaymentController::class, 'handleWebhook'])->withoutMiddleware(['web']);

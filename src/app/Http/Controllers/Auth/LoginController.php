@@ -14,7 +14,10 @@ class LoginController extends Controller
 
         if (Auth::attempt([$field => $request->login, 'password' => $request->password])) {
             $request->session()->regenerate();
-            return redirect()->intended('/')->with('message', 'ログインに成功しました');
+
+            session()->flash('message', 'ログインに成功しました');
+
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([

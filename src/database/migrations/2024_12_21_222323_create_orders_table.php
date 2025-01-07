@@ -17,9 +17,11 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
+            $table->string('stripe_session_id');
             $table->integer('price');
             $table->tinyInteger('payment_method')->comment('1:コンビニ払い 2:カード支払い');
             $table->string('shipping_address');
+            $table->string('status');
             $table->timestamps();
         });
     }
