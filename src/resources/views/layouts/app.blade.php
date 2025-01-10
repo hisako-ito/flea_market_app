@@ -56,8 +56,6 @@
 </body>
 
 <script>
-    // let paymentConfirmedAlertShown = false;
-
     const checkPaymentStatus = () => {
         fetch(`/stripe/check-payment-status?session_id={{ session('stripe_session_id') }}`, {
                 method: 'POST',
@@ -66,26 +64,6 @@
                 }
             })
             .then(response => response.json())
-        // .then(data => {
-        //     switch (data.status) {
-        //         case 'success':
-        //             if (!paymentConfirmedAlertShown) {
-        //                 alert('支払いが確認されました！');
-        //                 paymentConfirmedAlertShown = true;
-        //             }
-        //             break;
-        //         case 'pending':
-        //             document.querySelector('.content__alert').innerHTML = '<div class="alert--info">支払い確認中...</div>';
-        //             break;
-        //         default:
-        //             document.querySelector('.content__alert').innerHTML = '<div class="alert--danger">' + data.message + '</div>';
-        //             break;
-        //     }
-        // })
-        // .catch(error => {
-        //     console.error('エラー:', error);
-        //     document.querySelector('.content__alert').innerHTML = '<div class="alert--danger">エラーが発生しました。</div>';
-        // });
     };
 
     setInterval(checkPaymentStatus, 5000);

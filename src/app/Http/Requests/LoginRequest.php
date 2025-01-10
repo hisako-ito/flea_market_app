@@ -24,25 +24,16 @@ class LoginRequest extends FortifyLoginRequest
     public function rules()
     {
         return [
-            'login' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    if (!filter_var($value, FILTER_VALIDATE_EMAIL) && !preg_match('/^[a-zA-Z0-9_]+$/', $value)) {
-                        $fail('ユーザー名またはメールアドレスを正しく入力してください。');
-                    }
-                },
-            ],
-            'password' => 'required|min:8',
+            'email' => 'required',
+            'password' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'login.required' => 'ユーザー名またはメールアドレスを入力してください',
-            'login.email' => 'メールアドレスはメール形式で入力してください',
+            'email.required' => 'メールアドレスを入力してください',
             'password.required' => 'パスワードを入力してください',
-            'password.min:8' => 'パスワードは8文字以上で入力してください',
         ];
     }
 }

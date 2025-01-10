@@ -9,7 +9,6 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-// use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
@@ -18,20 +17,43 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Auth\RegisterController;
+use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
+use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
+use App\Actions\Fortify\EnsureEmailIsVerified;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
+        $this->app->singleton(CreatesNewUsers::class, CreateNewUser::class);
+
+        $this->app->singleton(VerifyEmailViewResponse::class, function () {
+            return new class implements VerifyEmailViewResponse {
+                public function toResponse($request)
+                {
+                    return view('auth.verify-email');
+                }
+            };
+        });
+    }
 
     /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
-        Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
 
         Fortify::registerView(function () {
@@ -47,21 +69,24 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(10)->by($email . $request->ip());
         });
 
-        // $this->app->bind(FortifyLoginRequest::class, LoginRequest::class);
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = User::where('email', $request->email)->first();
 
-        Fortify::authenticateUsing(function ($request) {
-            $user = User::where('email', $request->login)
-                ->orWhere('user_name', $request->login)
-                ->first();
-
-            if ($user && Hash::check($request->password, $user->password)) {
+            if (
+                $user &&
+                Hash::check($request->password, $user->password)
+            ) {
                 return $user;
             }
         });
 
-        $this->app->singleton(
-            \Laravel\Fortify\Contracts\RegisterResponse::class,
-            RegisterResponse::class
-        );
+        Fortify::authenticateThrough(function (Request $request) {
+            return array_filter([
+                config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
+                EnsureEmailIsVerified::class,
+                AttemptToAuthenticate::class,
+                PrepareAuthenticatedSession::class,
+            ]);
+        });
     }
 }

@@ -29,7 +29,7 @@ class ProfileInformationController extends Controller
 
         if ($addressRequest->route()->getName() === 'user-profile-information.register') {
             auth()->logout();
-            return redirect('/login')->with('message', '会員登録が完了しました。登録した情報でログインしてください。');
+            return redirect('/login')->with('message', 'メールアドレスの確認メールをお送りしました。メールアドレスを確認後、ログインしてください。');
         }
 
         return redirect()->back()->with('message', 'プロフィールを更新しました。');

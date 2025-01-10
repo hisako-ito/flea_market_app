@@ -38,3 +38,17 @@ services:
       - mysql
     ports:
       - 8080:80
+
+  mailhog:
+    image: 'mailhog/mailhog:latest'
+    ports:
+      - 1025:1025
+      - 8025:8025
+    volumes:
+      - mailhog-data:/tmp
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
+
+volumes:
+  mailhog-data:
