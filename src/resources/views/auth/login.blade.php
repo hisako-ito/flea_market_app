@@ -5,6 +5,11 @@
 @endsection
 
 @section('content')
+@if(session('verified'))
+<div class="alert alert-success">
+    メールアドレスが確認されました。ログインしてください。
+</div>
+@endif
 <div class="login__content">
     <div class="login__form">
         <div class="login-form__heading">
@@ -14,11 +19,11 @@
             @csrf
             <div class="form__group">
                 <div class="form__group-title">
-                    <label class="form__label--item" for="login">ユーザー名 / メールアドレス</label>
+                    <label class="form__label--item" for="email">メールアドレス</label>
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="login" id="login" value="{{ old('login') }}">
+                        <input type="text" name="email" id="email" value="{{ old('email') }}">
                     </div>
                 </div>
             </div>
