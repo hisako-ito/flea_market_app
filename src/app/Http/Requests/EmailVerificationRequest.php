@@ -45,14 +45,4 @@ class EmailVerificationRequest extends BaseEmailVerificationRequest
             //
         ];
     }
-
-    public function fulfill()
-    {
-        $user = User::find($this->route('id'));
-
-        if ($user && !$user->markEmailAsVerified()) {
-            $user->markEmailAsVerified();
-            event(new \Illuminate\Auth\Events\Verified($user));
-        }
-    }
 }

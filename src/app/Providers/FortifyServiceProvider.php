@@ -29,6 +29,7 @@ use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use App\Actions\Fortify\EnsureEmailIsVerified;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
+
 class FortifyServiceProvider extends ServiceProvider
 {
     /**

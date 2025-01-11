@@ -79,10 +79,6 @@ class PaymentController extends Controller
     {
         $session_id = $request->query('session_id') ?? session('stripe_session_id');
 
-        if (!$session_id) {
-            return redirect()->route('item.list')->with('error', 'セッションIDが見つかりませんでした。');
-        }
-
         Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
@@ -112,42 +108,32 @@ class PaymentController extends Controller
 
     public function checkPaymentStatus(Request $request)
     {
-        $session_id = $request->query('session_id');
-
-        if (!$session_id) {
-            return response()->json(['status' => 'error', 'message' => 'セッションIDが見つかりませんでした。'], 400);
-        }
-
-        $order = Order::where('stripe_session_id', $session_id)->first();
-
-        if (!$order) {
-            return response()->json(['status' => 'error', 'message' => '注文が見つかりませんでした。'], 404);
-        }
+        $session_id = $request->query('session_id') ?? session('stripe_session_id');
 
         Stripe::setApiKey(config('services.stripe.secret'));
+
         try {
             $session = StripeSession::retrieve($session_id);
-
-            if ($session->payment_status === 'paid') {
-                $order = Order::where('stripe_session_id', $session_id)->first();
-
-                if ($order) {
-                    $order->status = 'paid';
-                    $order->save();
-                }
-                $item = Item::find($order->item_id);
-                if ($item) {
-                    $item->is_sold = true;
-                    $item->save();
-                }
-
-                return response()->json(['status' => 'success', 'message' => '支払いが確認されました。']);
-            } else {
-                return response()->json(['status' => 'pending', 'message' => '支払いが完了していません。']);
-            }
         } catch (\Exception $e) {
-            Log::error('Stripeセッションエラー: ' . $e->getMessage());
-            return response()->json(['status' => 'error', 'message' => 'エラーが発生しました。'], 500);
+            return redirect()->route('item.list')->with('error', '無効なセッションIDが指定されました。');
         }
+
+        if ($session->payment_status === 'paid') {
+            $order = Order::where('stripe_session_id', $session_id)->first();
+
+            if ($order) {
+                $order->status = 'paid';
+                $order->save();
+            }
+            $item = Item::find($order->item_id);
+            if ($item) {
+                $item->is_sold = true;
+                $item->save();
+            }
+
+            return response()->json(['status' => 'paid'], 200);
+        }
+
+        return response()->json(['status' => 'pending'], 200);
     }
 }
