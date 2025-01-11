@@ -56,18 +56,29 @@
 </body>
 
 <script>
-    const checkPaymentStatus = () => {
-        fetch(`/stripe/check-payment-status?session_id={{ session('stripe_session_id') }}`, {
+    const checkPaymentStatus = async () => {
+        try {
+            const response = await fetch(`/stripe/check-payment-status?session_id={{ session('stripe_session_id') }}`, {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
-            })
-            .then(response => response.json())
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'paid') {
+                alert('コンビニ払いの支払いが確認されました！');
+                clearInterval(intervalId);
+            }
+        } catch (error) {
+            console.error('ステータス確認中にエラーが発生しました:', error);
+        }
     };
 
-    setInterval(checkPaymentStatus, 5000);
+    setInterval(checkPaymentStatus, 30000);
 </script>
+
 
 @yield('script')
 

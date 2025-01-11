@@ -1,0 +1,10 @@
+.verify-email__content {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 5rem 0;
+}
+
+.verify-email__heading {
+    text-align: center;
+}

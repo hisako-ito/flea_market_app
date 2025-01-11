@@ -7,7 +7,7 @@
 @section('content')
 @if(session('verified'))
 <div class="alert alert-success">
-    メールアドレスが確認されました。ログインしてください。
+    メールアドレスが確認されました。ログインをお願いします。
 </div>
 @endif
 <div class="login__content">
