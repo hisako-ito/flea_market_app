@@ -8,7 +8,6 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
-use Illuminate\Support\Facades\Log;
 use App\Http\Requests\PurchaseRequest;
 
 class PaymentController extends Controller
@@ -100,7 +99,7 @@ class PaymentController extends Controller
                 $item->save();
             }
 
-            return redirect()->route('item.list')->with('message', '支払いが確認されました！');
+            return redirect()->route('item.list')->with('message', '購入が完了しました。出品者の発送通知までお待ちください。');
         }
 
         return redirect()->route('item.list')->with('error', '支払いが完了していません。');

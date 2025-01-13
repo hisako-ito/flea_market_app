@@ -5,13 +5,10 @@
 @endsection
 
 @section('content')
-<div class="verify-email__content">
-    <div class="verify-email__heading">
-        <h2>メールアドレスの確認</h2>
-    </div>
-    <div>
-        <p>ご登録いただき、ありがとうございます。</p>
-        <p>登録を完了するには、送信されたメール内のボタンをクリックして認証を完了させてください。</p>
+<div class="verify-email-page">
+    <div class="verify-email-page__inner">
+        <h2 class="verify-email-page__heading">メールアドレスの確認</h2>
+        <p class="verify-email-page__message">ご登録いただき、ありがとうございます。<br />登録を完了するには、送信されたメール内のボタンをクリックして認証を完了させてください。</p>
     </div>
 </div>
 @endsection

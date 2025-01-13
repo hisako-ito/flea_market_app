@@ -68,7 +68,7 @@
             const result = await response.json();
 
             if (result.status === 'paid') {
-                alert('コンビニ払いの支払いが確認されました！');
+                alert('支払いが確認されました！');
                 clearInterval(intervalId);
             }
         } catch (error) {
