@@ -17,32 +17,14 @@ class MyListTest extends TestCase
      */
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->artisan('cache:clear');
-        $this->artisan('config:clear');
-        $this->artisan('route:clear');
-        $this->artisan('view:clear');
-    }
-
     public function testFavoriteItemDisplayedInMyList()
     {
         $user = User::factory()->create();
         /** @var \App\Models\User $user */
 
-        $favoriteItems = Item::factory()->count(3)->create();
-        // $nonFavoriteItems = Item::factory()->count(3)->create();
+        $favoriteItem = Item::factory()->create();
 
-        $user->favorites()->attach($favoriteItems->pluck('id')->toArray());
-
-
-        foreach ($favoriteItems as $item) {
-            $this->assertDatabaseHas('favorites', [
-                'user_id' => $user->id,
-                'item_id' => $item->id,
-            ]);
-        }
+        $user->favorites()->attach($favoriteItem->id);
 
         $this->actingAs($user);
 
@@ -50,12 +32,7 @@ class MyListTest extends TestCase
 
         $response->assertStatus(200);
 
-        foreach ($favoriteItems as $item) {
-            $response->assertSee($item->item_name);
-        }
-        // foreach ($nonFavoriteItems as $item) {
-        //     $response->assertDontSee($item->item_name);
-        // }
+        $response->assertSee($favoriteItem->item_name);
     }
 
     public function testSoldLabelIsDisplayedInMyList()
@@ -63,9 +40,9 @@ class MyListTest extends TestCase
         $user = User::factory()->create();
         /** @var \App\Models\User $user */
 
-        $item = Item::factory()->create(['is_sold' => true]);
+        $soldItem = Item::factory()->create(['is_sold' => true]);
 
-        $user->favorites()->attach($item->pluck('id')->toArray());
+        $user->favorites()->attach($soldItem->id);
 
         $this->actingAs($user);
 
@@ -82,10 +59,10 @@ class MyListTest extends TestCase
         $user = User::factory()->create();
         /** @var \App\Models\User $user */
 
-        $favoriteItem = Item::factory()->create();
+        $favoriteItem = Item::factory()->create(['is_sold' => false]);
         $ownItem = Item::factory()->create(['user_id' => $user->id]);
 
-        $user->favorites()->attach($favoriteItem->pluck('id'));
+        $user->favorites()->attach($favoriteItem->id);
 
         $this->actingAs($user);
 
@@ -96,5 +73,21 @@ class MyListTest extends TestCase
         $response->assertSee($favoriteItem->item_name);
 
         $response->assertDontSee($ownItem->item_name);
+    }
+
+    public function testGuestFavoriteItemNotDisplayedInMyList()
+    {
+        $user = User::factory()->create();
+        /** @var \App\Models\User $user */
+
+        $favoriteItem = Item::factory()->create();
+
+        $user->favorites()->attach($favoriteItem->id);
+
+        $response = $this->get('/?page=mylist');
+
+        $response->assertStatus(200);
+
+        $response->assertDontSee($favoriteItem->item_name);
     }
 }

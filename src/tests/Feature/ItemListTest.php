@@ -19,8 +19,6 @@ class ItemListTest extends TestCase
 
     public function testAllItemsDisplayedInItemList()
     {
-        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-
         Item::factory()->count(10)->create();
 
         $response = $this->get('/');
@@ -37,8 +35,6 @@ class ItemListTest extends TestCase
 
     public function testSoldLabelIsDisplayedInItemList()
     {
-        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-
         Item::factory()->create(['is_sold' => true]);
 
         $response = $this->get('/');
@@ -48,8 +44,6 @@ class ItemListTest extends TestCase
 
     public function testOwnItemsAreNotDisplayedInItemList()
     {
-        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
-
         $user = User::factory()->create();
         /** @var \App\Models\User $user */
 

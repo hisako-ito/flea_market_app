@@ -29,8 +29,8 @@ Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke
     ->name('verification.verify');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::post('/items/{item}/favorite', [FavoriteController::class, 'favorite'])->name('favorite');
-    Route::post('/items/{id}/comments', [CommentController::class, 'storeComment'])->name('items.comments.store');
+    Route::post('/item/{item_id}/favorite', [FavoriteController::class, 'favorite'])->name('favorite');
+    Route::post('/item/{item_id}/comment', [CommentController::class, 'storeComment'])->name('item.comments.store');
 
     Route::get('/mypage', [UserController::class, 'show'])->name('mypage');
     Route::get('/mypage/profile', [UserController::class, 'edit']);

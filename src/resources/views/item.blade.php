@@ -105,7 +105,7 @@
             <div class="comment-content">{{ $comment->content }}</div>
             @endforeach
             <h4 class="item-comment">商品へのコメント</h4>
-            <form class="comment__form" action="{{ route('items.comments.store', $item->id) }}" method="post">
+            <form class="comment__form" action="{{ route('item.comments.store', $item->id) }}" method="post">
                 @csrf
                 <textarea class="comment__form_textarea" name="content" cols="90" rows="7"></textarea>
                 <button type="submit" class="button-comment btn">コメントを送信する</button>
