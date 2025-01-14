@@ -48,7 +48,8 @@ class Item extends Model
 
     public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withPivot(['created_at', 'updated_at'])
+            ->withTimestamps();
     }
 
 
@@ -60,11 +61,6 @@ class Item extends Model
 
         return $this->favorites()->where('user_id', $user->id)->exists();
     }
-
-    // public function comments()
-    // {
-    //     return $this->belongsToMany(User::class, 'comments', 'item_id', 'user_id')->withPivot('content');
-    // }
 
     public function comments()
     {
