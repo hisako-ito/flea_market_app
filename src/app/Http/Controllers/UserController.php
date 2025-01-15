@@ -17,26 +17,29 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $keyword = $request->input('keyword', '');
-        $items = Item::query();
-        $orders = collect();
         $user = Auth::user();
-        $page = $request->query('page', 'sell');
+        $tab = $request->query('tab', 'sell');
 
         $query = Item::query();
 
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
-            return view('search_results', compact('items', 'keyword', 'page'));
+            return view('search_results', compact('items', 'keyword', 'tab'));
         }
 
-        if ($page == 'buy') {
+        if ($tab == 'buy') {
             $orders = Order::where('user_id', $user->id)->with('item')->get();
-            $items = collect();
-        } else {
+            $items =
+                $orders->map(function ($order) {
+                    return $order->item;
+                });
+        } elseif ($tab === 'sell') {
             $items = Item::where('user_id', $user->id)->get();
+        } else {
+            $items = collect();
         }
 
-        return view('mypage', compact('keyword', 'items', 'user', 'page', 'orders'));
+        return view('mypage', compact('keyword', 'items', 'user', 'tab'));
     }
 
     public function edit(Request $request)
@@ -48,7 +51,7 @@ class UserController extends Controller
 
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
-            return view('search_results', compact('items', 'keyword', 'page'));
+            return view('search_results', compact('items', 'keyword', 'tab'));
         }
 
         return view('profile_edit', compact('keyword', 'user'));
@@ -64,7 +67,7 @@ class UserController extends Controller
 
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
-            return view('search_results', compact('items', 'keyword', 'page'));
+            return view('search_results', compact('items', 'keyword', 'tab'));
         }
 
         return view('profile_address', compact('item', 'keyword', 'user'));

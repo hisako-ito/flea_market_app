@@ -8,7 +8,7 @@
 <form class="header-nav__search-form" action="/" method="get">
     @csrf
     <input class="header-nav__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword ?? '' }}">
-    <input type="hidden" name="page" value="{{ $page }}">
+    <input type="hidden" name="tab" value="{{ $tab }}">
 </form>
 @endsection
 
@@ -27,14 +27,14 @@
 
 @section('content')
 <div class="tabs">
-    <a href="{{ route('item.list', ['page' => 'recommend', 'keyword' => $keyword]) }}"
-        class="{{ $page === 'recommend' ? 'active-tab' : '' }}">おすすめ</a>
-    <a href="{{ route('item.list', ['page' => 'mylist', 'keyword' => $keyword]) }}"
-        class="{{ $page === 'mylist' ? 'active-tab' : '' }}">マイリスト</a>
+    <a href="{{ route('item.list', ['tab' => 'recommend', 'keyword' => $keyword]) }}"
+        class="{{ $tab === 'recommend' ? 'active-tab' : '' }}">おすすめ</a>
+    <a href="{{ route('item.list', ['tab' => 'mylist', 'keyword' => $keyword]) }}"
+        class="{{ $tab === 'mylist' ? 'active-tab' : '' }}">マイリスト</a>
 </div>
 
 <div class="items-list">
-    @if($page === 'recommend' && $items->isNotEmpty())
+    @if($tab === 'recommend' && $items->isNotEmpty())
     @foreach ($items as $item)
     <div class="item__card">
         <div class="card__img">
@@ -51,7 +51,7 @@
         </div>
     </div>
     @endforeach
-    @elseif ($page === 'mylist' && $favorites->isNotEmpty())
+    @elseif ($tab === 'mylist' && $favorites->isNotEmpty())
     @foreach ($favorites as $favorite)
     @if ($favorite->item) {{-- itemが存在する場合のみ表示 --}}
     <div class="item__card">

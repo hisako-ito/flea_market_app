@@ -33,7 +33,7 @@ class ItemListTest extends TestCase
         }
     }
 
-    public function testSoldLabelIsDisplayedInItemList()
+    public function testSoldDisplayedInItemList()
     {
         Item::factory()->create(['is_sold' => true]);
 

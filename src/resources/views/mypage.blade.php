@@ -30,7 +30,8 @@
     <div class="user-info__inner">
         <div class="user-info__image">
             <div class="user-info__image__inner">
-                <img src="{{ $user->user_image }}" alt="ユーザー画像">
+                <!-- <img src="{{ urlencode(asset($user->user_image)) }}" alt="ユーザー画像"> -->
+                <img src="{{ asset($user->user_image) }}" alt="ユーザー画像">
             </div>
         </div>
         <div class="user-info__content">
@@ -42,31 +43,31 @@
     </div>
 </div>
 <div class="tabs">
-    <a href="{{ route('mypage', ['page' => 'sell']) }}"
-        class="{{ $page === 'sell' ? 'active-tab' : '' }}">出品した商品</a>
-    <a href="{{ route('mypage', ['page' => 'buy']) }}"
-        class="{{ $page === 'buy' ? 'active-tab' : '' }}">購入した商品</a>
+    <a href="{{ route('mypage', ['tab' => 'sell']) }}"
+        class="{{ $tab === 'sell' ? 'active-tab' : '' }}">出品した商品</a>
+    <a href="{{ route('mypage', ['tab' => 'buy']) }}"
+        class="{{ $tab === 'buy' ? 'active-tab' : '' }}">購入した商品</a>
 </div>
 
 <div class="items-list">
-    @if($page === 'buy' && isset($orders) && $orders->isNotEmpty())
-    @foreach ($orders as $order)
+    @if($tab === 'buy' && isset($items) && $items->isNotEmpty())
+    @foreach ($items as $item)
     <div class="item__card">
         <div class="card__img">
-            @if ($order->item->is_sold)
+            @if ($item->is_sold)
             <div class="sold-label">
                 <span class="sold-font">SOLD</span>
             </div>
             @endif
-            <a href="/item/{{$order->item->id}}" class="product-link"></a>
-            <img src="{{ asset($order->item->item_image) }}" alt="商品画像">
+            <a href="/item/{{$item->id}}" class="product-link"></a>
+            <img src="{{ asset($item->item_image) }}" alt="商品画像">
         </div>
         <div class="card__detail">
-            <p>{{$order->item->item_name}}</p>
+            <p>{{$item->item_name}}</p>
         </div>
     </div>
     @endforeach
-    @elseif ($page === 'sell' && isset($items) && $items->isNotEmpty())
+    @elseif ($tab === 'sell' && isset($items) && $items->isNotEmpty())
     @foreach ($items as $item)
     <div class="item__card">
         <div class="card__img">

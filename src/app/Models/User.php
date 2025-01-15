@@ -76,4 +76,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => $this->freshTimestamp(),
         ])->save();
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
