@@ -30,7 +30,6 @@
     <div class="user-info__inner">
         <div class="user-info__image">
             <div class="user-info__image__inner">
-                <!-- <img src="{{ urlencode(asset($user->user_image)) }}" alt="ユーザー画像"> -->
                 <img src="{{ asset($user->user_image) }}" alt="ユーザー画像">
             </div>
         </div>

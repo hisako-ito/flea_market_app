@@ -56,21 +56,18 @@ class MyPageShowTest extends TestCase
         // マイページ表示の確認
         $response = $this->get('/mypage');
         $response->assertStatus(200);
-
-        $response->assertSee('<img src="' . urlencode(asset($user->user_image)) . '"', false);
+        $response->assertSee('<img src="' . asset($user->user_image) . '"', false);
         $response->assertSee('山田太郎');
 
         // 出品タブの確認
         $response = $this->get('/mypage?tab=sell');
         $response->assertStatus(200);
-
         $response->assertSee('src="http://localhost/storage/item_images/Armani+Mens+Clock.jpg"', false);
         $response->assertSee($item1->item_name);
 
         // 購入タブの確認
         $response = $this->get('/mypage?tab=buy');
         $response->assertStatus(200);
-
         $response->assertSee('src="http://localhost/storage/item_images/HDD+Hard+Disk.jpg"', false);
         $response->assertSee($item2->item_name);
     }
