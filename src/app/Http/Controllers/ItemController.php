@@ -63,7 +63,7 @@ class ItemController extends Controller
             return view('search_results', compact('items', 'keyword', 'tab'));
         }
 
-        return view('item', compact('item', 'categories', 'keyword', 'commentsCount'));
+        return view('item_detail', compact('item', 'categories', 'keyword', 'commentsCount'));
     }
 
     public function getPurchase($item_id, Request $request)

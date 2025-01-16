@@ -17,6 +17,6 @@ class LogoutController extends Controller
             $request->session()->regenerateToken();
         }
 
-        return redirect()->back()->with('message', 'ログアウトしました。');
+        return redirect()->back()->with('message', 'ログアウトしました');
     }
 }

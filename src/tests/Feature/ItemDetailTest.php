@@ -50,8 +50,7 @@ class ItemDetailTest extends TestCase
 
         $response->assertStatus(200);
 
-        $decodedContent = html_entity_decode($response->getContent());
-        $this->assertStringContainsString('src="http://localhost/storage/item_images/Armani+Mens+Clock.jpg"', $decodedContent);
+        $response->assertSee('<img src="' . asset($item->item_image) . '"', false);
 
         $response->assertSee('腕時計');
         $response->assertSee('Emporio Armani');
