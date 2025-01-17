@@ -41,6 +41,10 @@ php artisan migrate
 ```
    php artisan db:seed
 ```
+8. シンボリックリンク作成
+```
+   php artisan storage:link
+``` 
 
 ## 使用技術(実行環境)
 * PHP 7.4.9
@@ -54,3 +58,5 @@ php artisan migrate
 ## URL
 * 開発環境： [http://localhost](http://localhost)
 * phpMyAdmin： [http://localhost:8080/](http://localhost:8080/)
+* mailhog： [http://localhost:8025/](http://localhost:8025/)
+
