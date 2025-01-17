@@ -54,6 +54,7 @@ php artisan storage:link
 > [!NOTE]
 > 新規アカウント登録時は、mailhog([http://localhost/8025](http://localhost/8025))で受信するメールにて認証が必要です。
 
+### mailhog設定
 * 認証メール送信元のメールアドレス設定のため、envファイルのMAIL_FROM_ADDRESSを設定。
 ```
   MAIL_FROM_ADDRESS=example@example.com  
@@ -68,7 +69,7 @@ php artisan route:clear
 php artisan config:cache
 ```
 
-### 決済処理確認
+### Stripe設定
 本アプリはStripeによる決算処理機能を実装しています。
 アプリで決済機能を利用するためには、StripeのAPIキーを取得し、環境変数に設定する必要があります。  
 以下の手順に従って設定を行ってください。
