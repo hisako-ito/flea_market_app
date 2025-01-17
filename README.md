@@ -55,13 +55,14 @@ php artisan storage:link
 > 新規アカウント登録時は、mailhog([http://localhost/8025](http://localhost/8025))で受信するメールにて認証が必要です。
 
 ### mailhog設定
-* 認証メール送信元のメールアドレス設定のため、envファイルのMAIL_FROM_ADDRESSを設定。
+本アプリではユーザー登録の際、メールアドレス認証を実施する上で、メールサーバーとしてmailhogを設定しています。
+認証メール送信元のメールアドレス設定のため、envファイルのMAIL_FROM_ADDRESSを設定してください。
 ```
   MAIL_FROM_ADDRESS=example@example.com  
 ```
-* 上記メールアドレスは任意のメールアドレスで可
+* 上記は任意のメールアドレスで可
 
-envファイルの更新後は、反映のため、以下コマンドでキャッシュクリア  
+envファイルの更新後、反映のため、以下コマンドでキャッシュクリアを実施してください  
 ```
 php artisan cache:clear
 php artisan config:clear
