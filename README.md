@@ -56,7 +56,7 @@ php artisan storage:link
 * MySQL 15.1
 
 ## ER図
-![flea-market_app]()
+![flea-market_app](https://github.com/user-attachments/assets/a64cac7a-5cea-4824-9104-2f1fc9596ef2)
 
 
 ## URL
