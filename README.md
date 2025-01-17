@@ -28,8 +28,6 @@ DB_PORT=3306
 DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
-
-MAIL_FROM_ADDRESS=example@example.com
 ```
 5. アプリケーションキーの作成
 ```
@@ -56,6 +54,9 @@ php artisan storage:link
 > [!NOTE]
 > 新規アカウント登録時は、mailhog([http://localhost/8025](http://localhost/8025))で受信するメールにて認証が必要です。
 
+* 認証メール送信元のメールアドレス設定のため、envファイルのMAIL_FROM_ADDRESSを設定。
+  MAIL_FROM_ADDRESS=example@example.com  
+
 ### 決済処理確認
 本アプリはStripeによる決算処理機能を実装しています。
 アプリで決済機能を利用するためには、StripeのAPIキーを取得し、環境変数に設定する必要があります。以下の手順に従って設定を行ってください。
@@ -74,7 +75,6 @@ php artisan storage:link
 ```
 STRIPE_PUBLIC_KEY=your_public_key_here
 STRIPE_SECRET_KEY=your_secret_key_here
-
 ``` 
 
 5. アプリケーションの再起動
