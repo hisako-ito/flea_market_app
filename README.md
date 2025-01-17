@@ -55,7 +55,18 @@ php artisan storage:link
 > 新規アカウント登録時は、mailhog([http://localhost/8025](http://localhost/8025))で受信するメールにて認証が必要です。
 
 * 認証メール送信元のメールアドレス設定のため、envファイルのMAIL_FROM_ADDRESSを設定。
+```
   MAIL_FROM_ADDRESS=example@example.com  
+```
+* 上記メールアドレスは任意のメールアドレスで可
+
+envファイルの更新後は、反映のため、以下コマンドでキャッシュクリア  
+```
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan config:cache
+```
 
 ### 決済処理確認
 本アプリはStripeによる決算処理機能を実装しています。
