@@ -48,9 +48,12 @@ php artisan storage:link
 ### ログインテスト
 1. ログイン画面[http://localhost/login](http://localhost/login)表示
 2. 以下アカウントでログインを確認
-* アカウント情報  
+* アカウント情報 (メール認証済み) 
 　メールアドレス：taro@example.com  
 　パスワード：password123  
+> [!NOTE]
+> 新規アカウント登録時は、mailhog[http://localhost/register](http://localhost/register)で受信するメールにて認証が必要です。
+
 
 ## 使用技術(実行環境)
 * PHP 7.4.9
