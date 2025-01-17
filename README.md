@@ -39,11 +39,11 @@ php artisan migrate
 ```
 7. シーディングを実行する
 ```
-   php artisan db:seed
+php artisan db:seed
 ```
 8. シンボリックリンク作成
 ```
-   php artisan storage:link
+php artisan storage:link
 ``` 
 
 ## 使用技術(実行環境)
