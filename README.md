@@ -48,7 +48,7 @@ php artisan storage:link
 ### ログインテスト
 1. ログイン画面[http://localhost/login](http://localhost/login)表示
 2. 以下アカウントでログインを確認  
-* アカウント情報 (メール認証済み) 
+* アカウント情報 (メール認証済み)  
 　メールアドレス：taro@example.com  
 　パスワード：password123  
 > [!NOTE]
