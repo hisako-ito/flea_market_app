@@ -52,7 +52,7 @@ php artisan storage:link
 　メールアドレス：taro@example.com  
 　パスワード：password123  
 > [!NOTE]
-> 新規アカウント登録時は、mailhog[http://localhost/register](http://localhost/register)で受信するメールにて認証が必要です。
+> 新規アカウント登録時は、mailhog([http://localhost/8025](http://localhost/8025))で受信するメールにて認証が必要です。
 
 
 ## 使用技術(実行環境)
