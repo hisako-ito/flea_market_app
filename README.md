@@ -77,8 +77,8 @@ STRIPE_PUBLIC_KEY=your_public_key_here
 STRIPE_SECRET_KEY=your_secret_key_here
 ``` 
 
-5. アプリケーションの再起動
-.envファイルを更新後、アプリケーションを再起動してください。
+5. アプリケーションの再起動  
+.envファイルを更新後、キャッシュクリアをしてください。
 ```
 php artisan config:cache
 ``` 
