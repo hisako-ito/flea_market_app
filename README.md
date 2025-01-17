@@ -90,6 +90,10 @@ php artisan config:cache
 ```
 STRIPE_PUBLIC_KEY=your_public_key_here
 STRIPE_SECRET_KEY=your_secret_key_here
+
+CASHIER_CURRENCY=ja_JP
+CASHIER_CURRENCY_LOCALE=ja_JP
+CASHIER_LOGGER=daily
 ``` 
 * envファイル更新後は、反映のためキャッシュクリアを実施してください。
 
