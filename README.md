@@ -87,14 +87,9 @@ php artisan config:cache
 STRIPE_PUBLIC_KEY=your_public_key_here
 STRIPE_SECRET_KEY=your_secret_key_here
 ``` 
+* envファイル更新後は、反映のためキャッシュクリアを実施してください。
 
-5. アプリケーションの再起動  
-.envファイルを更新後、キャッシュクリアをしてください。
-```
-php artisan config:cache
-``` 
-
-5. 動作確認
+4. 動作確認
 アプリケーションでStripe決済が正しく動作するか確認してください。開発環境ではテストモードで動作確認を行い、必要に応じてテスト用のカード番号を使用してください。  
 | 項目 | 入力値 |
 | --- | --- |
