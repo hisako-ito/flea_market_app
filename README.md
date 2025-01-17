@@ -45,8 +45,10 @@ php artisan db:seed
 ```
 php artisan storage:link
 ``` 
-### Laravel環境構築
-* ログインアカウント情報  
+### ログインテスト
+1. ログイン画面[http://localhost/login](http://localhost/login)表示
+2. 以下アカウントでログインを確認
+* アカウント情報  
 　メールアドレス：taro@example.com  
 　パスワード：password123  
 
