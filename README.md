@@ -83,7 +83,8 @@ php artisan config:cache
     2. 公開可能キー（pk_live_...）および シークレットキー（sk_live_...）を確認してください。
     * 開発環境ではテストモードのキー（pk_test_... と sk_test_...）を使用してください。
 3. .envファイルへの設定
-取得したAPIキーをアプリケーションの.envファイルに追加してください。以下の例を参考に、適切なキーを設定してください。
+取得したAPIキーをアプリケーションの.envファイルに追加してください。
+以下の例を参考に、適切なキーを設定してください。
 ```
 STRIPE_PUBLIC_KEY=your_public_key_here
 STRIPE_SECRET_KEY=your_secret_key_here
