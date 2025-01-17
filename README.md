@@ -46,9 +46,9 @@ php artisan db:seed
 php artisan storage:link
 ``` 
 ### Laravel環境構築
-* ログインアカウント情報
-　メールアドレス：taro@example.com
-　パスワード：password123
+* ログインアカウント情報  
+　メールアドレス：taro@example.com  
+　パスワード：password123  
 
 ## 使用技術(実行環境)
 * PHP 7.4.9
