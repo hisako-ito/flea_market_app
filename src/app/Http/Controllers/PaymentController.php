@@ -135,4 +135,9 @@ class PaymentController extends Controller
 
         return response()->json(['status' => 'pending'], 200);
     }
+
+    public function cancel()
+    {
+        return view('stripe.cancel');
+    }
 }

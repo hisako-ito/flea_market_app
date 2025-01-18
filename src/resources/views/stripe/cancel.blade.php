@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/list.css')}}">
+<link rel="stylesheet" href="{{ asset('css/cancel.css')}}">
 @endsection
 
 @section('nav_search')
@@ -13,65 +13,10 @@
 @endsection
 
 @section('nav_actions')
-@if (Auth::check())
-<form class="logout-form" action="/logout" method="post">
-    @csrf
-    <button class="header-nav__logout-btn" type="submit">ログアウト</button>
-</form>
-@else
-<a class="header-nav__login-btn" href="/login">ログイン</a>
-@endif
-<a class="header-nav__mypage-btn" href="/mypage">マイページ</a>
-<a class="header-nav__sell-btn" href="/sell">出品</a>
-@endsection
-
-@section('content')
-<div class="tabs">
-    <a href="{{ route('item.list', ['tab' => 'recommend', 'keyword' => $keyword]) }}"
-        class="{{ $tab === 'recommend' ? 'active-tab' : '' }}">おすすめ</a>
-    <a href="{{ route('item.list', ['tab' => 'mylist', 'keyword' => $keyword]) }}"
-        class="{{ $tab === 'mylist' ? 'active-tab' : '' }}">マイリスト</a>
-</div>
-
-<div class="items-list">
-    @if($tab === 'recommend' && $items->isNotEmpty())
-    @foreach ($items as $item)
-    <div class="item__card">
-        <div class="card__img">
-            @if ($item->is_sold)
-            <div class="sold-label">
-                <span class="sold-font">SOLD</span>
-            </div>
-            @endif
-            <a href="/item/{{$item->id}}" class="item-link"></a>
-            <img src="{{ asset($item->item_image) }}" alt="商品画像">
-        </div>
-        <div class="card__detail">
-            <p>{{$item->item_name}}</p>
-        </div>
+<div class="purchase-cancel-page">
+    <div class="purchase-cancel-page__inner">
+        <h2 class="purchase-cancel-page__heading">購入がキャンセルされました。</h2>
+        <p class="purchase-cancel-page__message">もしご購入ご希望の場合は、再度購入手続きをお願いいたします。</p>
     </div>
-    @endforeach
-    @elseif ($tab === 'mylist' && $favorites->isNotEmpty())
-    @foreach ($favorites as $favorite)
-    @if ($favorite->item) {{-- itemが存在する場合のみ表示 --}}
-    <div class="item__card">
-        <div class="card__img">
-            @if ($favorite->item->is_sold)
-            <div class="sold-label">
-                <span class="sold-font">SOLD</span>
-            </div>
-            @endif
-            <a href="/item/{{$favorite->item->id}}" class="item-link"></a>
-            <img src="{{ asset($favorite->item->item_image) }}" alt="商品画像">
-        </div>
-        <div class="card__detail">
-            <p>{{$favorite->item->item_name}}</p>
-        </div>
-    </div>
-    @endif
-    @endforeach
-    @else
-    <p class="no-results">該当する商品がありません</p>
-    @endif
 </div>
 @endsection
