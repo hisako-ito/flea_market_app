@@ -1,0 +1,16 @@
+.purchase-cancel-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 5rem 0;
+}
+
+.purchase-cancel-page__heading,
+.purchase-cancel-page__message {
+    text-align: center;
+}
+
+.purchase-cancel-page__message {
+    margin-top: 2rem;
+    line-height: 2;
+}

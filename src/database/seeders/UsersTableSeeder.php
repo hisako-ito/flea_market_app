@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
             [
                 'user_name' => '山田太郎',
                 'email' => 'taro@example.com',
+                'email_verified_at' => '2025-01-01 00:00:00',
                 'user_image' => 'storage/user_images/dog.jpg',
                 'postal_code' => '111-1111',
                 'address' => '東京都新宿区',
@@ -28,6 +29,7 @@ class UsersTableSeeder extends Seeder
             [
                 'user_name' => '山田花子',
                 'email' => 'hanako@example.com',
+                'email_verified_at' => '2025-01-02 00:00:00',
                 'user_image' => 'storage/user_images/cat.jp',
                 'postal_code' => '222-2222',
                 'address' => '東京都渋谷区',
@@ -37,6 +39,7 @@ class UsersTableSeeder extends Seeder
             [
                 'user_name' => '山田一郎',
                 'email' => 'ichiro@example.com',
+                'email_verified_at' => '2025-01-03 00:00:00',
                 'user_image' => 'storage/user_images/turtle.jpg',
                 'postal_code' => '333-3333',
                 'address' => '東京都港区',
