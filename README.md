@@ -41,10 +41,6 @@ php artisan migrate
 ```
 php artisan db:seed
 ```
-8. シンボリックリンク作成
-```
-php artisan storage:link
-``` 
 ### ログインテスト
 1. ログイン画面([http://localhost/login](http://localhost/login))表示
 2. 以下アカウントでログインを確認  
