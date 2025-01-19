@@ -74,7 +74,7 @@
             </form>
             <div class="item-description">
                 <h3 class="description__heading">商品説明</h3>
-                <p class="description__description">{{$item->description}}</p>
+                <p class="description__content">{{$item->description}}</p>
             </div>
             <div class="item-information">
                 <h3 class="information__heading">商品の情報</h3>

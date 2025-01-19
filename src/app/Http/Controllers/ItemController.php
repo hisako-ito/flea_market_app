@@ -35,15 +35,19 @@ class ItemController extends Controller
             $items = $query->withCount('favorites')
                 ->orderBy('favorites_count', 'desc')
                 ->get();
-        } elseif ($tab === 'mylist' && $user) {
-            $favorites = $user->favoriteEntries()
-                ->whereHas('item', function ($query) use ($user, $keyword) {
-                    if (!empty($keyword)) {
-                        $query->where('item_name', 'like', '%' . $keyword . '%');
-                    }
-                    $query->where('user_id', '!=', $user->id);
-                })
-                ->get();
+        } elseif ($tab === 'mylist') {
+            if ($user) {
+                $favorites = $user->favoriteEntries()
+                    ->whereHas('item', function ($query) use ($user, $keyword) {
+                        if (!empty($keyword)) {
+                            $query->where('item_name', 'like', '%' . $keyword . '%');
+                        }
+                        $query->where('user_id', '!=', $user->id);
+                    })
+                    ->get();
+            } else {
+                $favorites = collect();
+            }
         }
 
         return view('list', compact('keyword', 'items', 'user', 'tab', 'sort', 'favorites'));

@@ -22,7 +22,7 @@ class KeywordSearchTest extends TestCase
         $item = Item::factory()->create(['item_name' => 'テスト商品']);
         $keyword = 'テスト';
         $response =
-            $this->get('/?page=recommend&keyword=' . $keyword);
+            $this->get('/?tab=recommend&keyword=' . $keyword);
 
         $response->assertStatus(200);
 
@@ -43,7 +43,7 @@ class KeywordSearchTest extends TestCase
         $this->actingAs($user);
 
         $response =
-            $this->get('/?page=mylist&keyword=' . $keyword);
+            $this->get('/?=mylist&keyword=' . $keyword);
 
         $response->assertStatus(200);
 
