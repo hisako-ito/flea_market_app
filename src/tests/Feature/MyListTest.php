@@ -28,7 +28,7 @@ class MyListTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get('/?page=mylist');
+        $response = $this->get('/?tab=mylist');
 
         $response->assertStatus(200);
 
@@ -46,7 +46,7 @@ class MyListTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get('/?page=mylist');
+        $response = $this->get('/?tab=mylist');
 
         $response->assertStatus(200);
 
@@ -66,7 +66,7 @@ class MyListTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->get('/?page=mylist');
+        $response = $this->get('/?tab=mylist');
 
         $response->assertStatus(200);
 
@@ -84,7 +84,7 @@ class MyListTest extends TestCase
 
         $user->favorites()->attach($favoriteItem->id);
 
-        $response = $this->get('/?page=mylist');
+        $response = $this->get('/?tab=mylist');
 
         $response->assertStatus(200);
 

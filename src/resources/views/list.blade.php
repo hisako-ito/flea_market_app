@@ -34,6 +34,7 @@
 </div>
 
 <div class="items-list">
+    {{-- おすすめタブの処理 --}}
     @if($tab === 'recommend' && $items->isNotEmpty())
     @foreach ($items as $item)
     <div class="item__card">
@@ -51,9 +52,15 @@
         </div>
     </div>
     @endforeach
-    @elseif ($tab === 'mylist' && $favorites->isNotEmpty())
+
+    {{-- マイリストタブの処理 --}}
+    @elseif ($tab === 'mylist')
+    @if (Auth::guest())
+    {{-- ゲストユーザーの場合 --}}
+    @elseif ($favorites->isNotEmpty())
+    {{-- ログイン済みでお気に入りがある場合 --}}
     @foreach ($favorites as $favorite)
-    @if ($favorite->item) {{-- itemが存在する場合のみ表示 --}}
+    @if ($favorite->item)
     <div class="item__card">
         <div class="card__img">
             @if ($favorite->item->is_sold)
@@ -71,7 +78,11 @@
     @endif
     @endforeach
     @else
-    <p class="no-results"></p>
+    {{-- ログイン済みでお気に入りが空の場合 --}}
+    <p class="no-results">お気に入りの商品はありません。</p>
+    @endif
+    @else
+    <p class="no-results">該当する商品はありません。</p>
     @endif
 </div>
 @endsection
