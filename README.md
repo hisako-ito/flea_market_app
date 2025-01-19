@@ -109,7 +109,7 @@ CASHIER_LOGGER=daily
 * MySQL 15.1
 
 ## ER図
-![flea-market_app](https://github.com/user-attachments/assets/a64cac7a-5cea-4824-9104-2f1fc9596ef2)
+![flea_market_app](https://github.com/user-attachments/assets/49d0b230-cc4b-48fc-babf-6bc46a64ba4f)
 
 
 ## URL
