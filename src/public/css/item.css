@@ -265,9 +265,9 @@
     }
 
     .sold-font {
-        top: -30px;
-        left: -50px;
-        font-size: 1.3rem;
+        top: -35px;
+        left: -55px;
+        font-size: 1.2rem;
     }
 }
 
@@ -281,8 +281,8 @@
     }
 
     .sold-font {
-        top: -55px;
-        left: -75px;
-        font-size: 2rem;
+        top: -65px;
+        left: -80px;
+        font-size: 1.8rem;
     }
 }
