@@ -62,7 +62,7 @@ class PaymentController extends Controller
         session(['stripe_session_id' => $session->id]);
 
         Order::create([
-            'user_id' => $user->id,
+            'buyer_id' => $user->id,
             'item_id' => $item->id,
             'price' => $item->price,
             'payment_method' => $paymentMethod,
@@ -124,8 +124,11 @@ class PaymentController extends Controller
                 $order->status = 'paid';
                 $order->save();
             }
+
             $item = Item::find($order->item_id);
+            $user = Auth::user();
             if ($item) {
+                $item->buyer_id = $user->id;
                 $item->is_sold = true;
                 $item->save();
             }

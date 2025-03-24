@@ -14,12 +14,11 @@ class UserController extends Controller
         return view('profile_add');
     }
 
-    public function show(Request $request)
+    public function myPageShow(Request $request)
     {
         $keyword = $request->input('keyword', '');
         $user = Auth::user();
         $tab = $request->query('tab', 'sell');
-
         $query = Item::query();
 
         if (!empty($keyword)) {
@@ -28,11 +27,10 @@ class UserController extends Controller
         }
 
         if ($tab == 'buy') {
-            $orders = Order::where('user_id', $user->id)->with('item')->get();
-            $items =
-                $orders->map(function ($order) {
-                    return $order->item;
-                });
+            $orders = Order::where('buyer_id', $user->id)->with('item')->get();
+            $items = $orders->map(function ($order) {
+                return $order->item;
+            });
         } elseif ($tab === 'sell') {
             $items = Item::where('user_id', $user->id)->get();
         } else {
