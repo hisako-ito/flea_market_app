@@ -58,7 +58,7 @@
                 <span class="sold-font">SOLD</span>
             </div>
             @endif
-            <a href="/item/{{$item->id}}" class="product-link"></a>
+            <a href="/mypage/items/{{$item->id}}/chat" class="product-link"></a>
             <img src="{{ asset($item->item_image) }}" alt="商品画像">
         </div>
         <div class="card__detail">
@@ -75,7 +75,7 @@
                 <span class="sold-font">SOLD</span>
             </div>
             @endif
-            <a href="/item/{{$item->id}}" class="product-link"></a>
+            <a href="/mypage/items/{{$item->id}}/chat" class="product-link"></a>
             <img src="{{ asset($item->item_image) }}" alt="商品画像">
         </div>
         <div class="card__detail">
