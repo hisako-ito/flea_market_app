@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->foreignId('seller_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('buyer_id')->constrained('users')->cascadeOnDelete();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

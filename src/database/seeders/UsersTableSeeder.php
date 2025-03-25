@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
                 'user_name' => '山田花子',
                 'email' => 'hanako@example.com',
                 'email_verified_at' => '2025-01-02 00:00:00',
-                'user_image' => 'storage/user_images/cat.jp',
+                'user_image' => 'storage/user_images/cat.jpg',
                 'postal_code' => '222-2222',
                 'address' => '東京都渋谷区',
                 'building' => '渋谷ビル',

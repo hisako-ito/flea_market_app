@@ -13,9 +13,9 @@ class Order extends Model
         'id',
     ];
 
-    public function user()
+    public function buyer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'buyer_id');
     }
 
     public function item()

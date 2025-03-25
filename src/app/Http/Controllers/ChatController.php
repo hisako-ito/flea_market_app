@@ -13,7 +13,7 @@ class ChatController extends Controller
     public function chatShow($item_id)
     {
         $user = Auth::user();
-        $item = Item::with('buyer')->find($item_id);
+        $item = Item::with('user', 'buyer')->find($item_id);
         $transactions = Transaction::where('item_id', $item->id)
             ->where('seller_id', $user->id)
             ->get();
