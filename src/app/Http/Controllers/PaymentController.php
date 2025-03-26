@@ -76,6 +76,7 @@ class PaymentController extends Controller
 
     public function waitingForPayment(Request $request)
     {
+        $user = Auth::user();
         $session_id = $request->query('session_id') ?? session('stripe_session_id');
 
         Stripe::setApiKey(config('services.stripe.secret'));
@@ -95,6 +96,7 @@ class PaymentController extends Controller
             }
             $item = Item::find($order->item_id);
             if ($item) {
+                $item->buyer_id = $user->id;
                 $item->is_sold = true;
                 $item->save();
             }

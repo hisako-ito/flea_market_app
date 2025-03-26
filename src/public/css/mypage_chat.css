@@ -1,7 +1,9 @@
 .chat-container {
     display: grid;
-    grid-template-rows: 100px 180px 400px 100px;
-    grid-template-columns: 1fr 3fr;
+    grid-template-rows: auto auto 1fr 250px;
+    grid-template-columns: 1fr 4fr;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .chat-sidebar {
@@ -9,7 +11,31 @@
     grid-row: 1/5;
     background: #868686;
     color: #FFFFFF;
-    padding: 3%;
+    padding: 3% 10%;
+}
+
+.complete-btn:hover {
+    background-color: #FF8282;
+}
+
+.chat-sidebar__heading {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.chat-sidebar__btn-container {
+    margin-top: 10%;
+}
+
+.chat-sidebar__link-btn {
+    background-color: #EEEFEB;
+    color: #000000;
+    padding: 1% 4%;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-top: 15%;
 }
 
 .chat-header {
@@ -19,34 +45,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 3%;
-}
-
-.chat-sidebar__heading {
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-.item-info {
-    grid-column: 2/3;
-    grid-row: 2/3;
-    display: flex;
-    align-items: center;
-    padding: 3%;
-    gap: 3%;
-}
-
-.chat-area {
-    grid-column: 2/3;
-    grid-row: 3/4;
-    padding: 3%;
-}
-
-.message-form {
-    grid-column: 2/3;
-    grid-row: 4/5;
-    padding: 3%;
-    display: flex;
-    align-items: center;
+    border-bottom: solid 2px #5F5F5F;
 }
 
 .chat-header__receiver-info {
@@ -60,8 +59,8 @@
     background-color: #D9D9D9;
     border-radius: 50%;
     overflow: hidden;
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,9 +74,18 @@
 }
 
 .complete-btn {
-    background-color: #FF8282;
     border-radius: 30px;
     width: 140px;
+}
+
+.item-info {
+    grid-column: 2/3;
+    grid-row: 2/3;
+    display: flex;
+    align-items: center;
+    padding: 3%;
+    gap: 3%;
+    border-bottom: solid 2px #5F5F5F;
 }
 
 .item-image {
@@ -90,11 +98,11 @@
 }
 
 .item-name {
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 .item-price {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
 }
 
 .item-price::before {
@@ -110,6 +118,119 @@
     font-size: 1rem;
 }
 
+.message-area {
+    grid-column: 2/3;
+    grid-row: 3/4;
+    padding: 3%;
+    overflow-y: scroll;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 3%;
+}
+
+.my-message {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.other-message {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.message-sender-info {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    margin-bottom: 1%;
+}
+
+.my-info {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.sender-info__name {
+    width: 100px;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3%;
+}
+
+.message-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1%;
+}
+
+.message-update-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    margin: 0;
+}
+
+.message-update-form__item-input {
+    border-radius: 4px;
+    width: 500px;
+    border: solid 1px #5F5F5F;
+    height: 50px;
+    padding: 1.5%;
+}
+
+.sender-info__image {
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sender-info__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.message-image {
+    background-color: #D9D9D9;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1%;
+}
+
+.message-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.message-form {
+    grid-column: 2/3;
+    grid-row: 4/5;
+    padding: 3%;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    bottom: 0;
+    right: 0;
+    background-color: #FFFFFF;
+    z-index: 1000;
+}
+
 .message-form__inner {
     width: 100%;
     display: flex;
@@ -123,7 +244,7 @@
     width: 120px;
     font-weight: bold;
     color: #FF5555;
-    border: 2px solid #FF5555;
+    border: solid 2px #FF5555;
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
@@ -142,4 +263,14 @@
 .message-form__btn-container {
     display: flex;
     gap: 3%;
+}
+
+.file-name-display {
+    margin-left: 10px;
+    font-size: 0.9rem;
+    color: #555;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

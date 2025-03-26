@@ -14,21 +14,31 @@ class ChatController extends Controller
     {
         $user = Auth::user();
         $item = Item::with('user', 'buyer')->find($item_id);
-        $transactions = Transaction::where('item_id', $item->id)
-            ->where('seller_id', $user->id)
+
+        $transactions = Transaction::with('item')
+            ->where('status', 'pending')
+            ->where(function ($query) use ($user) {
+                $query->where('seller_id', $user->id)
+                    ->orWhere('buyer_id', $user->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $messages = Message::where('item_id', $item_id)
+            ->with('sender')
+            ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('mypage_chat', compact('user', 'item', 'transactions'));
+        return view('mypage_chat', compact('user', 'item', 'transactions', 'messages'));
     }
 
-    public function store($item_id, Request $request)
+    public function messageStore($item_id, Request $request)
     {
         $user = Auth::user();
         $item = Item::find($item_id);
 
         $transaction = Transaction::firstOrCreate(
             [
-                'item_id' => $item->id,
+                'item_id' => $item_id,
                 'buyer_id' => $item->buyer_id,
             ],
             [
@@ -36,15 +46,18 @@ class ChatController extends Controller
             ]
         );
 
-        // $path = $request->file('image')?->store('message_images', 'public');
+        $message = new Message();
+        $message->transaction_id = $transaction->id;
+        $message->item_id = $item_id;
+        $message->sender_id = $user->id;
+        $message->content = $request->content;
 
-        Message::create([
-            'transaction_id' => $transaction->id,
-            'sender_id' => $user->id,
-            'content' => $request->content,
-            // 'image' => $path,
-        ]);
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('chat_images', 'public');
+            $message->image = 'storage/' . $path;
+        }
+        $message->save();
 
-        return redirect()->route('chat.show', ['transaction' => $transaction->id]);
+        return redirect()->route('chat.show', ['item_id' => $item_id])->with('message', 'メッセージを送信しました。');
     }
 }
