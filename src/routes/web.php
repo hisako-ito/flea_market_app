@@ -38,10 +38,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/mypage/profile', [ProfileInformationController::class, 'update'])->name('user-profile-information.profile');
 
     Route::get('/mypage/items/{item_id}/chat', [ChatController::class, 'chatShow'])->name('chat.show');
-    Route::post('/chat/message', [ChatController::class, 'store'])->name('chat.store');
-    Route::get('/messages/{message_id}/edit', [ChatController::class, 'edit'])->name('chat.edit');
-    Route::put('/messages/{message_is}', [ChatController::class, 'update'])->name('chat.update');
-    Route::delete('/messages/{message_id}', [ChatController::class, 'destroy'])->name('chat.destroy');
+    Route::post('/mypage/items/{item_id}/chat', [ChatController::class, 'messageStore'])->name('message.store');
+    Route::patch('/messages/{message_id}', [ChatController::class, 'messageUpdate'])->name('message.update');
+    Route::delete('/messages/{message_id}', [ChatController::class, 'messageDestroy'])->name('message.destroy');
 
     Route::get('/purchase/{item_id}', [ItemController::class, 'getPurchase'])->name('purchase.get');
     Route::post('/purchase/{item_id}', [PaymentController::class, 'postPurchase'])->name('purchase.post');

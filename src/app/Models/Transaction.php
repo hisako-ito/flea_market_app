@@ -13,6 +13,11 @@ class Transaction extends Model
         'id',
     ];
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function item()
     {
         return $this->belongsTo(Item::class);
