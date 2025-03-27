@@ -55,6 +55,11 @@
                     <label for="image-input" class="file-input-label">画像を選択する</label>
                     <input type="file" name="item_image" id="image-input" accept="image/*">
                 </div>
+                <div class="form__error">
+                    @error('item_image')
+                    {{ $message }}
+                    @enderror
+                </div>
             </div>
             <div class="exhibition-item-info__heading">
                 <h3>商品の詳細</h3>
@@ -70,6 +75,11 @@
                         <label class="category-item" for="category-{{ $category->id }}">{{ $category->name }}</label>
                         @endforeach
                     </div>
+                </div>
+                <div class="form__error">
+                    @error('categories')
+                    {{ $message }}
+                    @enderror
                 </div>
             </div>
             <div class="form__group">
@@ -89,6 +99,11 @@
                 old('condition') == 4 ? 'selected' : '' }}>状態が悪い</option>
                     </select>
                 </div>
+                <div class="form__error">
+                    @error('condition')
+                    {{ $message }}
+                    @enderror
+                </div>
             </div>
             <div class="exhibition-item-info__heading">
                 <h3>商品名と説明</h3>
@@ -102,6 +117,11 @@
                         <input type="text" name="item_name" id="item_name" value="{{ old('item_name') }}">
                     </div>
                 </div>
+                <div class="form__error">
+                    @error('item_name')
+                    {{ $message }}
+                    @enderror
+                </div>
             </div>
             <div class="form__group">
                 <div class="form__group-title">
@@ -111,6 +131,11 @@
                     <div class="form__input--text">
                         <input type="text" name="brand" id="brand" value="{{ old('brand') }}">
                     </div>
+                </div>
+                <div class="form__error">
+                    @error('brand')
+                    {{ $message }}
+                    @enderror
                 </div>
             </div>
             <div class="form__group">
@@ -122,6 +147,11 @@
                         <textarea type="text" name="description" id="description" cols="30" rows="10">{{ old('description') }}</textarea>
                     </div>
                 </div>
+                <div class="form__error">
+                    @error('description')
+                    {{ $message }}
+                    @enderror
+                </div>
             </div>
             <div class="form__group">
                 <div class="form__group-title">
@@ -131,6 +161,11 @@
                     <div class="form__input--text">
                         <input type="text" class="price-input" name="price" id="price" value="{{ old('price') }}" placeholder="￥">
                     </div>
+                </div>
+                <div class="form__error">
+                    @error('price')
+                    {{ $message }}
+                    @enderror
                 </div>
             </div>
             <input type="hidden" name="user_id" value="{{ $user->id }}">

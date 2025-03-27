@@ -162,6 +162,12 @@ p {
     margin: 0;
 }
 
+.form__error {
+    color: #ff0000;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
 /* レスポンシブ (768px以上)*/
 @media screen and (min-width: 768px) {
     .header-nav__login-btn,

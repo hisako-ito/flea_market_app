@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\Message;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -33,6 +35,20 @@ class UserController extends Controller
             });
         } elseif ($tab === 'sell') {
             $items = Item::where('user_id', $user->id)->get();
+        } elseif ($tab === 'trade') {
+            $messages = Message::with('transaction')->orderBy('updated_at', 'desc')->get();
+            $transactions = $messages->map(function ($message) {
+                return $message->transaction;
+            });
+            $transactions = Transaction::with('item')
+                ->where('status', 'pending')
+                ->where(function ($query) use ($user) {
+                    $query->where('seller_id', $user->id)
+                        ->orWhere('buyer_id', $user->id);
+                })->get();
+            $items = $transactions->map(function ($transaction) {
+                return $transaction->item;
+            });
         } else {
             $items = collect();
         }

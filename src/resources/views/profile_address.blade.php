@@ -41,6 +41,11 @@
                     <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', auth()->user()->postal_code) }}">
                 </div>
             </div>
+            <div class="form__error">
+                @error('postal_code')
+                {{ $message }}
+                @enderror
+            </div>
         </div>
         <div class="form__group">
             <div class="form__group-title">
@@ -51,6 +56,11 @@
                     <input type="text" name="address" id="address" value="{{ old('address', auth()->user()->address) }}">
                 </div>
             </div>
+            <div class="form__error">
+                @error('address')
+                {{ $message }}
+                @enderror
+            </div>
         </div>
         <div class="form__group">
             <div class="form__group-title">
@@ -60,6 +70,11 @@
                 <div class="form__input--text">
                     <input type="text" name="building" id="building" value="{{ old('building', auth()->user()->building) }}">
                 </div>
+            </div>
+            <div class="form__error">
+                @error('building')
+                {{ $message }}
+                @enderror
             </div>
         </div>
         <input type="hidden" name="user_name" value="{{ $user->user_name }}">

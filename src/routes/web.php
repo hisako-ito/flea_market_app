@@ -42,6 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/messages/{message_id}', [ChatController::class, 'messageUpdate'])->name('message.update');
     Route::delete('/messages/{message_id}', [ChatController::class, 'messageDestroy'])->name('message.destroy');
 
+    Route::post('/transactions/{transaction_id}/complete', [ChatController::class, 'completeTransaction'])->name('transactions.complete');
+
+
     Route::get('/purchase/{item_id}', [ItemController::class, 'getPurchase'])->name('purchase.get');
     Route::post('/purchase/{item_id}', [PaymentController::class, 'postPurchase'])->name('purchase.post');
     Route::get('/purchase/address/{item_id}', [UserController::class, 'getAddress']);

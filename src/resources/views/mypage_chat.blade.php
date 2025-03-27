@@ -59,7 +59,7 @@
             </h2>
         </div>
         @if ($item->buyer && $item->buyer->id == $user->id)
-        <form method="POST" action="">
+        <form method="POST" action="/transactions/{{$transaction->id}}/complete">
             @csrf
             <button type="submit" class="btn complete-btn">取引を完了する</button>
         </form>
@@ -92,50 +92,66 @@
                 <form class="message-update-form" method="POST" action="/messages/{{$message->id}}">
                     @csrf
                     @method('PATCH')
-                    <input class="message-update-form__item-input" type="text" name="content" value="{{ $message->content }}">
-                </form>
-                <div class="message-buttons">
-                    <form class="message-update-form" method="POST" action="/messages/{{$message->id}}">
-                        @csrf
-                        @method('PATCH')
+                    <textarea name="content" class="message-update-form__textarea">{{ old('content', $message->content) }}</textarea>
+
+                    @if ($errors->getBag('edit_' . $message->id)->has('content'))
+                    <p class="form__error" style="color: red;">
+                        {{ $errors->getBag('edit_' . $message->id)->first('content') }}
+                    </p>
+                    @endif
+                    <div class="message-buttons">
                         <button class="message-update-form__btn" type="submit">編集</button>
-                    </form>
-                    <form class="message-delete-form" method="POST" action="/messages/{{$message->id}}">
-                        @csrf
-                        @method('DELETE')
-                        <input type="hidden" name="id" value="{{ $message->id }}">
-                        <button type="submit">削除</button>
-                    </form>
-                </div>
-                @else
-                <input class="message-update-form__item-input" value="{{ $message->content }}" readonly>
-                @endif
+                </form>
+                <form class="message-delete-form" method="POST" action="/messages/{{$message->id}}">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="id" value="{{ $message->id }}">
+                    <button class="message-delete-form__btn" type="submit">削除</button>
             </div>
-            @if ($message->image)
+            </form>
+            @else
+            <textarea class="message-update-form__textarea" value="" readonly>{{ $message->content }}</textarea>
+            @endif
+            @if ($message->msg_image)
             <div class="message-image">
-                <img src="{{ asset($message->image) }}" alt="画像" class="message-image">
+                <img src="{{ asset($message->msg_image) }}" alt="画像" class="message-image">
             </div>
             @endif
         </div>
         @endforeach
     </div>
+</div>
 
-    <div class="message-form">
-        <form class="message-form__inner" method="POST" action="/mypage/items/{{$item->id}}/chat" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="sender_id" value="{{ $user->id }}">
-            <textarea class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください" cols="15" rows="5">{{ old('content') }}</textarea>
-            <div class="message-form__btn-container">
-                <input type="file" name="image" id="fileInput" accept="image/png, image/jpeg" hidden>
-                <label for="fileInput" class="file-input-label">画像を追加</label>
-                <span id="fileNameDisplay" class="file-name-display"></span>
-                <button class="message-form__btn" type="submit"><i class="fa-regular fa-paper-plane" style="color: #5F5F5F; font-size: 32px;"></i></button>
-            </div>
-        </form>
+<div class="message-form-area">
+    <div class="message-form-area__inner">
+        <div class="form__error">
+            @error('content')
+            {{ $message }}
+            @enderror
+        </div>
+        <div class="form__error">
+            @error('msg_image')
+            {{ $message }}
+            @enderror
+        </div>
+        <div class="message-form">
+            <form class="message-form__form" method="POST" action="/mypage/items/{{$item->id}}/chat" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="sender_id" value="{{ $user->id }}">
+                <textarea class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください" cols="15" rows="5">
+                {{ session()->get('_error_bag') === 'default' ? old('content') : '' }}
+                </textarea>
+                <div class="message-form__btn-container">
+                    <input type="file" name="msg_image" id="fileInput" accept="image/png, image/jpeg" hidden>
+                    <label for="fileInput" class="file-input-label">画像を追加</label>
+                    <span id="fileNameDisplay" class="file-name-display"></span>
+                    <button class="message-form__btn" type="submit"><i class="fa-regular fa-paper-plane" style="color: #5F5F5F; font-size: 32px;"></i></button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
-
 @section('script')
 <script>
     document.getElementById('fileInput').addEventListener('change', function(event) {

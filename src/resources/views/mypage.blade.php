@@ -46,6 +46,8 @@
         class="{{ $tab === 'sell' ? 'active-tab' : '' }}">出品した商品</a>
     <a href="{{ route('mypage', ['tab' => 'buy']) }}"
         class="{{ $tab === 'buy' ? 'active-tab' : '' }}">購入した商品</a>
+    <a href="{{ route('mypage', ['tab' => 'trade']) }}"
+        class="{{ $tab === 'trade' ? 'active-tab' : '' }}">取引中の商品</a>
 </div>
 
 <div class="items-list">
@@ -67,6 +69,23 @@
     </div>
     @endforeach
     @elseif ($tab === 'sell' && isset($items) && $items->isNotEmpty())
+    @foreach ($items as $item)
+    <div class="item__card">
+        <div class="card__img">
+            @if ($item->is_sold)
+            <div class="sold-label">
+                <span class="sold-font">SOLD</span>
+            </div>
+            @endif
+            <a href="/mypage/items/{{$item->id}}/chat" class="product-link"></a>
+            <img src="{{ asset($item->item_image) }}" alt="商品画像">
+        </div>
+        <div class="card__detail">
+            <p>{{$item->item_name}}</p>
+        </div>
+    </div>
+    @endforeach
+    @elseif ($tab === 'trade' && isset($items) && $items->isNotEmpty())
     @foreach ($items as $item)
     <div class="item__card">
         <div class="card__img">
