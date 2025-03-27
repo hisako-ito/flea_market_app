@@ -64,6 +64,11 @@
                             <option value="カード払い">カード支払い</option>
                         </select>
                     </div>
+                    <div class="form__error">
+                        @error('payment_method')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </div>
                 <div class="item__deliver-address">
                     <div class="deliver-address__wrapper">

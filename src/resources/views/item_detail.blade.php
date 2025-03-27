@@ -105,6 +105,11 @@
             <div class="comment-content">{{ $comment->content }}</div>
             @endforeach
             <h4 class="item-comment">商品へのコメント</h4>
+            <div class="form__error">
+                @error('content')
+                {{ $message }}
+                @enderror
+            </div>
             <form class="comment__form" action="{{ route('item.comments.store', $item->id) }}" method="post">
                 @csrf
                 <textarea class="comment__form_textarea" name="content" cols="90" rows="7"></textarea>
