@@ -59,11 +59,10 @@
             </h2>
         </div>
         @if ($item->buyer && $item->buyer->id == $user->id)
-        <form method="POST" action="/transactions/{{$transaction->id}}/complete">
+        <form method="POST" action="/transactions/{{$item->id}}/complete">
             @csrf
             <button type="submit" class="btn complete-btn">取引を完了する</button>
         </form>
-        @else
         @endif
     </div>
 
@@ -134,6 +133,7 @@
             {{ $message }}
             @enderror
         </div>
+        @if ($item->buyer)
         <div class="message-form">
             <form class="message-form__form" method="POST" action="/mypage/items/{{$item->id}}/chat" enctype="multipart/form-data">
                 @csrf
@@ -149,6 +149,7 @@
                 </div>
             </form>
         </div>
+        @endif
     </div>
 </div>
 @endsection

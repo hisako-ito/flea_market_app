@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Message;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -23,6 +24,17 @@ class UserController extends Controller
         $tab = $request->query('tab', 'sell');
         $query = Item::query();
 
+        $unreadMessages = Message::where('receiver_id', $user->id)
+            ->where('is_read', false)
+            ->select('item_id', DB::raw('count(*) as unread_count'))
+            ->groupBy('item_id')
+            ->get()
+            ->map(function ($message) {
+                $message->item_id = (int) $message->item_id;
+                return $message;
+            })
+            ->keyBy('item_id');
+
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
             return view('search_results', compact('items', 'keyword', 'tab'));
@@ -36,24 +48,28 @@ class UserController extends Controller
         } elseif ($tab === 'sell') {
             $items = Item::where('user_id', $user->id)->get();
         } elseif ($tab === 'trade') {
-            $messages = Message::with('transaction')->orderBy('updated_at', 'desc')->get();
-            $transactions = $messages->map(function ($message) {
-                return $message->transaction;
+            $messages = Message::with('transaction.item')
+                ->whereHas('transaction', function ($query) use ($user) {
+                    $query->where('status', 'pending')
+                        ->where(function ($q) use ($user) {
+                            $q->where('seller_id', $user->id)
+                                ->orWhere('buyer_id', $user->id);
+                        });
+                })
+                ->latest('updated_at')
+                ->get();
+            $latestMessages = $messages->unique('transaction_id');
+            $sortedMessages = $latestMessages->sortByDesc(function ($message) use ($user) {
+                return $message->receiver_id === $user->id ? 1 : 0;
             });
-            $transactions = Transaction::with('item')
-                ->where('status', 'pending')
-                ->where(function ($query) use ($user) {
-                    $query->where('seller_id', $user->id)
-                        ->orWhere('buyer_id', $user->id);
-                })->get();
-            $items = $transactions->map(function ($transaction) {
-                return $transaction->item;
+            $items = $sortedMessages->map(function ($message) {
+                return $message->item;
             });
         } else {
             $items = collect();
         }
 
-        return view('mypage', compact('keyword', 'items', 'user', 'tab'));
+        return view('mypage', compact('keyword', 'items', 'user', 'tab', 'unreadMessages'));
     }
 
     public function edit(Request $request)

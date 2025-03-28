@@ -69,13 +69,26 @@
 
 .tabs a {
     color: #5F5F5F;
-    padding: 10px 20px;
+    padding: 10px 30px;
+    margin-right: 50px;
     font-weight: bold;
 }
 
 .tabs a.active-tab {
     color: #FF0000;
     font-weight: bold;
+}
+
+.total-unread-msg {
+    display: inline-block;
+    background-color: #FF0000;
+    color: #ffffff;
+    width: 30px;
+    padding: 4px 8px;
+    border-radius: 50%;
+    text-align: center;
+    margin-left: 4px;
+    margin-bottom: 1px;
 }
 
 .items-list {
@@ -90,23 +103,39 @@
 }
 
 .sold-label {
-    position:absolute;
+    position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     border-top: 50px solid #FF5555;
-    border-right: 50px solid transparent;
-    border-left: 50px solid #FF5555;
+    border-left: 50px solid transparent;
+    border-right: 50px solid #FF5555;
     border-bottom: 50px solid transparent;
     border-radius: 4px;
+    z-index: 100;
 }
 
 .sold-font {
     position: absolute;
     top: -33px;
-    left: -45px;
+    right: -45px;
     color: #ffffff;
     font-size: 1rem;
-    transform: rotate(-45deg);
+    transform: rotate(45deg);
+    z-index: 101;
+}
+
+.notification-badge {
+    top: 3px;
+    left: 0;
+    position: absolute;
+    background-color: #FF0000;
+    color: #ffffff;
+    width: 30px;
+    padding: 4px 8px;
+    border-radius: 50%;
+    text-align: center;
+    margin-left: 4px;
+    z-index: 102;
 }
 
 .product-link {
@@ -121,10 +150,6 @@
     width: 100%;
     height: auto;
     border-radius: 4px;
-}
-
-.item__card {
-    width: 100%;
 }
 
 .card__detail p {

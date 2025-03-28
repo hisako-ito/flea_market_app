@@ -25,34 +25,41 @@ class ChatController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->get();
-        $transaction = Transaction::where('item_id', $item_id)->first();
         $messages = Message::where('item_id', $item_id)
             ->with('sender')
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('mypage_chat', compact('user', 'item', 'transactions', 'transaction', 'messages'));
+        return view('mypage_chat', compact('user', 'item', 'transactions', 'messages'));
     }
 
     public function messageStore($item_id, MessageRequest $request)
     {
         $user = Auth::user();
         $item = Item::find($item_id);
+        $transaction = Transaction::where('item_id', $item_id)->first();
 
-        $transaction = Transaction::firstOrCreate(
-            [
+        if (!$transaction) {
+            $transaction = Transaction::Create([
                 'item_id' => $item_id,
                 'buyer_id' => $item->buyer_id,
-            ],
-            [
                 'seller_id' => $item->user_id,
-            ]
-        );
+            ]);
+        } elseif ($transaction->status === 'completed') {
+            $transaction->update(['status' => 'pending',]);
+        }
+
         $message = new Message();
         $message->transaction_id = $transaction->id;
         $message->item_id = $item_id;
         $message->sender_id = $user->id;
         $message->content = $request->content;
+
+        if ($item->buyer_id !== $user->id) {
+            $message->receiver_id = $item->buyer_id;
+        } else {
+            $message->receiver_id = $item->user_id;
+        }
 
         if ($request->hasFile('msg_image')) {
             $file_name = $request->file('msg_image')->getClientOriginalName();
@@ -61,7 +68,7 @@ class ChatController extends Controller
         }
         $message->save();
 
-        return redirect()->route('chat.show', ['item_id' => $item_id])->with('message', 'メッセージを送信しました。');
+        return redirect()->route('chat.show', ['item_id' => $item_id])->with('message', 'メッセージを送信しました');
     }
 
     public function messageUpdate($message_id, Request $request)
@@ -86,7 +93,7 @@ class ChatController extends Controller
         ]);
 
         return redirect()->route('chat.show', ['item_id' => $message->item_id])
-            ->with('message', 'メッセージを編集しました。');
+            ->with('message', 'メッセージを編集しました');
     }
 
     public function messageDestroy($message_id)
@@ -94,23 +101,27 @@ class ChatController extends Controller
         $message = Message::with('item')->find($message_id);
 
         if (!$message) {
-            return redirect()->back()->with('error', 'メッセージが見つかりませんでした。');
+            return redirect()->back()->with('error', 'メッセージが見つかりませんでした');
         }
 
         $message->delete();
 
         return redirect()->route('chat.show', ['item_id' => $message->item_id])
-            ->with('message', 'メッセージを削除しました。');
+            ->with('message', 'メッセージを削除しました');
     }
 
-    public function completeTransaction($transaction_id)
+    public function completeTransaction($item_id)
     {
-        $transaction = Transaction::with('item')->find($transaction_id);
+        $transaction = Transaction::where('item_id', $item_id)->first();
 
-        $transaction->status = 'completed';
-        $transaction->save();
+        if ($transaction && $transaction->status !== 'completed') {
+            $transaction->status = 'completed';
+            $transaction->save();
 
-        return redirect()->route('chat.show', ['item_id' => $transaction->item_id])
-            ->with('message', '取引を完了しました');
+            return redirect()->route('chat.show', ['item_id' => $item_id])
+                ->with('message', '取引を完了しました');
+        }
+        return redirect()->route('chat.show', ['item_id' => $item_id])
+            ->with('message', 'この取引はすでに完了しています');
     }
 }
