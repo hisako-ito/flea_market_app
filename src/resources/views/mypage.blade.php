@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/list.css')}}">
 <link rel="stylesheet" href="{{ asset('css/mypage.css')}}">
 @endsection
 
@@ -47,7 +46,7 @@
     <a href="{{ route('mypage', ['tab' => 'buy']) }}"
         class="{{ $tab === 'buy' ? 'active-tab' : '' }}">購入した商品</a>
     <a href="{{ route('mypage', ['tab' => 'trade']) }}"
-        class="{{ $tab === 'trade' ? 'active-tab' : '' }}">取引中の商品</a>
+        class="{{ $tab === 'trade' ? 'active-tab' : '' }}">取引中の商品<span class="total-unread-msg">{{ $unreadMessages->sum('unread_count') }}</span></a>
 </div>
 
 <div class="items-list">
@@ -92,6 +91,11 @@
             @if ($item->is_sold)
             <div class="sold-label">
                 <span class="sold-font">SOLD</span>
+            </div>
+            @endif
+            @if (isset($unreadMessages[$item->id]))
+            <div class="notification-badge">
+                {{ $unreadMessages[$item->id]->unread_count }}
             </div>
             @endif
             <a href="/mypage/items/{{$item->id}}/chat" class="product-link"></a>

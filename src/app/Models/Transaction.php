@@ -32,4 +32,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'buyer_id');
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

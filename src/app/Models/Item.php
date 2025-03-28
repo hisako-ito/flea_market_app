@@ -81,4 +81,9 @@ class Item extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }
