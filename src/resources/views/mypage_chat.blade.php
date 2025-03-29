@@ -4,28 +4,8 @@
 <link rel="stylesheet" href="{{ asset('css/mypage_chat.css')}}">
 @endsection
 
-@section('nav_search')
-<form class="header-nav__search-form" action="/" method="get">
-    @csrf
-    <input class="header-nav__keyword-input" type="search" name="keyword" placeholder="なにをお探しですか？" value="{{ $keyword ?? '' }}">
-</form>
-@endsection
-
-@section('nav_actions')
-@if (Auth::check())
-<form class="logout-form" action="/logout" method="post">
-    @csrf
-    <button class="header-nav__logout-btn" type="submit">ログアウト</button>
-</form>
-@else
-<a class="header-nav__login-btn" href="/login">ログイン</a>
-@endif
-<a class="header-nav__mypage-btn" href="/mypage">マイページ</a>
-<a class="header-nav__sell-btn" href="/sell">出品</a>
-@endsection
-
 @section('content')
-<div class="chat-container">
+<div class="chat-container" id="app" data-should-show-modal="{{ $shouldShowModal ? 'true' : 'false' }}">
     <aside class="chat-sidebar">
         <h4 class="chat-sidebar__heading">その他の取引</h4>
         <div class="chat-sidebar__btn-container">
@@ -59,10 +39,7 @@
             </h2>
         </div>
         @if ($item->buyer && $item->buyer->id == $user->id)
-        <form method="POST" action="/transactions/{{$item->id}}/complete">
-            @csrf
-            <button type="submit" class="btn complete-btn">取引を完了する</button>
-        </form>
+        <button type="button" class="btn complete-btn" id="completeTransactionBtn">取引を完了する</button>
         @endif
     </div>
 
@@ -138,9 +115,7 @@
             <form class="message-form__form" method="POST" action="/mypage/items/{{$item->id}}/chat" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="sender_id" value="{{ $user->id }}">
-                <textarea class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください" cols="15" rows="5">
-                {{ session()->get('_error_bag') === 'default' ? old('content') : '' }}
-                </textarea>
+                <textarea class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください" maxlength="400">{{ session()->get('_error_bag') === 'default' ? old('content') : '' }}</textarea>
                 <div class="message-form__btn-container">
                     <input type="file" name="msg_image" id="fileInput" accept="image/png, image/jpeg" hidden>
                     <label for="fileInput" class="file-input-label">画像を追加</label>
@@ -152,12 +127,57 @@
         @endif
     </div>
 </div>
+
+<div id="ratingModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+        <div class="modal__heading">
+            <h2>取引が完了しました。</h2>
+        </div>
+        <div class="rating-form">
+            <p class="rating-form__message">今回の取引相手はどうでしたか？</p>
+            <form class="rating-form__form" method="POST" action="{{ route('review.store', ['item_id' => $item->id, 'transaction_id' => $transaction->id]) }}">
+                @csrf
+                <input type="hidden" name="rating" value="0">
+                <div class="star-rating">
+                    @for ($i = 5; $i >= 1; $i--)
+                    <input type="radio" name="rating" value="{{ $i }}" id="star{{ $i }}" hidden>
+                    <label class="star" for="star{{ $i }}"><i class="fas fa-star"></i></label>
+                    @endfor
+                </div>
+                <div class="form__button">
+                    <button type="submit" class="send-btn">送信する</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 @section('script')
 <script>
     document.getElementById('fileInput').addEventListener('change', function(event) {
         const fileName = event.target.files[0]?.name || '選択されていません';
         document.getElementById('fileNameDisplay').textContent = fileName;
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const completeBtn = document.getElementById('completeTransactionBtn');
+        const modal = document.getElementById('ratingModal');
+
+        // HTMLのdata属性から値を取得（型もstringなので注意）
+        const shouldShowModalAttr = document.getElementById('app').dataset.shouldShowModal;
+        const shouldShowModal = shouldShowModalAttr === 'true';
+
+        if (shouldShowModal && modal) {
+            modal.style.display = 'flex';
+        }
+
+        if (completeBtn) {
+            completeBtn.addEventListener('click', function() {
+                modal.style.display = 'flex';
+            });
+        }
     });
 </script>
 @endsection

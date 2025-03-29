@@ -86,4 +86,9 @@ class Item extends Model
     {
         return $this->hasMany(Message::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

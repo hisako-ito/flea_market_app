@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\Message;
-use App\Models\Transaction;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +24,15 @@ class UserController extends Controller
         $tab = $request->query('tab', 'sell');
         $query = Item::query();
 
-        $unreadMessages = Message::where('receiver_id', $user->id)
+        $unreadMessages = Message::with('transaction.item')
+            ->whereHas('transaction', function ($query) use ($user) {
+                $query->where('status', 'pending')
+                    ->where(function ($q) use ($user) {
+                        $q->where('seller_id', $user->id)
+                            ->orWhere('buyer_id', $user->id);
+                    });
+            })
+            ->where('receiver_id', $user->id)
             ->where('is_read', false)
             ->select('item_id', DB::raw('count(*) as unread_count'))
             ->groupBy('item_id')
@@ -34,6 +42,8 @@ class UserController extends Controller
                 return $message;
             })
             ->keyBy('item_id');
+
+        $averageRating = Review::where('reviewed_id', $user->id)->avg('rating');
 
         if (!empty($keyword)) {
             $items = $query->where('item_name', 'like', '%' . $keyword . '%')->get();
@@ -69,7 +79,7 @@ class UserController extends Controller
             $items = collect();
         }
 
-        return view('mypage', compact('keyword', 'items', 'user', 'tab', 'unreadMessages'));
+        return view('mypage', compact('keyword', 'items', 'user', 'tab', 'unreadMessages', 'averageRating'));
     }
 
     public function edit(Request $request)
