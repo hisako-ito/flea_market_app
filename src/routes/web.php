@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/messages/{message_id}', [ChatController::class, 'messageUpdate'])->name('message.update');
     Route::delete('/messages/{message_id}', [ChatController::class, 'messageDestroy'])->name('message.destroy');
 
-    Route::post('/transactions/{item_id}/complete', [ChatController::class, 'completeTransaction'])->name('transactions.complete');
+    Route::post('/ratings/{item_id}/{transaction_id}', [ChatController::class, 'reviewStore'])->name('review.store');
 
 
     Route::get('/purchase/{item_id}', [ItemController::class, 'getPurchase'])->name('purchase.get');

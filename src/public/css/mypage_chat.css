@@ -30,7 +30,7 @@
 .chat-sidebar__link-btn {
     background-color: #EEEFEB;
     color: #000000;
-    padding: 1% 4%;
+    padding: 2% 4%;
     border-radius: 5px;
     width: 100%;
     text-align: center;
@@ -75,7 +75,8 @@
 
 .complete-btn {
     border-radius: 30px;
-    width: 140px;
+    width: 200px;
+    padding: 10px 20px;
 }
 
 .item-info {
@@ -148,7 +149,7 @@
     display: flex;
     align-items: center;
     gap: 5%;
-    margin-bottom: 0.5%;
+    margin-bottom: 10px;
 }
 
 .my-info {
@@ -181,7 +182,7 @@
     width: 500px;
     border: solid 1px #5F5F5F;
     height: 50px;
-    padding: 4px 6px;
+    padding: 10px 12px;
     resize: none;
 }
 
@@ -223,7 +224,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 1%;
 }
 
 .message-image img {
@@ -282,10 +282,16 @@
     border-radius: 4px;
     border: solid 1px #5F5F5F;
     overflow-y: scroll;
-    height: 50px;
+    height: 100%;
     width: 100%;
-    padding: 4px 6px;
+    text-align: left;
+    padding: 10px 12px;
     resize: none;
+}
+
+.message-form__textarea::placeholder {
+    color: #7B7B7B;
+    text-align: left;
 }
 
 .message-form__btn-container {
@@ -301,4 +307,109 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #FDFCE6;
+    width: 600px;
+    height: 350px;
+    border: solid 1px #000000;
+    border-radius: 15px;
+    text-align: left;
+}
+
+.modal__heading {
+    border-bottom: solid 1px #000000;
+    height: 20%;
+    display: flex;
+    align-items: center;
+}
+
+.modal__heading h2 {
+    margin-left: 30px;
+    font-weight: normal;
+}
+
+.rating-form {
+    width: 100%;
+    height: 80%;
+}
+
+.rating-form p {
+    margin-left: 30px;
+}
+
+.rating-form__message {
+    color: #868686;
+    margin: 30px 0 10px;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-direction: row-reverse;
+    padding: 30px 0;
+}
+
+.star {
+    font-size: 3rem;
+    color: #D9D9D9;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-rating input[type="radio"]:checked~label.star {
+    color: gold;
+}
+
+.form__button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100px;
+    padding-right: 30px;
+    border-top: solid 1px #000000;
+    box-sizing: border-box;
+}
+
+.send-btn {
+    background-color: #FF5555;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.send-btn:hover {
+    background-color: #FF8282;
+}
+
+/* レスポンシブ (768px以上)*/
+@media screen and (min-width: 768px) {
+    .chat-sidebar__link-btn {
+        font-size: 0.8rem;
+    }
+}
+
+/* レスポンシブ (1000px以上)*/
+@media screen and (min-width: 1400px) {
+    .chat-sidebar__link-btn {
+        font-size: 1rem;
+    }
 }

@@ -13,11 +13,6 @@ class Transaction extends Model
         'id',
     ];
 
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
-
     public function item()
     {
         return $this->belongsTo(Item::class);
@@ -36,5 +31,10 @@ class Transaction extends Model
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
