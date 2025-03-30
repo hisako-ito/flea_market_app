@@ -111,9 +111,8 @@ STRIPE_SECRET_KEY=your_secret_key_here
 | 有効期限  | 任意の未来の日付 (例: 12/34)  |
 | セキュリティコード  | 任意の3桁 (例: 123)  |
 
-以下のリンクは公式ドキュメントです。
-https://docs.stripe.com/payments/checkout?locale=ja-JP
-[https://docs.stripe.com/payments/checkout?locale=ja-JP]
+以下のリンクは公式ドキュメントです。  
+[https://docs.stripe.com/payments/checkout?locale=ja-JP](https://docs.stripe.com/payments/checkout?locale=ja-JP)
 
 ### PHPUnitを利用したテストに関して
 以下のコマンド:
