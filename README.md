@@ -19,15 +19,14 @@ mysql:
 ### Laravel環境構築
 1. docker-compose exec php bash
 2. composer install
-3. 「.env.example」ファイルを 「.env」ファイルに命名を変更。  または、.envファイルを作成します。　　
-4. env以下の環境変数を追加
+3. cp .env.example .env　　
+4. envファイルの変更
 ```
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=laravel_db
-DB_USERNAME=laravel_user
-DB_PASSWORD=laravel_pass
+DB_HOSTをmysqlに変更  
+　DB_DATABASEをlaravel_dbに変更  
+　DB_USERNAMEをlaravel_userに変更  
+　DB_PASSをlaravel_passに変更  
+　MAIL_FROM_ADDRESSに送信元アドレスを設定 
 ```
 5. アプリケーションキーの作成
 ```
