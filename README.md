@@ -42,7 +42,7 @@ php artisan migrate
 php artisan db:seed
 ```
 
-### テストアカウント
+### ログイン情報
 ---
 
 **name:** 山田太郎  
