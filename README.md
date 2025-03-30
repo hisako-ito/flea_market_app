@@ -41,16 +41,10 @@ php artisan migrate
 ```
 php artisan db:seed
 ```
-### ログインテスト
-1. ログイン画面([http://localhost/login](http://localhost/login))表示
-2. 以下アカウントでログインを確認  
-* アカウント情報 (メール認証済み)  
-　メールアドレス：taro@example.com  
-　パスワード：password123
+
 ### テストアカウント
 ---
 
-#### 一般ユーザーアカウント
 **name:** 山田太郎  
 **email:** [taro@example.com](mailto:taro@example.com)  
 **password:** password123  
