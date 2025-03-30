@@ -38,7 +38,7 @@
                 @endif
             </h2>
         </div>
-        @if ($item->buyer && $item->buyer->id == $user->id)
+        @if ($transaction && $transaction->status === "pending" && $item->buyer_id === $user->id && $message)
         <button type="button" class="btn complete-btn" id="completeTransactionBtn">取引を完了する</button>
         @endif
     </div>
@@ -135,7 +135,7 @@
         </div>
         <div class="rating-form">
             <p class="rating-form__message">今回の取引相手はどうでしたか？</p>
-            <form class="rating-form__form" method="POST" action="{{ route('review.store', ['item_id' => $item->id, 'transaction_id' => $transaction->id]) }}">
+            <form class="rating-form__form" method="POST" action="/ratings/{{$item->id}}">
                 @csrf
                 <input type="hidden" name="rating" value="0">
                 <div class="star-rating">
@@ -165,7 +165,6 @@
         const completeBtn = document.getElementById('completeTransactionBtn');
         const modal = document.getElementById('ratingModal');
 
-        // HTMLのdata属性から値を取得（型もstringなので注意）
         const shouldShowModalAttr = document.getElementById('app').dataset.shouldShowModal;
         const shouldShowModal = shouldShowModalAttr === 'true';
 
