@@ -136,7 +136,8 @@ php artisan config:clear
 php artisan migrate:fresh --env=testing
 ./vendor/bin/phpunit
 
-``` 
+```
+※.env.testingにもStripeのAPIキーを設定してください。
 
 ## 使用技術(実行環境)
 * PHP 7.4.9
