@@ -121,7 +121,7 @@ STRIPE_SECRET_KEY=your_secret_key_here
 docker-compose exec mysql bash
 mysql -u root -p
 //パスワードはrootと入力
-create database test_database;
+CREATE DATABASE demo_test;
 
 docker-compose exec php bash
 php artisan migrate:fresh --env=testing
