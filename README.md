@@ -46,7 +46,25 @@ php artisan db:seed
 2. 以下アカウントでログインを確認  
 * アカウント情報 (メール認証済み)  
 　メールアドレス：taro@example.com  
-　パスワード：password123  
+　パスワード：password123
+### テストアカウント
+---
+
+#### 一般ユーザーアカウント
+**name:** 山田太郎  
+**email:** [taro@example.com](mailto:taro@example.com)  
+**password:** password123  
+
+**name:** 山田花子      
+**email:** [hanako@example.com](mailto:hanako@example.com)  
+**password:** password123  
+
+**name:** 山田一郎    
+**email:** [ichiro@example.com](mailto:ichiro@example.com)  
+**password:** password123  
+
+---
+
 > [!NOTE]
 > 新規アカウント登録時は、mailhog([http://localhost/8025](http://localhost/8025))で受信するメールにて認証が必要です。
 
@@ -109,7 +127,7 @@ CASHIER_LOGGER=daily
 * MySQL 15.1
 
 ## ER図
-![flea_market_app](https://github.com/user-attachments/assets/49d0b230-cc4b-48fc-babf-6bc46a64ba4f)
+![flea_market_app](https://github.com/user-attachments/assets/3747a5fe-8cab-4477-8614-8fedb7e56727)
 
 
 ## URL
