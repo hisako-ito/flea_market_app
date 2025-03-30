@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MessageRequest;
 use App\Models\Review;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TransactionCompletedMail;
 
 class ChatController extends Controller
 {
@@ -17,25 +19,18 @@ class ChatController extends Controller
     {
         $user = Auth::user();
         $item = Item::with('user', 'buyer')->find($item_id);
-        $transaction = Transaction::where('item_id', $item_id)->first();
+        $transaction = Transaction::where('item_id', $item_id)
+            ->where('buyer_id', $item->buyer_id)
+            ->where('seller_id', $item->user_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $reviewerId = auth()->id();
-        $reviewedId = ($transaction->buyer_id === $reviewerId)
-            ? $transaction->seller_id : $transaction->buyer_id;
-
-        $alreadyReviewed = Review::where('item_id', $item_id)
-            ->where('reviewer_id', $user->id)
-            ->exists();
-
-        $shouldShowModal = false;
-
-        if (
-            $transaction &&
-            $transaction->status === 'completed' && !$alreadyReviewed &&
-            $item->user_id === $user->id
-        ) {
-            $shouldShowModal = true;
-        }
+        $shouldShowModal = $transaction &&
+            $transaction->status === 'completed' &&
+            $item->user_id === $user->id &&
+            !Review::where('transaction_id', $transaction->id)
+                ->where('reviewer_id', $user->id)
+                ->exists();
 
         $transactions = Transaction::with('item')
             ->where('status', 'pending')
@@ -51,23 +46,33 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('mypage_chat', compact('user', 'item', 'transactions', 'messages', 'shouldShowModal'));
+        $message = null;
+        if ($transaction && $transaction->status === 'pending') {
+            $message = Message::where('transaction_id', $transaction->id)
+                ->orderBy('created_at', 'asc')
+                ->first();
+        }
+
+        return view('mypage_chat', compact('user', 'item', 'transaction', 'transactions', 'messages', 'message', 'shouldShowModal'));
     }
 
     public function messageStore($item_id, MessageRequest $request)
     {
         $user = Auth::user();
         $item = Item::find($item_id);
-        $transaction = Transaction::where('item_id', $item_id)->first();
+
+        $transaction = Transaction::where('item_id', $item_id)
+            ->where('buyer_id', $item->buyer_id)
+            ->where('seller_id', $item->user_id)
+            ->where('status', 'pending')
+            ->first();
 
         if (!$transaction) {
-            $transaction = Transaction::Create([
+            $transaction = Transaction::create([
                 'item_id' => $item_id,
                 'buyer_id' => $item->buyer_id,
                 'seller_id' => $item->user_id,
             ]);
-        } elseif ($transaction->status === 'completed') {
-            $transaction->update(['status' => 'pending',]);
         }
 
         $message = new Message();
@@ -131,41 +136,47 @@ class ChatController extends Controller
             ->with('message', 'メッセージを削除しました');
     }
 
-    public function reviewStore($item_id, $transaction_id, Request $request)
+    public function reviewStore($item_id, Request $request)
     {
+        $user = Auth::user();
+        $item = Item::find($item_id);
+
         $transaction = Transaction::where('item_id', $item_id)
+            ->where('buyer_id', $item->buyer_id)
+            ->where('seller_id', $item->user_id)
             ->orderBy('created_at', 'desc')
             ->first();
 
-        if (!$transaction || $transaction->item_id != $item_id) {
+        if (!$transaction) {
             return redirect()->back()->with('message', '指定された取引が見つかりません');
         }
 
-        $reviewerId = auth()->id();
-        $reviewedId = ($transaction->buyer_id === $reviewerId)
+        $reviewedId = ($transaction->buyer_id === $user->id)
             ? $transaction->seller_id : $transaction->buyer_id;
 
         $alreadyReviewed = Review::where('transaction_id', $transaction->id)
-            ->where('reviewer_id', $reviewerId)
-            ->where('reviewed_id', $reviewedId)
+            ->where('reviewer_id', $user->id)
             ->exists();
 
         if ($alreadyReviewed) {
             return redirect()->route('item.list')->with('message', 'すでに評価済みです');
         }
 
-        if ($transaction->status !== 'completed') {
-            $transaction->status = 'completed';
-            $transaction->save();
-        }
-
         Review::create([
             'transaction_id' => $transaction->id,
             'item_id' => $item_id,
-            'reviewer_id' => $reviewerId,
+            'reviewer_id' => $user->id,
             'reviewed_id' => $reviewedId,
             'rating' => $request->rating,
         ]);
+
+        if ($transaction->status !== 'completed' && $user->id === $transaction->buyer_id) {
+            $transaction->status = 'completed';
+            $transaction->save();
+
+            Mail::to($transaction->seller->email)
+                ->send(new TransactionCompletedMail($item, $transaction->seller, $user));
+        }
 
         return redirect()->route('item.list')->with('message', '評価を送信しました');
     }
