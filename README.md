@@ -124,6 +124,15 @@ mysql -u root -p
 CREATE DATABASE demo_test;
 
 docker-compose exec php bash
+cp .env .env.testing
+//.env.testingファイルの文頭部分にあるAPP_ENVとAPP_KEYを以下のように変更
+//APP_ENVをtestに変更
+//APP_KEYの＝の後を削除
+//DB_DATABASEをdemo_testに変更  
+//DB_USERNAMEをrootに変更  
+//DB_PASSをrootに変更  
+php artisan key:generate --env=testing
+php artisan config:clear
 php artisan migrate:fresh --env=testing
 ./vendor/bin/phpunit
 
