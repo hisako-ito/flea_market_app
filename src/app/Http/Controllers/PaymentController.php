@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -101,6 +102,20 @@ class PaymentController extends Controller
                 $item->save();
             }
 
+            $transaction = Transaction::where('item_id', $item->id)
+                ->where('buyer_id', $item->buyer_id)
+                ->where('seller_id', $item->user_id)
+                ->where('status', 'pending')
+                ->first();
+
+            if (!$transaction) {
+                $transaction = Transaction::create([
+                    'item_id' => $item->id,
+                    'buyer_id' => $item->buyer_id,
+                    'seller_id' => $item->user_id,
+                ]);
+            }
+
             return redirect()->route('item.list')->with('message', '購入が完了しました。出品者の発送通知までお待ちください。');
         }
 
@@ -133,6 +148,20 @@ class PaymentController extends Controller
                 $item->buyer_id = $user->id;
                 $item->is_sold = true;
                 $item->save();
+            }
+
+            $transaction = Transaction::where('item_id', $item->id)
+                ->where('buyer_id', $item->buyer_id)
+                ->where('seller_id', $item->user_id)
+                ->where('status', 'pending')
+                ->first();
+
+            if (!$transaction) {
+                $transaction = Transaction::create([
+                    'item_id' => $item->id,
+                    'buyer_id' => $item->buyer_id,
+                    'seller_id' => $item->user_id,
+                ]);
             }
 
             return response()->json(['status' => 'paid'], 200);

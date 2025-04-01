@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\Transaction;
 use App\Models\Message;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
@@ -58,23 +59,25 @@ class UserController extends Controller
         } elseif ($tab === 'sell') {
             $items = Item::where('user_id', $user->id)->get();
         } elseif ($tab === 'trade') {
-            $messages = Message::with('transaction.item')
-                ->whereHas('transaction', function ($query) use ($user) {
-                    $query->where('status', 'pending')
-                        ->where(function ($q) use ($user) {
-                            $q->where('seller_id', $user->id)
-                                ->orWhere('buyer_id', $user->id);
-                        });
+            $transactions = Transaction::where('status', 'pending')
+                ->where(function ($query) use ($user) {
+                    $query->where('seller_id', $user->id)
+                        ->orWhere('buyer_id', $user->id);
                 })
+                ->with(['item', 'messages'])
                 ->latest('updated_at')
                 ->get();
-            $latestMessages = $messages->unique('transaction_id');
-            $sortedMessages = $latestMessages->sortByDesc(function ($message) use ($user) {
-                return $message->receiver_id === $user->id ? 1 : 0;
+
+            $sortedTransactions = $transactions->sortByDesc(function ($transaction) use ($user) {
+                return $transaction->messages->contains(function ($message) use ($user) {
+                    return $message->receiver_id === $user->id;
+                }) ? 1 : 0;
             });
-            $items = $sortedMessages->map(function ($message) {
-                return $message->item;
-            });
+
+            $items = $sortedTransactions
+                ->map(function ($transaction) {
+                    return $transaction->item;
+                });
         } else {
             $items = collect();
         }

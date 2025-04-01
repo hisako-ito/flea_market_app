@@ -47,7 +47,11 @@
 </body>
 
 <script>
+    let paymentChecked = false;
+
     const checkPaymentStatus = async () => {
+        if (paymentChecked) return;
+
         try {
             const response = await fetch(`/stripe/check-payment-status?session_id={{ session('stripe_session_id') }}`, {
                 method: 'POST',
@@ -59,15 +63,17 @@
             const result = await response.json();
 
             if (result.status === 'paid') {
-                alert('支払いが確認されました！');
                 clearInterval(intervalId);
+                paymentChecked = true;
+
+                location.reload();
             }
         } catch (error) {
             console.error('ステータス確認中にエラーが発生しました:', error);
         }
     };
 
-    setInterval(checkPaymentStatus, 30000);
+    const intervalId = setInterval(checkPaymentStatus, 30000);
 </script>
 
 
