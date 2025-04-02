@@ -26,7 +26,6 @@ DB_HOSTをmysqlに変更
 　DB_DATABASEをlaravel_dbに変更  
 　DB_USERNAMEをlaravel_userに変更  
 　DB_PASSをlaravel_passに変更  
-　MAIL_FROM_ADDRESSに送信元アドレスを設定 
 ```
 5. アプリケーションキーの作成
 ```
@@ -97,7 +96,6 @@ php artisan config:cache
 ```
 STRIPE_PUBLIC_KEY=your_public_key_here
 STRIPE_SECRET_KEY=your_secret_key_here
-
 ``` 
 * envファイル更新後は、反映のためキャッシュクリアを実施してください。
 
@@ -134,8 +132,7 @@ cp .env .env.testing
 php artisan key:generate --env=testing
 php artisan config:clear
 php artisan migrate:fresh --env=testing
-./vendor/bin/phpunit
-
+./vendor/bin/phpunit　
 ```
 ※.env.testingにもStripeのAPIキーを設定してください。
 
