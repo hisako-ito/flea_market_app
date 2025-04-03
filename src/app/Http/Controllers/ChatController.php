@@ -19,7 +19,7 @@ class ChatController extends Controller
     {
         $user = Auth::user();
         $item = Item::with('buyer')->find($item_id);
-        $transaction = Transaction::where('item_id', $item->id)->first();
+        $mainTransaction = Transaction::where('item_id', $item_id)->first();
 
         $transactions = Transaction::with('item')
             ->where('status', 'pending')
@@ -30,25 +30,30 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $messages = Message::where('item_id', $item->id)
+        $messages = Message::where('item_id', $item_id)
             ->with('sender')
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $shouldShowModal = $transaction &&
-            $transaction->status === 'completed' &&
+        $shouldShowModal = $mainTransaction &&
+            $mainTransaction->status === 'completed' &&
             $item->user_id === $user->id &&
-            !Review::where('transaction_id', $transaction->id)
+            !Review::where('transaction_id', $mainTransaction->id)
                 ->where('reviewer_id', $user->id)
                 ->exists();
 
-        return view('mypage_chat', compact('user', 'item', 'transaction', 'transactions', 'messages', 'shouldShowModal'));
+        Message::where('item_id', $item_id)
+            ->where('sender_id', '!=', $user->id)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return view('mypage_chat', compact('user', 'item', 'mainTransaction', 'transactions', 'messages', 'shouldShowModal'));
     }
 
     public function messageStore($item_id, MessageRequest $request)
     {
         $user = Auth::user();
-        $item = Item::find($item_id);
+        $item = Item::with('buyer')->find($item_id);
 
         $transaction = Transaction::where('item_id', $item_id)
             ->where('buyer_id', $item->buyer_id)

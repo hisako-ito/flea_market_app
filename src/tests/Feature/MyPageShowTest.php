@@ -20,15 +20,20 @@ class MyPageShowTest extends TestCase
 
     public function testMyPageShow()
     {
-        $user = User::factory()->create([
+        /** @var \App\Models\User $user1 */
+        $user1 = User::factory()->create([
             'user_name' => '山田太郎',
             'user_image' => 'storage/user_images/dog.jpg',
+        ]);
+        $user2 = User::factory()->create([
+            'user_name' => '山田花子',
+            'user_image' => 'storage/user_images/cat.jpg',
         ]);
         /** @var \App\Models\User $user */
 
         $item1 = Item::factory()->create([
             'item_name' => '腕時計',
-            'user_id' => $user->id,
+            'user_id' => $user1->id,
             'item_image' => 'storage/item_images/Armani+Mens+Clock.jpg',
         ]);
 
@@ -42,7 +47,8 @@ class MyPageShowTest extends TestCase
         ]);
 
         Order::create([
-            'user_id' => $user->id,
+            'user_id' => $user2->id,
+            'buyer_id' => $user1->id,
             'item_id' => $item2->id,
             'stripe_session_id' => 'cs_test_1234',
             'price' => 1000,
@@ -51,12 +57,12 @@ class MyPageShowTest extends TestCase
             'status' => 'paid',
         ]);
 
-        $this->actingAs($user);
+        $this->actingAs($user1);
 
         // マイページ表示の確認
         $response = $this->get('/mypage');
         $response->assertStatus(200);
-        $response->assertSee('<img src="' . asset($user->user_image) . '"', false);
+        $response->assertSee('<img src="' . asset($user1->user_image) . '"', false);
         $response->assertSee('山田太郎');
 
         // 出品タブの確認

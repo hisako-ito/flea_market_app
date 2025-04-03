@@ -44,39 +44,39 @@
             @yield('content')
         </div>
     </main>
-</body>
 
-<script>
-    let paymentChecked = false;
+    @yield('script')
 
-    const checkPaymentStatus = async () => {
-        if (paymentChecked) return;
+    <script>
+        let paymentChecked = false;
 
-        try {
-            const response = await fetch(`/stripe/check-payment-status?session_id={{ session('stripe_session_id') }}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        const checkPaymentStatus = async () => {
+            if (paymentChecked) return;
+
+            try {
+                const response = await fetch(`/stripe/check-payment-status?session_id={{ session('stripe_session_id') }}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'paid') {
+                    clearInterval(intervalId);
+                    paymentChecked = true;
+
+                    location.reload();
                 }
-            });
-
-            const result = await response.json();
-
-            if (result.status === 'paid') {
-                clearInterval(intervalId);
-                paymentChecked = true;
-
-                location.reload();
+            } catch (error) {
+                console.error('ステータス確認中にエラーが発生しました:', error);
             }
-        } catch (error) {
-            console.error('ステータス確認中にエラーが発生しました:', error);
-        }
-    };
+        };
 
-    const intervalId = setInterval(checkPaymentStatus, 30000);
-</script>
+        const intervalId = setInterval(checkPaymentStatus, 30000);
+    </script>
 
-
-@yield('script')
+</body>
 
 </html>

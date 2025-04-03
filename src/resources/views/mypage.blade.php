@@ -113,7 +113,7 @@
             @endif
             @if (isset($unreadMessages[$item->id]))
             <div class="notification-badge">
-                {{ $unreadMessages[$item->id]->unread_count }}
+                <span>{{ $unreadMessages[$item->id]->unread_count }}</span>
             </div>
             @endif
             <a href="/mypage/items/{{$item->id}}/chat" class="product-link"></a>
