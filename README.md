@@ -17,9 +17,9 @@ mysql:
 ```
 
 ### Laravel環境構築
-1. ```docker-compose exec php bash```
-2. composer install
-3. cp .env.example .env　　
+1. `docker-compose exec php bash`
+2. `composer install`
+3. `cp .env.example .env`　　
 4. envファイルの変更
 ```
 DB_HOSTをmysqlに変更  
