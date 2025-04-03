@@ -25,7 +25,7 @@ mysql:
   DB_HOSTをmysqlに変更  
 　DB_DATABASEをlaravel_dbに変更  
 　DB_USERNAMEをlaravel_userに変更  
-　DB_PASSをlaravel_passに変更  
+　DB_PASSWORDをlaravel_passに変更  
 ```
 5. アプリケーションキーの作成
 ```
