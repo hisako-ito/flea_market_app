@@ -94,8 +94,8 @@ php artisan config:cache
 取得したAPIキーをアプリケーションの.envファイルに追加してください。
 以下の例を参考に、適切なキーを設定してください。
 ```
-STRIPE_KEY=your_public_key_here
-STRIPE_SECRET_KEY=your_secret_key_here
+STRIPE_PUBLIC_KEY="パブリックキー"
+STRIPE_SECRET_KEY="シークレットキー"
 ``` 
 * envファイル更新後は、反映のためキャッシュクリアを実施してください。
 
