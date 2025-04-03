@@ -77,6 +77,11 @@ class Item extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
+    }
+
     public function messages()
     {
         return $this->hasMany(Message::class);
