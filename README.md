@@ -17,7 +17,7 @@ mysql:
 ```
 
 ### Laravel環境構築
-1. docker-compose exec php bash
+1. ```docker-compose exec php bash```
 2. composer install
 3. cp .env.example .env　　
 4. envファイルの変更
