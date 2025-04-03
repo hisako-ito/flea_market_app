@@ -66,7 +66,7 @@ php artisan db:seed
 ```
   MAIL_FROM_ADDRESS=example@example.com  
 ```
-* 上記は任意のメールアドレスで可
+※上記は任意のメールアドレスで可
 
 envファイルの更新後、反映のため、以下コマンドでキャッシュクリアを実施してください  
 ```
