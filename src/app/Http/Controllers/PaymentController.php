@@ -62,15 +62,25 @@ class PaymentController extends Controller
 
         session(['stripe_session_id' => $session->id]);
 
-        Order::create([
-            'buyer_id' => $user->id,
-            'item_id' => $item->id,
-            'price' => $item->price,
-            'payment_method' => $paymentMethod,
-            'shipping_address' => $shippingAddress,
-            'stripe_session_id' => $session->id,
-            'status' => 'pending',
-        ]);
+        $order = Order::where('buyer_id', $user->id)
+            ->where('item_id', $item->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$order) {
+            Order::create([
+                'buyer_id' => $user->id,
+                'item_id' => $item->id,
+                'price' => $item->price,
+                'payment_method' => $paymentMethod,
+                'shipping_address' => $shippingAddress,
+                'stripe_session_id' => $session->id,
+                'status' => 'pending',
+            ]);
+        } else {
+            $order->stripe_session_id = $session->id;
+            $order->save();
+        }
 
         return redirect($session->url);
     }

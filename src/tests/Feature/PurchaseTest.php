@@ -58,7 +58,7 @@ class PurchaseTest extends TestCase
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('orders', [
-            'user_id' => $user->id,
+            'buyer_id' => $user->id,
             'item_id' => $item->id,
         ]);
     }
@@ -82,7 +82,7 @@ class PurchaseTest extends TestCase
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('orders', [
-            'user_id' => $user->id,
+            'buyer_id' => $user->id,
             'item_id' => $item->id,
         ]);
 
@@ -119,7 +119,7 @@ class PurchaseTest extends TestCase
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('orders', [
-            'user_id' => $user->id,
+            'buyer_id' => $user->id,
             'item_id' => $item->id,
         ]);
 

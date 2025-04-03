@@ -38,16 +38,21 @@
                 @endif
             </h2>
         </div>
-        @if ($transaction && $transaction->status === "pending" && $item->buyer_id === $user->id)
+        @if ($item->buyer && $item->buyer->id == $user->id && $mainTransaction && $mainTransaction->status === "pending")
         <button type="button" class="btn complete-btn" id="completeTransactionBtn">取引を完了する</button>
+        @elseif ($item->buyer && $item->buyer->id == $user->id && $mainTransaction->status === "completed")
+        <button type="button" class="btn completed-btn">取引は完了しました</button>
+        @else
         @endif
     </div>
 
     <div class="item-info">
         <img src="{{ asset($item->item_image) }}" alt="商品画像" class="item-image">
         <div class="item-details">
-            <h3 class="item-name">{{ $item->item_name }}</h3>
-            <p class="item-price">{{ number_format($item->price) }}</p>
+            <div class="item-details__inner">
+                <h3 class="item-name">{{ $item->item_name }}</h3>
+                <p class="item-price">{{ number_format($item->price) }}</p>
+            </div>
         </div>
     </div>
 
@@ -110,12 +115,12 @@
             {{ $message }}
             @enderror
         </div>
-        @if ($item->buyer)
+        @if ($item->buyer && $mainTransaction->status === "pending")
         <div class="message-form">
             <form id="chat-form" data-user-id="{{ $user->id }}" data-item-id="{{ $item->id }}" class="message-form__form" method="POST" action="/mypage/items/{{$item->id}}/chat" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="sender_id" value="{{ $user->id }}">
-                <textarea id="chat-input" class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください" maxlength="400">{{ session()->get('_error_bag') === 'default' ? old('content') : '' }}</textarea>
+                <textarea id="chat-input" class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください">{{ session()->get('_error_bag') === 'default' ? old('content') : '' }}</textarea>
                 <div class="message-form__btn-container">
                     <input type="file" name="msg_image" id="fileInput" accept="image/png, image/jpeg" hidden>
                     <label for="fileInput" class="file-input-label">画像を追加</label>
@@ -155,51 +160,50 @@
 @endsection
 @section('script')
 <script>
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-        const fileName = event.target.files[0]?.name || '選択されていません';
-        document.getElementById('fileNameDisplay').textContent = fileName;
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        if (fileInput && fileNameDisplay) {
+            fileInput.addEventListener('change', function(event) {
+                const fileName = event.target.files[0]?.name || '選択されていません';
+                fileNameDisplay.textContent = fileName;
+            });
+        }
+
         const completeBtn = document.getElementById('completeTransactionBtn');
         const modal = document.getElementById('ratingModal');
-
-        const shouldShowModalAttr = document.getElementById('app').dataset.shouldShowModal;
+        const shouldShowModalAttr = document.getElementById('app')?.dataset.shouldShowModal;
         const shouldShowModal = shouldShowModalAttr === 'true';
-
         if (shouldShowModal && modal) {
             modal.style.display = 'flex';
         }
-
         if (completeBtn) {
             completeBtn.addEventListener('click', function() {
                 modal.style.display = 'flex';
             });
         }
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
+
         const form = document.getElementById('chat-form');
         const textarea = document.getElementById('chat-input');
-        const itemId = form.dataset.itemId;
-        const userId = form.dataset.userId;
 
-        const storageKey = `chat_draft_${userId}_${itemId}`;
+        if (form && textarea) {
+            const itemId = form.dataset.itemId;
+            const userId = form.dataset.userId;
+            const storageKey = `chat_draft_${userId}_${itemId}`;
 
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-            textarea.value = saved;
+            const saved = sessionStorage.getItem(storageKey);
+            if (saved) {
+                textarea.value = saved;
+            }
+
+            textarea.addEventListener('input', () => {
+                sessionStorage.setItem(storageKey, textarea.value);
+            });
+
+            form.addEventListener('submit', () => {
+                sessionStorage.removeItem(storageKey);
+            });
         }
-
-        textarea.addEventListener('input', () => {
-            localStorage.setItem(storageKey, textarea.value);
-        });
-
-        form.addEventListener('submit', () => {
-            localStorage.removeItem(storageKey);
-        });
     });
 </script>
 @endsection
