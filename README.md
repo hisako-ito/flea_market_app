@@ -22,7 +22,7 @@ mysql:
 3. `cp .env.example .env`　　
 4. envファイルの変更
 ```
-DB_HOSTをmysqlに変更  
+  DB_HOSTをmysqlに変更  
 　DB_DATABASEをlaravel_dbに変更  
 　DB_USERNAMEをlaravel_userに変更  
 　DB_PASSをlaravel_passに変更  
