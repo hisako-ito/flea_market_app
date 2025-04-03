@@ -142,7 +142,7 @@ php artisan migrate:fresh --env=testing
 * MySQL 15.1
 
 ## ER図
-![flea_market_app](https://github.com/user-attachments/assets/f3b9ffb6-5d04-490b-b4dd-c885c81bca82)
+![flea_market_app](https://github.com/user-attachments/assets/d2981626-f85e-42da-97cc-234630e7ccc3)
 
 ## URL
 * 開発環境： [http://localhost](http://localhost)
