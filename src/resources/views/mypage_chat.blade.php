@@ -119,7 +119,7 @@
             <form id="chat-form" data-user-id="{{ $user->id }}" data-item-id="{{ $item->id }}" class="message-form__form" method="POST" action="/mypage/items/{{$item->id}}/chat" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="sender_id" value="{{ $user->id }}">
-                <textarea id="chat-input" class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください">{{ session()->get('_error_bag') === 'default' ? old('content') : '' }}</textarea>
+                <textarea id="chat-input" class="message-form__textarea" name="content" placeholder="取引メッセージを記入してください">{{ old('content', '') }}</textarea>
                 <div class="message-form__btn-container">
                     <input type="file" name="msg_image" id="fileInput" accept="image/png, image/jpeg" hidden>
                     <label for="fileInput" class="file-input-label">画像を追加</label>
