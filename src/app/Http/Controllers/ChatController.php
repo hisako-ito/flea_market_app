@@ -90,10 +90,10 @@ class ChatController extends Controller
     {
         $message = Message::find($message_id);
         $validator = Validator::make($request->all(), [
-            'content' => 'required|max:400',
+            "content.{$message->id}" => 'required|max:400',
         ], [
-            'content.required' => '本文を入力してください',
-            'content.max' => '本文は400文字以内で入力してください',
+            "content.{$message->id}.required" => '本文を入力してください',
+            "content.{$message->id}.max" => '本文は400文字以内で入力してください',
         ]);
 
         if ($validator->fails()) {
@@ -103,8 +103,10 @@ class ChatController extends Controller
                 ->withInput();
         }
 
+        $content = $request->input("content.{$message->id}");
+
         $message->update([
-            'content' => $request->input('content'),
+            'content' => $content,
         ]);
 
         return redirect()->route('chat.show', ['item_id' => $message->item_id])

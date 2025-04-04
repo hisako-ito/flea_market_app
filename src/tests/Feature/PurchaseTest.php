@@ -118,6 +118,14 @@ class PurchaseTest extends TestCase
 
         $response->assertStatus(302);
 
+        session(['stripe_session_id' => 'cs_test_1234']);
+
+        $response = $this->actingAs($user)
+            ->get('/stripe/waiting-for-payment?session_id=cs_test_1234');
+
+
+        $response->assertStatus(302);
+
         $this->assertDatabaseHas('orders', [
             'buyer_id' => $user->id,
             'item_id' => $item->id,

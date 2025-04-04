@@ -59,25 +59,6 @@ class UserController extends Controller
         } elseif ($tab === 'sell') {
             $items = Item::where('user_id', $user->id)->get();
         } elseif ($tab === 'trade') {
-            $unreadMessages = Message::with('transaction.item')
-                ->whereHas('transaction', function ($query) use ($user) {
-                    $query->where('status', 'pending')
-                        ->where(function ($q) use ($user) {
-                            $q->where('seller_id', $user->id)
-                                ->orWhere('buyer_id', $user->id);
-                        });
-                })
-                ->where('receiver_id', $user->id)
-                ->where('is_read', false)
-                ->select('item_id', DB::raw('count(*) as unread_count'))
-                ->groupBy('item_id')
-                ->get()
-                ->map(function ($message) {
-                    $message->item_id = (int) $message->item_id;
-                    return $message;
-                })
-                ->keyBy('item_id');
-
             $transactions = Transaction::where('status', 'pending')
                 ->where(function ($query) use ($user) {
                     $query->where('seller_id', $user->id)
