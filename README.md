@@ -128,7 +128,7 @@ cp .env .env.testing
 //APP_KEYの＝の後を削除
 //DB_DATABASEをdemo_testに変更  
 //DB_USERNAMEをrootに変更  
-//DB_PASSをrootに変更  
+//DB_PASSWORDをrootに変更  
 php artisan key:generate --env=testing
 php artisan config:clear
 php artisan migrate:fresh --env=testing
