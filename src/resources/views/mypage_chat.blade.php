@@ -73,11 +73,10 @@
                 <form class="message-update-form" method="POST" action="/messages/{{$message->id}}">
                     @csrf
                     @method('PATCH')
-                    <textarea name="content" class="message-update-form__textarea">{{ old('content', $message->content) }}</textarea>
-
-                    @if ($errors->getBag('edit_' . $message->id)->has('content'))
+                    <textarea name="content[{{ $message->id }}]" class="message-update-form__textarea">{{ old("content.{$message->id}", $message->content) }}</textarea>
+                    @if ($errors->getBag('edit_' . $message->id)->has("content.{$message->id}"))
                     <p class="form__error" style="color: red;">
-                        {{ $errors->getBag('edit_' . $message->id)->first('content') }}
+                        {{ $errors->getBag('edit_' . $message->id)->first("content.{$message->id}") }}
                     </p>
                     @endif
                     <div class="message-buttons">

@@ -200,7 +200,7 @@
     width: 500px;
     height: 50px;
     border: solid 1px #5F5F5F;
-    padding: 8px;
+    padding: 4px 8px;
     resize: none;
 }
 
@@ -305,9 +305,8 @@
     border: solid 1px #5F5F5F;
     overflow-y: scroll;
     height: 50px;
-    line-height: 50px;
     width: 100%;
-    padding: 0 8px;
+    padding: 16px 8px;
     resize: none;
     vertical-align: middle;
 }
